@@ -1,37 +1,18 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/carloska24/nexus-core-lab/internal/platform/httpserver"
 )
 
-type healthResponse struct {
-	Status  string `json:"status"`
-	Service string `json:"service"`
-}
-
 func main() {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("GET /health", healthHandler)
+	handler := httpserver.New()
 
 	log.Println("NEXUS Core Lab API listening on :8080")
 
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	if err := http.ListenAndServe(":8080", handler); err != nil {
 		log.Fatal(err)
-	}
-}
-
-func healthHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	response := healthResponse{
-		Status:  "ok",
-		Service: "nexus-core-lab",
-	}
-
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		log.Printf("failed to encode health response: %v", err)
 	}
 }

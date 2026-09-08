@@ -1,4 +1,4 @@
-package main
+package httpserver
 
 import (
 	"encoding/json"
@@ -7,11 +7,13 @@ import (
 	"testing"
 )
 
-func TestHealthHandler(t *testing.T) {
+func TestHealthEndpoint(t *testing.T) {
+	handler := New()
+
 	request := httptest.NewRequest(http.MethodGet, "/health", nil)
 	recorder := httptest.NewRecorder()
 
-	healthHandler(recorder, request)
+	handler.ServeHTTP(recorder, request)
 
 	response := recorder.Result()
 	defer response.Body.Close()
@@ -21,7 +23,7 @@ func TestHealthHandler(t *testing.T) {
 	}
 
 	if contentType := response.Header.Get("Content-Type"); contentType != "application/json" {
-		t.Errorf("expected Content-Type application/json, got %q", contentType)
+		t.Fatalf("expected Content-Type application/json, got %q", contentType)
 	}
 
 	var body healthResponse
