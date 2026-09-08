@@ -1,0 +1,38 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Build
+bin/
+dist/
+build/
+*.exe
+*.out
+*.test
+
+# Coverage
+coverage.out
+coverage.html
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+# IDE / Editors
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local development
+.local/
+
+# Docker local overrides
+docker-compose.override.yml
