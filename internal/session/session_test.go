@@ -388,3 +388,99 @@ func TestConcurrentAttach_SameDevice_Deterministic(t *testing.T) {
 		t.Fatalf("expected active session IP %s to be allocated in pool", activeSession.IPAddress)
 	}
 }
+
+type recordEvent struct {
+	Type SessionEventType
+	Sess *Session
+}
+
+type mockEventEmitter struct {
+	mu     sync.Mutex
+	events []recordEvent
+}
+
+func (m *mockEventEmitter) EmitSessionEvent(ctx context.Context, eventType SessionEventType, s *Session) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.events = append(m.events, recordEvent{Type: eventType, Sess: s})
+}
+
+func (m *mockEventEmitter) count(t SessionEventType) int {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	c := 0
+	for _, e := range m.events {
+		if e.Type == t {
+			c++
+		}
+	}
+	return c
+}
+
+func TestSession_EventEmitter(t *testing.T) {
+	ctx := context.Background()
+	repo := NewMemoryRepository()
+	checker := newMockDeviceChecker()
+	checker.addDevice("DEV-EVT-001", "SUB-EVT-001", true)
+	ipPool := network.NewIPPool()
+	emitter := &mockEventEmitter{}
+
+	svc := NewService(repo, checker, ipPool, emitter)
+
+	// 1. Attach emite ATTACH
+	s1, err := svc.Attach(ctx, AttachRequest{DeviceID: "DEV-EVT-001", CellID: "CELL-SP-001"})
+	if err != nil {
+		t.Fatalf("attach error: %v", err)
+	}
+	if emitter.count(SessionEventAttach) != 1 {
+		t.Fatalf("expected 1 ATTACH event, got %d", emitter.count(SessionEventAttach))
+	}
+
+	// 2. Handover na mesma célula é no-op e NÃO emite CELL_HANDOVER
+	_, err = svc.Handover(ctx, s1.ID, "CELL-SP-001")
+	if err != nil {
+		t.Fatalf("same cell handover error: %v", err)
+	}
+	if emitter.count(SessionEventCellHandover) != 0 {
+		t.Fatalf("expected 0 CELL_HANDOVER events for no-op, got %d", emitter.count(SessionEventCellHandover))
+	}
+
+	// 3. Handover em célula diferente emite CELL_HANDOVER
+	_, err = svc.Handover(ctx, s1.ID, "CELL-SP-002")
+	if err != nil {
+		t.Fatalf("handover error: %v", err)
+	}
+	if emitter.count(SessionEventCellHandover) != 1 {
+		t.Fatalf("expected 1 CELL_HANDOVER event, got %d", emitter.count(SessionEventCellHandover))
+	}
+
+	// 4. Re-attach emite STALE_DISCONNECT da s1 e ATTACH da s2
+	s2, err := svc.Attach(ctx, AttachRequest{DeviceID: "DEV-EVT-001", CellID: "CELL-SP-003"})
+	if err != nil {
+		t.Fatalf("re-attach error: %v", err)
+	}
+	if emitter.count(SessionEventStaleDisconnect) != 1 {
+		t.Fatalf("expected 1 STALE_DISCONNECT event, got %d", emitter.count(SessionEventStaleDisconnect))
+	}
+	if emitter.count(SessionEventAttach) != 2 {
+		t.Fatalf("expected 2 ATTACH events total, got %d", emitter.count(SessionEventAttach))
+	}
+
+	// 5. Detach na s2 emite DETACH
+	_, err = svc.Detach(ctx, s2.ID)
+	if err != nil {
+		t.Fatalf("detach error: %v", err)
+	}
+	if emitter.count(SessionEventDetach) != 1 {
+		t.Fatalf("expected 1 DETACH event, got %d", emitter.count(SessionEventDetach))
+	}
+
+	// 6. Detach repetido na s2 é idempotente e NÃO emite DETACH adicional
+	_, err = svc.Detach(ctx, s2.ID)
+	if err != nil {
+		t.Fatalf("second detach error: %v", err)
+	}
+	if emitter.count(SessionEventDetach) != 1 {
+		t.Fatalf("expected still 1 DETACH event on duplicate detach, got %d", emitter.count(SessionEventDetach))
+	}
+}

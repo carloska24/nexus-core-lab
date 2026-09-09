@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync/atomic"
 	"syscall"
 	"time"
 
@@ -15,6 +16,7 @@ import (
 	"github.com/carloska24/nexus-core-lab/internal/platform/httpserver"
 	"github.com/carloska24/nexus-core-lab/internal/session"
 	"github.com/carloska24/nexus-core-lab/internal/subscriber"
+	"github.com/carloska24/nexus-core-lab/internal/telemetry"
 )
 
 // subscriberCheckerAdapter conecta o serviço de Subscriber ao contrato consumidor de Device
@@ -64,7 +66,43 @@ func (a *deviceCheckerAdapter) CheckDeviceAttachable(ctx context.Context, device
 	}, nil
 }
 
+// telemetrySessionAdapter conecta o domínio Session ao pipeline assíncrono de Telemetria
+// sem que o domínio de sessões precise conhecer o pacote de telemetria.
+type telemetrySessionAdapter struct {
+	worker *telemetry.Worker
+}
+
+func (a *telemetrySessionAdapter) EmitSessionEvent(ctx context.Context, eventType session.SessionEventType, s *session.Session) {
+	var tType telemetry.EventType
+	switch eventType {
+	case session.SessionEventAttach:
+		tType = telemetry.EventAttach
+	case session.SessionEventCellHandover:
+		tType = telemetry.EventCellHandover
+	case session.SessionEventDetach:
+		tType = telemetry.EventDetach
+	case session.SessionEventStaleDisconnect:
+		tType = telemetry.EventStaleDisconnect
+	default:
+		return
+	}
+
+	a.worker.Emit(telemetry.Event{
+		Type:         tType,
+		SessionID:    s.ID,
+		DeviceID:     s.DeviceID,
+		SubscriberID: s.SubscriberID,
+		CellID:       s.CellID,
+		Timestamp:    time.Now().UTC(),
+	})
+}
+
 func main() {
+	// Infraestrutura de Telemetria e Observabilidade (Milestone 4)
+	var requestsCounter atomic.Uint64
+	telemetryWorker := telemetry.NewWorker()
+	telemetryWorker.Start()
+
 	// Composição de dependências do módulo Subscriber (Milestone 1)
 	subscriberRepo := subscriber.NewMemoryRepository()
 	subscriberService := subscriber.NewService(subscriberRepo)
@@ -78,14 +116,22 @@ func main() {
 	// Composição de dependências dos módulos Network e Session (Milestone 3)
 	ipPool := network.NewIPPool()
 	sessionRepo := session.NewMemoryRepository()
-	sessionService := session.NewService(sessionRepo, &deviceCheckerAdapter{deviceService: deviceService}, ipPool)
+	sessionAdapter := &telemetrySessionAdapter{worker: telemetryWorker}
+	sessionService := session.NewService(sessionRepo, &deviceCheckerAdapter{deviceService: deviceService}, ipPool, sessionAdapter)
 	sessionHandler := session.NewHandler(sessionService)
 
-	handler := httpserver.New(
+	// Composição de dependências do módulo Telemetry (Milestone 4)
+	telemetryHandler := telemetry.NewHandler(telemetryWorker.Metrics(), sessionRepo, &requestsCounter)
+
+	router := httpserver.New(
 		subscriberHandler.RegisterRoutes,
 		deviceHandler.RegisterRoutes,
 		sessionHandler.RegisterRoutes,
+		telemetryHandler.RegisterRoutes,
 	)
+
+	// Envolve o roteador com middleware de Request ID, log/slog e contagem de requisições
+	handler := httpserver.TelemetryMiddleware(&requestsCounter)(router)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -131,6 +177,11 @@ func main() {
 
 	if err := server.Shutdown(shutdownContext); err != nil {
 		log.Printf("HTTP server shutdown error: %v", err)
+	}
+
+	log.Println("shutting down telemetry worker")
+	if err := telemetryWorker.Shutdown(shutdownContext); err != nil {
+		log.Printf("telemetry worker shutdown error: %v", err)
 	}
 
 	log.Println("HTTP server stopped")

@@ -25,17 +25,23 @@ type Service struct {
 	repo          Repository
 	deviceChecker DeviceChecker
 	ipPool        *network.IPPool
+	emitter       EventEmitter
 
 	deviceLocksMu sync.Mutex
 	deviceLocks   map[string]*sync.Mutex
 }
 
-// NewService instancia um novo serviço de sessões.
-func NewService(repo Repository, deviceChecker DeviceChecker, ipPool *network.IPPool) *Service {
+// NewService instancia um novo serviço de sessões, com emitter de eventos opcional.
+func NewService(repo Repository, deviceChecker DeviceChecker, ipPool *network.IPPool, emitter ...EventEmitter) *Service {
+	var em EventEmitter
+	if len(emitter) > 0 {
+		em = emitter[0]
+	}
 	return &Service{
 		repo:          repo,
 		deviceChecker: deviceChecker,
 		ipPool:        ipPool,
+		emitter:       em,
 		deviceLocks:   make(map[string]*sync.Mutex),
 	}
 }
@@ -80,6 +86,10 @@ func (s *Service) Attach(ctx context.Context, req AttachRequest) (*Session, erro
 		}
 		_ = s.ipPool.Release(activeSession.IPAddress)
 		_ = s.repo.ClearActive(ctx, req.DeviceID, activeSession.ID)
+
+		if s.emitter != nil {
+			s.emitter.EmitSessionEvent(ctx, SessionEventStaleDisconnect, activeSession)
+		}
 	}
 
 	// Alocação de novo IP (pode reaproveitar o recém-liberado pelo pool)
@@ -103,11 +113,15 @@ func (s *Service) Attach(ctx context.Context, req AttachRequest) (*Session, erro
 		return nil, fmt.Errorf("failed to set active session: %w", err)
 	}
 
+	if s.emitter != nil {
+		s.emitter.EmitSessionEvent(ctx, SessionEventAttach, newSession)
+	}
+
 	return newSession, nil
 }
 
 // Handover altera a célula de fixação de uma sessão CONNECTED sem alterar seu IP ou identificador.
-// Handover para a célula atual é tratado como no-op com sucesso.
+// Handover para a célula atual é tratado como no-op com sucesso (sem emissão de evento).
 func (s *Service) Handover(ctx context.Context, sessionID, targetCellID string) (*Session, error) {
 	if _, err := network.FindCell(targetCellID); err != nil {
 		return nil, err
@@ -132,7 +146,7 @@ func (s *Service) Handover(ctx context.Context, sessionID, targetCellID string) 
 	}
 
 	if sess.CellID == targetCellID {
-		return sess, nil // no-op idempotente
+		return sess, nil // no-op idempotente (não emite evento)
 	}
 
 	if err := sess.Handover(targetCellID); err != nil {
@@ -143,11 +157,15 @@ func (s *Service) Handover(ctx context.Context, sessionID, targetCellID string) 
 		return nil, fmt.Errorf("failed to update session handover: %w", err)
 	}
 
+	if s.emitter != nil {
+		s.emitter.EmitSessionEvent(ctx, SessionEventCellHandover, sess)
+	}
+
 	return sess, nil
 }
 
 // Detach encerra a sessão ativa, liberando o IP de volta ao pool e desvinculando o dispositivo.
-// Operação idempotente: se já desconectada, retorna sucesso sem alterar o motivo nem liberar o IP novamente.
+// Operação idempotente: se já desconectada, retorna sucesso sem alterar o motivo, sem liberar o IP novamente e sem emitir evento.
 func (s *Service) Detach(ctx context.Context, sessionID string) (*Session, error) {
 	sess, err := s.repo.FindByID(ctx, sessionID)
 	if err != nil {
@@ -163,7 +181,7 @@ func (s *Service) Detach(ctx context.Context, sessionID string) (*Session, error
 		return nil, err
 	}
 
-	// Idempotência: se já desconectada, não repete liberação nem altera motivo
+	// Idempotência: se já desconectada, não repete liberação nem emite evento adicional
 	if sess.Status == StatusDisconnected {
 		return sess, nil
 	}
@@ -175,6 +193,10 @@ func (s *Service) Detach(ctx context.Context, sessionID string) (*Session, error
 
 	_ = s.ipPool.Release(sess.IPAddress)
 	_ = s.repo.ClearActive(ctx, sess.DeviceID, sess.ID)
+
+	if s.emitter != nil {
+		s.emitter.EmitSessionEvent(ctx, SessionEventDetach, sess)
+	}
 
 	return sess, nil
 }
