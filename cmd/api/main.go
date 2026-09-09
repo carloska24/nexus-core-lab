@@ -11,7 +11,9 @@ import (
 	"time"
 
 	"github.com/carloska24/nexus-core-lab/internal/device"
+	"github.com/carloska24/nexus-core-lab/internal/network"
 	"github.com/carloska24/nexus-core-lab/internal/platform/httpserver"
+	"github.com/carloska24/nexus-core-lab/internal/session"
 	"github.com/carloska24/nexus-core-lab/internal/subscriber"
 )
 
@@ -37,6 +39,31 @@ func (a *subscriberCheckerAdapter) CheckSubscriberActive(ctx context.Context, su
 	return nil
 }
 
+// deviceCheckerAdapter conecta o serviço de Device ao contrato consumidor de Session
+// sem vazar structs ou tipos internos de Device para o pacote Session.
+type deviceCheckerAdapter struct {
+	deviceService *device.Service
+}
+
+func (a *deviceCheckerAdapter) CheckDeviceAttachable(ctx context.Context, deviceID string) (*session.DeviceInfo, error) {
+	dev, err := a.deviceService.FindByID(ctx, deviceID)
+	if err != nil {
+		if errors.Is(err, device.ErrDeviceNotFound) {
+			return nil, session.ErrDeviceNotFound
+		}
+		return nil, err
+	}
+
+	if dev.Status != device.StatusRegistered {
+		return nil, session.ErrDeviceNotEligible
+	}
+
+	return &session.DeviceInfo{
+		DeviceID:     dev.ID,
+		SubscriberID: dev.SubscriberID,
+	}, nil
+}
+
 func main() {
 	// Composição de dependências do módulo Subscriber (Milestone 1)
 	subscriberRepo := subscriber.NewMemoryRepository()
@@ -48,9 +75,16 @@ func main() {
 	deviceService := device.NewService(deviceRepo, &subscriberCheckerAdapter{subService: subscriberService})
 	deviceHandler := device.NewHandler(deviceService)
 
+	// Composição de dependências dos módulos Network e Session (Milestone 3)
+	ipPool := network.NewIPPool()
+	sessionRepo := session.NewMemoryRepository()
+	sessionService := session.NewService(sessionRepo, &deviceCheckerAdapter{deviceService: deviceService}, ipPool)
+	sessionHandler := session.NewHandler(sessionService)
+
 	handler := httpserver.New(
 		subscriberHandler.RegisterRoutes,
 		deviceHandler.RegisterRoutes,
+		sessionHandler.RegisterRoutes,
 	)
 
 	port := os.Getenv("PORT")
