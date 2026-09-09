@@ -11,10 +11,20 @@ type healthResponse struct {
 	Service string `json:"service"`
 }
 
-func New() http.Handler {
+// RouteRegistrar define uma função capaz de acoplar rotas a um ServeMux.
+type RouteRegistrar func(mux *http.ServeMux)
+
+// New instancia o roteador HTTP com o endpoint /health e registra módulos adicionais fornecidos.
+func New(registrars ...RouteRegistrar) http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /health", healthHandler)
+
+	for _, register := range registrars {
+		if register != nil {
+			register(mux)
+		}
+	}
 
 	return mux
 }

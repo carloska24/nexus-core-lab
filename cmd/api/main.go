@@ -11,10 +11,18 @@ import (
 	"time"
 
 	"github.com/carloska24/nexus-core-lab/internal/platform/httpserver"
+	"github.com/carloska24/nexus-core-lab/internal/subscriber"
 )
 
 func main() {
-	handler := httpserver.New()
+	// Composição de dependências do módulo Subscriber (In-Memory no Milestone 1)
+	subscriberRepo := subscriber.NewMemoryRepository()
+	subscriberService := subscriber.NewService(subscriberRepo)
+	subscriberHandler := subscriber.NewHandler(subscriberService)
+
+	handler := httpserver.New(
+		subscriberHandler.RegisterRoutes,
+	)
 
 	port := os.Getenv("PORT")
 	if port == "" {
