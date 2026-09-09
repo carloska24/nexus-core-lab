@@ -16,8 +16,15 @@ import (
 func main() {
 	handler := httpserver.New()
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	address := ":" + port
+
 	server := &http.Server{
-		Addr:              ":8080",
+		Addr:              address,
 		Handler:           handler,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
@@ -28,7 +35,7 @@ func main() {
 	serverErrors := make(chan error, 1)
 
 	go func() {
-		log.Println("NEXUS Core Lab API listening on :8080")
+		log.Printf("NEXUS Core Lab API listening on %s", address)
 
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			serverErrors <- err
