@@ -10,18 +10,47 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/carloska24/nexus-core-lab/internal/device"
 	"github.com/carloska24/nexus-core-lab/internal/platform/httpserver"
 	"github.com/carloska24/nexus-core-lab/internal/subscriber"
 )
 
+// subscriberCheckerAdapter conecta o serviço de Subscriber ao contrato consumidor de Device
+// sem vazar tipos ou strings de status do domínio Subscriber para o pacote Device.
+type subscriberCheckerAdapter struct {
+	subService *subscriber.Service
+}
+
+func (a *subscriberCheckerAdapter) CheckSubscriberActive(ctx context.Context, subscriberID string) error {
+	sub, err := a.subService.FindByID(ctx, subscriberID)
+	if err != nil {
+		if errors.Is(err, subscriber.ErrSubscriberNotFound) {
+			return device.ErrSubscriberNotFound
+		}
+		return err
+	}
+
+	if sub.Status != subscriber.StatusActive {
+		return device.ErrSubscriberNotActive
+	}
+
+	return nil
+}
+
 func main() {
-	// Composição de dependências do módulo Subscriber (In-Memory no Milestone 1)
+	// Composição de dependências do módulo Subscriber (Milestone 1)
 	subscriberRepo := subscriber.NewMemoryRepository()
 	subscriberService := subscriber.NewService(subscriberRepo)
 	subscriberHandler := subscriber.NewHandler(subscriberService)
 
+	// Composição de dependências do módulo Device (Milestone 2)
+	deviceRepo := device.NewMemoryRepository()
+	deviceService := device.NewService(deviceRepo, &subscriberCheckerAdapter{subService: subscriberService})
+	deviceHandler := device.NewHandler(deviceService)
+
 	handler := httpserver.New(
 		subscriberHandler.RegisterRoutes,
+		deviceHandler.RegisterRoutes,
 	)
 
 	port := os.Getenv("PORT")
