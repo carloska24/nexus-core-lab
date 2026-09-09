@@ -2,6 +2,7 @@ package httpserver
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -26,5 +27,7 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 		Service: "nexus-core-lab",
 	}
 
-	_ = json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("failed to encode health response: %v", err)
+	}
 }
