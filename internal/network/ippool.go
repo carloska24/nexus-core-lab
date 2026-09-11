@@ -7,9 +7,10 @@ import (
 )
 
 var (
-	ErrIPPoolExhausted = errors.New("ip pool exhausted")
-	ErrIPNotAllocated  = errors.New("ip address is not allocated in pool")
-	ErrInvalidIPFormat = errors.New("invalid ip format for pool")
+	ErrIPPoolExhausted    = errors.New("ip pool exhausted")
+	ErrIPNotAllocated     = errors.New("ip address is not allocated in pool")
+	ErrInvalidIPFormat    = errors.New("invalid ip format for pool")
+	ErrIPAlreadyAllocated = errors.New("ip address is already allocated in pool")
 )
 
 const (
@@ -98,4 +99,45 @@ func hostToIPv4String(host uint32) string {
 	b3 := byte(host >> 8)
 	b4 := byte(host & 0xFF)
 	return net.IPv4(10, 45, b3, b4).String()
+}
+
+// MarkAllocated reserva explicitamente um endereço IP existente (usado no warm-up pós-restart).
+// Retorna erro se o IP for inválido, fora do bloco 10.45.0.0/16 ou se já estiver alocado.
+func (p *IPPool) MarkAllocated(ip string) error {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	parsed := net.ParseIP(ip)
+	if parsed == nil {
+		return ErrInvalidIPFormat
+	}
+	ipv4 := parsed.To4()
+	if ipv4 == nil || ipv4[0] != 10 || ipv4[1] != 45 {
+		return ErrInvalidIPFormat
+	}
+
+	host := (uint32(ipv4[2]) << 8) | uint32(ipv4[3])
+	if host < minHost || host > maxHost {
+		return ErrInvalidIPFormat
+	}
+
+	if _, ok := p.allocated[ip]; ok {
+		return ErrIPAlreadyAllocated
+	}
+
+	// Remove de recycled se presente
+	for i, r := range p.recycled {
+		if r == ip {
+			p.recycled = append(p.recycled[:i], p.recycled[i+1:]...)
+			break
+		}
+	}
+
+	// Se o IP estiver à frente ou igual a nextHost, avança nextHost para host + 1
+	if host >= p.nextHost {
+		p.nextHost = host + 1
+	}
+
+	p.allocated[ip] = struct{}{}
+	return nil
 }

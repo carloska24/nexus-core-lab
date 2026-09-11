@@ -33,7 +33,17 @@ func (h *Handler) handleGetTelemetry(w http.ResponseWriter, r *http.Request) {
 		totalReqs = h.requestsCounter.Load()
 	}
 
-	snapshot := h.metrics.Snapshot(totalReqs, h.activeProvider)
+	snapshot, err := h.metrics.Snapshot(r.Context(), totalReqs, h.activeProvider)
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(map[string]string{
+			"error":   "internal_error",
+			"message": "failed to retrieve active sessions from storage",
+			"code":    "TELEMETRY_STORAGE_ERROR",
+		})
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)

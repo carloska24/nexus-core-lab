@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -14,6 +16,7 @@ import (
 	"github.com/carloska24/nexus-core-lab/internal/device"
 	"github.com/carloska24/nexus-core-lab/internal/network"
 	"github.com/carloska24/nexus-core-lab/internal/platform/httpserver"
+	"github.com/carloska24/nexus-core-lab/internal/platform/postgres"
 	"github.com/carloska24/nexus-core-lab/internal/session"
 	"github.com/carloska24/nexus-core-lab/internal/subscriber"
 	"github.com/carloska24/nexus-core-lab/internal/telemetry"
@@ -97,30 +100,98 @@ func (a *telemetrySessionAdapter) EmitSessionEvent(ctx context.Context, eventTyp
 	})
 }
 
+// warmUpIPPool carrega todas as sessões CONNECTED e pré-aloca os IPs no IPPool antes de aceitar requisições.
+func warmUpIPPool(ctx context.Context, db *sql.DB, ipPool *network.IPPool) error {
+	rows, err := db.QueryContext(ctx, "SELECT ip_address FROM sessions WHERE status = 'CONNECTED'")
+	if err != nil {
+		return fmt.Errorf("failed to query connected sessions for IPPool warm-up: %w", err)
+	}
+	defer rows.Close()
+
+	count := 0
+	for rows.Next() {
+		var ip string
+		if err := rows.Scan(&ip); err != nil {
+			return fmt.Errorf("failed to scan session ip: %w", err)
+		}
+		if err := ipPool.MarkAllocated(ip); err != nil {
+			return fmt.Errorf("failed to mark IP %s as allocated during warm-up: %w", ip, err)
+		}
+		count++
+	}
+	if err := rows.Err(); err != nil {
+		return fmt.Errorf("error iterating connected sessions during warm-up: %w", err)
+	}
+
+	log.Printf("IPPool warm-up completed: %d active session IP(s) pre-allocated", count)
+	return nil
+}
+
 func main() {
+	ctx := context.Background()
+
 	// Infraestrutura de Telemetria e Observabilidade (Milestone 4)
 	var requestsCounter atomic.Uint64
 	telemetryWorker := telemetry.NewWorker()
 	telemetryWorker.Start()
 
+	// Inicialização do pool de IPs em memória
+	ipPool := network.NewIPPool()
+
+	// Resolução e injeção de persistência (In-Memory vs PostgreSQL)
+	databaseURL := os.Getenv("DATABASE_URL")
+
+	var (
+		subscriberRepo subscriber.Repository
+		deviceRepo     device.Repository
+		sessionRepo    session.Repository
+		sqlDB          *sql.DB
+	)
+
+	if databaseURL == "" {
+		log.Println("storage_backend=memory")
+		subscriberRepo = subscriber.NewMemoryRepository()
+		deviceRepo = device.NewMemoryRepository()
+		sessionRepo = session.NewMemoryRepository()
+	} else {
+		log.Println("storage_backend=postgres")
+		var err error
+		sqlDB, err = postgres.Open(ctx, postgres.DefaultConfig(databaseURL))
+		if err != nil {
+			log.Fatalf("fatal: database connection failed: %v", err)
+		}
+		defer sqlDB.Close()
+
+		// Valida se as migrações esperadas foram executadas
+		const expectedSchemaVersion = 3
+		if err := postgres.ValidateSchema(ctx, sqlDB, expectedSchemaVersion); err != nil {
+			log.Fatalf("fatal: database schema validation failed: %v. Please run: go run ./cmd/migrate -up", err)
+		}
+
+		// Reconstituição obrigatória do estado do IPPool a partir das sessões ativas
+		if err := warmUpIPPool(ctx, sqlDB, ipPool); err != nil {
+			log.Fatalf("fatal: IPPool warm-up failed: %v", err)
+		}
+
+		subscriberRepo = subscriber.NewPostgresRepository(sqlDB)
+		deviceRepo = device.NewPostgresRepository(sqlDB)
+		sessionRepo = session.NewPostgresRepository(sqlDB)
+	}
+
 	// Composição de dependências do módulo Subscriber (Milestone 1)
-	subscriberRepo := subscriber.NewMemoryRepository()
 	subscriberService := subscriber.NewService(subscriberRepo)
 	subscriberHandler := subscriber.NewHandler(subscriberService)
 
 	// Composição de dependências do módulo Device (Milestone 2)
-	deviceRepo := device.NewMemoryRepository()
 	deviceService := device.NewService(deviceRepo, &subscriberCheckerAdapter{subService: subscriberService})
 	deviceHandler := device.NewHandler(deviceService)
 
-	// Composição de dependências dos módulos Network e Session (Milestone 3)
-	ipPool := network.NewIPPool()
-	sessionRepo := session.NewMemoryRepository()
+	// Composição de dependências dos módulos Network e Session (Milestone 3 & 6)
 	sessionAdapter := &telemetrySessionAdapter{worker: telemetryWorker}
 	sessionService := session.NewService(sessionRepo, &deviceCheckerAdapter{deviceService: deviceService}, ipPool, sessionAdapter)
 	sessionHandler := session.NewHandler(sessionService)
 
-	// Composição de dependências do módulo Telemetry (Milestone 4)
+	// Composição de dependências do módulo Telemetry (Milestone 4 & 6)
 	telemetryHandler := telemetry.NewHandler(telemetryWorker.Metrics(), sessionRepo, &requestsCounter)
 
 	router := httpserver.New(

@@ -137,3 +137,29 @@ func TestIPPool_ConcurrentAllocationAndRelease(t *testing.T) {
 		t.Errorf("expected 0 allocated IPs at the end, got %d", pool.AllocatedCount())
 	}
 }
+
+func TestIPPool_MarkAllocated(t *testing.T) {
+	pool := NewIPPool()
+
+	// Marca um IP válido
+	if err := pool.MarkAllocated("10.45.0.10"); err != nil {
+		t.Fatalf("expected MarkAllocated to succeed, got %v", err)
+	}
+
+	if !pool.IsAllocated("10.45.0.10") {
+		t.Errorf("expected 10.45.0.10 to be allocated")
+	}
+
+	// Tentar marcar novamente deve retornar ErrIPAlreadyAllocated
+	if err := pool.MarkAllocated("10.45.0.10"); !errors.Is(err, ErrIPAlreadyAllocated) {
+		t.Errorf("expected ErrIPAlreadyAllocated, got %v", err)
+	}
+
+	// Tentar marcar IP inválido ou fora do bloco 10.45
+	if err := pool.MarkAllocated("192.168.1.1"); !errors.Is(err, ErrInvalidIPFormat) {
+		t.Errorf("expected ErrInvalidIPFormat for 192.168.1.1, got %v", err)
+	}
+	if err := pool.MarkAllocated("invalid-ip"); !errors.Is(err, ErrInvalidIPFormat) {
+		t.Errorf("expected ErrInvalidIPFormat for invalid-ip, got %v", err)
+	}
+}

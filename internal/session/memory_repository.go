@@ -39,7 +39,7 @@ func (r *MemoryRepository) Save(ctx context.Context, s *Session) error {
 	return nil
 }
 
-// Update atualiza uma sessão existente.
+// Update atualiza uma sessão existente e sincroniza o mapa de sessões ativas por dispositivo.
 func (r *MemoryRepository) Update(ctx context.Context, s *Session) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -49,6 +49,13 @@ func (r *MemoryRepository) Update(ctx context.Context, s *Session) error {
 	}
 
 	r.byID[s.ID] = copySession(s)
+
+	if s.Status == StatusDisconnected {
+		if activeID, exists := r.activeByDevice[s.DeviceID]; exists && activeID == s.ID {
+			delete(r.activeByDevice, s.DeviceID)
+		}
+	}
+
 	return nil
 }
 
@@ -83,24 +90,35 @@ func (r *MemoryRepository) FindActiveByDevice(ctx context.Context, deviceID stri
 	return copySession(s), nil
 }
 
-// SetActive vincula a sessão informada como a sessão ativa do dispositivo.
-func (r *MemoryRepository) SetActive(ctx context.Context, deviceID, sessionID string) error {
+// AttachSession persiste a nova sessão e substitui atomicamente qualquer sessão ativa anterior do mesmo dispositivo.
+func (r *MemoryRepository) AttachSession(ctx context.Context, newSession *Session) (*Session, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	r.activeByDevice[deviceID] = sessionID
-	return nil
+	if _, exists := r.byID[newSession.ID]; exists {
+		return nil, ErrDuplicateSession
+	}
+
+	var staleSession *Session
+	if oldSessionID, exists := r.activeByDevice[newSession.DeviceID]; exists {
+		if old, ok := r.byID[oldSessionID]; ok && old.Status == StatusConnected {
+			old.Detach(DisconnectReasonStale)
+			staleSession = copySession(old)
+		}
+	}
+
+	r.byID[newSession.ID] = copySession(newSession)
+	r.activeByDevice[newSession.DeviceID] = newSession.ID
+
+	return staleSession, nil
 }
 
-// ClearActive desvincula a sessão ativa do dispositivo se for a mesma informada.
-func (r *MemoryRepository) ClearActive(ctx context.Context, deviceID, sessionID string) error {
-	r.mu.Lock()
-	defer r.mu.Unlock()
+// ActiveCount retorna o número total de sessões ativas registradas no repositório.
+func (r *MemoryRepository) ActiveCount(ctx context.Context) (int, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 
-	if current, exists := r.activeByDevice[deviceID]; exists && current == sessionID {
-		delete(r.activeByDevice, deviceID)
-	}
-	return nil
+	return len(r.activeByDevice), nil
 }
 
 func copySession(s *Session) *Session {
@@ -114,12 +132,4 @@ func copySession(s *Session) *Session {
 		clone.ClosedAt = &closedAtCopy
 	}
 	return &clone
-}
-
-// ActiveCount retorna o número total de sessões ativas registradas (útil para testes).
-func (r *MemoryRepository) ActiveCount() int {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
-	return len(r.activeByDevice)
 }

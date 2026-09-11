@@ -77,42 +77,36 @@ func (s *Service) Attach(ctx context.Context, req AttachRequest) (*Session, erro
 	unlock := s.lockDevice(req.DeviceID)
 	defer unlock()
 
-	// Verifica se já existe sessão ativa vinculada a este equipamento
-	activeSession, err := s.repo.FindActiveByDevice(ctx, req.DeviceID)
-	if err == nil && activeSession != nil {
-		activeSession.Detach(DisconnectReasonStale)
-		if updateErr := s.repo.Update(ctx, activeSession); updateErr != nil {
-			return nil, fmt.Errorf("failed to stale disconnect previous session: %w", updateErr)
-		}
-		_ = s.ipPool.Release(activeSession.IPAddress)
-		_ = s.repo.ClearActive(ctx, req.DeviceID, activeSession.ID)
-
-		if s.emitter != nil {
-			s.emitter.EmitSessionEvent(ctx, SessionEventStaleDisconnect, activeSession)
-		}
-	}
-
-	// Alocação de novo IP (pode reaproveitar o recém-liberado pelo pool)
-	ip, err := s.ipPool.Allocate()
+	// 1. Aloca novo IP do pool
+	newIP, err := s.ipPool.Allocate()
 	if err != nil {
 		return nil, fmt.Errorf("failed to allocate ip from pool: %w", err)
 	}
 
-	newSession, err := New(req.DeviceID, devInfo.SubscriberID, req.CellID, ip)
+	// 2. Cria instância da nova sessão
+	newSession, err := New(req.DeviceID, devInfo.SubscriberID, req.CellID, newIP)
 	if err != nil {
-		_ = s.ipPool.Release(ip)
+		_ = s.ipPool.Release(newIP)
 		return nil, err
 	}
 
-	if err := s.repo.Save(ctx, newSession); err != nil {
-		_ = s.ipPool.Release(ip)
-		return nil, fmt.Errorf("failed to save session: %w", err)
+	// 3. Persiste atomicamente no repositório (substitui anterior se re-attach)
+	staleSession, err := s.repo.AttachSession(ctx, newSession)
+	if err != nil {
+		// Compensação: em caso de falha de persistência, libera novo IP alocado
+		_ = s.ipPool.Release(newIP)
+		return nil, fmt.Errorf("failed to attach session: %w", err)
 	}
 
-	if err := s.repo.SetActive(ctx, req.DeviceID, newSession.ID); err != nil {
-		return nil, fmt.Errorf("failed to set active session: %w", err)
+	// 4. Somente após sucesso na persistência: se foi re-attach, libera o IP anterior e emite STALE_DISCONNECT
+	if staleSession != nil {
+		_ = s.ipPool.Release(staleSession.IPAddress)
+		if s.emitter != nil {
+			s.emitter.EmitSessionEvent(ctx, SessionEventStaleDisconnect, staleSession)
+		}
 	}
 
+	// 5. Emite evento de ATTACH para a nova sessão
 	if s.emitter != nil {
 		s.emitter.EmitSessionEvent(ctx, SessionEventAttach, newSession)
 	}
@@ -188,11 +182,12 @@ func (s *Service) Detach(ctx context.Context, sessionID string) (*Session, error
 
 	sess.Detach(DisconnectReasonVoluntary)
 	if err := s.repo.Update(ctx, sess); err != nil {
+		// Se persistência falhar, NÃO libera o IP
 		return nil, fmt.Errorf("failed to update detached session: %w", err)
 	}
 
+	// Somente após persistência confirmada: libera o IP no pool
 	_ = s.ipPool.Release(sess.IPAddress)
-	_ = s.repo.ClearActive(ctx, sess.DeviceID, sess.ID)
 
 	if s.emitter != nil {
 		s.emitter.EmitSessionEvent(ctx, SessionEventDetach, sess)

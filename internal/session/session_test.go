@@ -340,8 +340,12 @@ func TestConcurrentAttach_SameDevice_Deterministic(t *testing.T) {
 	}
 
 	// 2. No repositório, o activeByDevice aponta para essa sessão única
-	if repo.ActiveCount() != 1 {
-		t.Fatalf("expected repo activeCount to be exactly 1, got %d", repo.ActiveCount())
+	activeCount, err := repo.ActiveCount(ctx)
+	if err != nil {
+		t.Fatalf("unexpected error getting active count: %v", err)
+	}
+	if activeCount != 1 {
+		t.Fatalf("expected repo activeCount to be exactly 1, got %d", activeCount)
 	}
 
 	// 3. Todas as outras sessões criadas devem ter sido encerradas com STALE_DISCONNECT

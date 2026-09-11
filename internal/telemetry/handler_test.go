@@ -64,3 +64,32 @@ func TestHandler_GetTelemetry(t *testing.T) {
 		t.Errorf("expected stale_disconnect 1, got %d", resp.EventsTotal.StaleDisconnect)
 	}
 }
+
+func TestHandler_GetTelemetry_StorageError(t *testing.T) {
+	metrics := &Metrics{}
+	var reqCounter atomic.Uint64
+
+	activeProvider := &mockActiveProvider{err: http.ErrHandlerTimeout}
+
+	h := NewHandler(metrics, activeProvider, &reqCounter)
+	mux := http.NewServeMux()
+	h.RegisterRoutes(mux)
+
+	req := httptest.NewRequest(http.MethodGet, "/telemetry", nil)
+	w := httptest.NewRecorder()
+
+	mux.ServeHTTP(w, req)
+
+	if w.Code != http.StatusInternalServerError {
+		t.Fatalf("expected status 500 Internal Server Error, got %d", w.Code)
+	}
+
+	var errResp map[string]string
+	if err := json.NewDecoder(w.Body).Decode(&errResp); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+
+	if errResp["code"] != "TELEMETRY_STORAGE_ERROR" {
+		t.Errorf("expected code TELEMETRY_STORAGE_ERROR, got %s", errResp["code"])
+	}
+}

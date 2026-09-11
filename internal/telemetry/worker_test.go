@@ -9,10 +9,11 @@ import (
 
 type mockActiveProvider struct {
 	count int
+	err   error
 }
 
-func (m *mockActiveProvider) ActiveCount() int {
-	return m.count
+func (m *mockActiveProvider) ActiveCount(ctx context.Context) (int, error) {
+	return m.count, m.err
 }
 
 func TestWorker_ProcessEventTypes(t *testing.T) {
@@ -32,7 +33,10 @@ func TestWorker_ProcessEventTypes(t *testing.T) {
 		t.Fatalf("unexpected shutdown error: %v", err)
 	}
 
-	snap := w.Metrics().Snapshot(10, &mockActiveProvider{count: 1})
+	snap, err := w.Metrics().Snapshot(context.Background(), 10, &mockActiveProvider{count: 1})
+	if err != nil {
+		t.Fatalf("unexpected snapshot error: %v", err)
+	}
 
 	if snap.EventsTotal.Attach != 2 {
 		t.Errorf("expected 2 attach events, got %d", snap.EventsTotal.Attach)

@@ -10,6 +10,6 @@ type Repository interface {
 	Update(ctx context.Context, s *Session) error
 	FindByID(ctx context.Context, id string) (*Session, error)
 	FindActiveByDevice(ctx context.Context, deviceID string) (*Session, error)
-	SetActive(ctx context.Context, deviceID, sessionID string) error
-	ClearActive(ctx context.Context, deviceID, sessionID string) error
+	AttachSession(ctx context.Context, newSession *Session) (*Session, error)
+	ActiveCount(ctx context.Context) (int, error)
 }

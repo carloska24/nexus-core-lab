@@ -1,6 +1,7 @@
 package telemetry
 
 import (
+	"context"
 	"sync/atomic"
 	"time"
 )
@@ -8,7 +9,7 @@ import (
 // ActiveSessionProvider define o contrato consumidor mínimo para recuperar o estado atual
 // de sessões ativas diretamente da fonte de verdade (Session Repository).
 type ActiveSessionProvider interface {
-	ActiveCount() int
+	ActiveCount(ctx context.Context) (int, error)
 }
 
 // Metrics armazena os contadores assíncronos protegidos por operações atômicas.
@@ -46,10 +47,14 @@ type TelemetryResponse struct {
 
 // Snapshot constrói a resposta consolidada de telemetria lendo contadores atômicos e
 // derivando os gauges de estado atual diretamente do provedor de sessões ativas.
-func (m *Metrics) Snapshot(requestsTotal uint64, activeProvider ActiveSessionProvider) TelemetryResponse {
+func (m *Metrics) Snapshot(ctx context.Context, requestsTotal uint64, activeProvider ActiveSessionProvider) (TelemetryResponse, error) {
 	var currentActive int64
 	if activeProvider != nil {
-		currentActive = int64(activeProvider.ActiveCount())
+		count, err := activeProvider.ActiveCount(ctx)
+		if err != nil {
+			return TelemetryResponse{}, err
+		}
+		currentActive = int64(count)
 	}
 
 	return TelemetryResponse{
@@ -67,5 +72,5 @@ func (m *Metrics) Snapshot(requestsTotal uint64, activeProvider ActiveSessionPro
 			Detach:          m.detachTotal.Load(),
 			StaleDisconnect: m.staleDisconnectTotal.Load(),
 		},
-	}
+	}, nil
 }
