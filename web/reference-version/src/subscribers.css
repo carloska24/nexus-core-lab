@@ -1,0 +1,41 @@
+.subscribers-workspace header{align-items:center}
+.subscribers-workspace button{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.subscribers-workspace button:disabled{opacity:.45;cursor:not-allowed}
+.subscribers-workspace .provision-action{background:#124c80;border-color:#2472ac}
+.subscriber-toolbar,.subscriber-search,.subscriber-collection-meta{display:flex;align-items:center;gap:12px}
+.subscriber-toolbar,.subscriber-collection-meta{justify-content:space-between}
+.subscriber-search input{width:340px;margin:0}
+.subscriber-collection-meta{margin:18px 0 14px;font-size:13px;color:#9db6d0}
+.subscriber-collection-meta>span:first-child{display:flex;align-items:center;gap:8px}
+.subscriber-collection-meta strong{color:#edf3ff}
+.subscriber-table{padding:12px 18px}
+.subscriber-table th{font-size:12px;font-weight:500}
+.subscriber-table td{font-size:13px;padding:16px 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.subscriber-table th{padding:12px 10px}
+.subscriber-badge{display:inline-flex;border:1px solid;border-radius:5px;padding:5px 7px;font:10px 'Segoe UI',sans-serif;letter-spacing:.2px;white-space:nowrap}
+.status-PENDING_ACTIVATION{color:#92caff;background:#102c43;border-color:#275578}
+.status-ACTIVE{color:#5ee7aa;background:#0c2c27;border-color:#23564a}
+.status-SUSPENDED{color:#ebc079;background:#30291c;border-color:#605036}
+.status-DEACTIVATED{color:#bcacbb;background:#27202b;border-color:#51404e}
+.subscribers-workspace .subscriber-error{color:#f5ab96;background:#281c21;border:1px solid #644039;padding:12px;border-radius:6px;font-size:13px;overflow-wrap:anywhere}
+.subscriber-error button{margin-left:12px}
+.subscribers-workspace .subscriber-success{color:#66dca7;font-size:13px}
+.subscriber-dialog{width:min(650px,90vw);max-height:88vh;overflow:auto;color:#cbdaf0;box-sizing:border-box;box-shadow:0 20px 90px #000b}
+.subscriber-dialog::backdrop{background:#020711b8}
+.subscriber-dialog-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px}
+.subscriber-dialog-head small{font-size:11px;letter-spacing:1px}
+.subscriber-dialog-head h2{margin:8px 0 22px;font-size:22px}
+.subscriber-dialog-head button{padding:6px;background:transparent}
+.subscriber-identity{display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid #203b50;padding-bottom:17px}
+.subscriber-identity>strong{font-size:22px;color:#e4efff;font-weight:500}
+.subscriber-details{display:grid;grid-template-columns:1fr 1fr;gap:7px 22px;font-size:13px}
+.subscriber-details>div:first-child{grid-column:1/-1}
+.subscriber-details dd{overflow-wrap:anywhere;margin-bottom:5px}
+.subscriber-details dd small{display:block;font-size:10px;color:#7898b8}
+.subscriber-lifecycle{border-top:1px solid #203b50;padding-top:16px}
+.subscriber-lifecycle label,.subscriber-provision label{display:flex;flex-direction:column;gap:8px;font-size:13px}
+.subscriber-lifecycle label>span{font-size:11px;color:#8aa4bf}
+.subscriber-lifecycle input,.subscriber-provision input{width:100%;box-sizing:border-box}
+.subscriber-actions{display:flex;gap:10px;flex-wrap:wrap}
+.subscriber-actions .destructive{background:#35212a;border-color:#744654;color:#ecbbc0}
+.subscriber-dialog .terminal-notice{color:#b8a7bd;border-top:1px solid #3c3041;padding-top:14px;font-size:13px}

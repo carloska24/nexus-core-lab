@@ -20,7 +20,7 @@ func NewHandler(service *Service) *Handler {
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /api/v1/devices", h.handleRegister)
 	mux.HandleFunc("GET /api/v1/devices/{id}", h.handleFindByID)
-	mux.HandleFunc("GET /api/v1/devices", h.handleListBySubscriber)
+	mux.HandleFunc("GET /api/v1/devices", h.handleList)
 }
 
 type errorResponse struct {
@@ -76,14 +76,20 @@ func (h *Handler) handleFindByID(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, dev)
 }
 
-func (h *Handler) handleListBySubscriber(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) handleList(w http.ResponseWriter, r *http.Request) {
 	subscriberID := r.URL.Query().Get("subscriber_id")
-	if subscriberID == "" {
+	if r.URL.Query().Has("subscriber_id") && subscriberID == "" {
 		writeJSONError(w, http.StatusBadRequest, "bad_request", "query parameter 'subscriber_id' is required", "MISSING_QUERY_PARAMETER")
 		return
 	}
 
-	devices, err := h.service.ListBySubscriber(r.Context(), subscriberID)
+	var devices []*Device
+	var err error
+	if r.URL.Query().Has("subscriber_id") {
+		devices, err = h.service.ListBySubscriber(r.Context(), subscriberID)
+	} else {
+		devices, err = h.service.List(r.Context())
+	}
 	if err != nil {
 		writeJSONError(w, http.StatusInternalServerError, "internal_error", "failed to list devices", "INTERNAL_SERVER_ERROR")
 		return

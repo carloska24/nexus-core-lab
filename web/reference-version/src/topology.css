@@ -1,0 +1,13 @@
+.topology-state{position:absolute;left:12px;top:8px;z-index:6;font:10px 'Segoe UI',sans-serif;color:#b4cce1}
+.app .topology-state button{border:1px solid #1e3b50;background:#071521e8;border-radius:4px;font:10px 'Segoe UI',sans-serif;padding:5px 8px;color:inherit}
+.topology-state[data-state=partial],.topology-state[data-state=stale]{color:#e2bc78}.topology-state[data-state=error]{color:#f2a895}
+.topology-register{width:365px;max-height:285px;overflow:auto;background:#071522f5;border:1px solid #294357;border-radius:5px;padding:10px;box-shadow:0 10px 25px #0008}
+.topology-register>div{padding:8px 0;border-bottom:1px solid #1b3446;font-size:11px}
+.topology-register small{display:block;color:#e3ae83}
+.app .links .stale-link{stroke:#93a2ae;opacity:.45;stroke-dasharray:2 7}
+.app .live-device.stale circle{fill:#8e9caa}
+.live-device{cursor:pointer;outline:none}.live-device:focus circle{stroke:#e3f5ff;stroke-width:3}
+.topology-tooltip{background:#061725f5;border:1px solid #315369;border-radius:5px;padding:8px;color:#c4d9e9;font:11px/1.4 'Segoe UI',sans-serif;text-align:left;overflow-wrap:anywhere;max-height:225px;overflow:auto}
+.app .preview-state{font-size:10px;color:#8fa9c1;margin:7px 13px}
+.app .live-sessions-preview td{font-size:11px!important;padding:5px 3px;height:28px}
+.app .live-sessions-preview .head-title h2{font-size:16px}

@@ -1,0 +1,298 @@
+/* ==========================================================================
+   Bottom Analytics Cards (Session Activity, Events by Type, IP Pool)
+   ========================================================================== */
+
+.analytics-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--transition-fast);
+  height: 100%;
+  min-height: 175px;
+}
+
+.analytics-card:hover {
+  border-color: var(--border-active);
+}
+
+.analytics-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.analytics-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.analytics-icon-wrap {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.analytics-icon-wrap.blue-bg {
+  background-color: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.analytics-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.analytics-subtitle {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* Session Activity Specific */
+.chart-legend-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.legend-entry {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-indicator.green {
+  background-color: var(--color-green);
+  box-shadow: 0 0 4px var(--color-green-glow);
+}
+
+.legend-indicator.blue {
+  background-color: var(--color-lte);
+  box-shadow: 0 0 4px var(--color-lte-glow);
+}
+
+.chart-canvas-container {
+  width: 100%;
+  height: 125px;
+}
+
+/* Events By Type Donut Specific */
+.donut-content-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(100% - 30px);
+  gap: 10px;
+}
+
+.donut-chart-wrap {
+  position: relative;
+  width: 125px;
+  height: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.donut-center-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.donut-total {
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.donut-label {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.donut-legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.donut-legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.legend-name-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-bullet {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legend-item-name {
+  color: var(--text-secondary);
+  font-size: 10.5px;
+}
+
+.legend-item-percent {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* IP Pool Usage Specific */
+.ip-pool-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.ip-pool-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.ip-pool-stat-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.ip-pool-left-label {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.ip-pool-left-label strong {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ip-pool-right-percent {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.ip-progress-track {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 8px 0 6px;
+}
+
+.ip-progress-fill.green-bar {
+  height: 100%;
+  background: #10b981;
+  border-radius: 3px;
+  box-shadow: 0 0 6px var(--color-green-glow);
+}
+
+.ip-pool-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 10.5px;
+  font-family: var(--font-mono);
+  margin-bottom: 6px;
+}
+
+.ip-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-secondary);
+}
+
+.ip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.dot-green {
+  background-color: #10b981;
+  box-shadow: 0 0 4px var(--color-green-glow);
+}
+
+.dot-gray {
+  background-color: #64748b;
+}
+
+.ip-warmup-box {
+  background-color: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--radius-xs);
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.warmup-check-icon {
+  color: var(--color-green);
+  flex-shrink: 0;
+}
+
+.warmup-text-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.warmup-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--color-green);
+  line-height: 1.2;
+}
+
+.warmup-subtitle {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}

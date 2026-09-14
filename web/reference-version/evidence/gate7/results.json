@@ -1,0 +1,170 @@
+{
+  "results": [
+    "Fresh API execution starts with empty feed",
+    "Real Attach → Handover → Detach; UUID/IP and original cell preserved",
+    "Real re-attach emits STALE_DISCONNECT for old session then ATTACH for replacement",
+    "Telemetry counters count each event once",
+    "Overview real feed at three resolutions; Total Events remains telemetry",
+    "Events uses shared snapshot; full UUID details accessible",
+    "Failed read preserves last six events as stale",
+    "Initial failure is error, not false empty success; polling recovers",
+    "Slow feed polling never overlaps; next round waits five seconds after completion",
+    "Unmount stops feed polling; zero browser errors"
+  ],
+  "hero": [
+    {
+      "id": "3",
+      "ip_address": "10.45.0.2",
+      "disconnect_reason": "VOLUNTARY_DETACH",
+      "type": "DETACH",
+      "session_id": "2c2d3a20-38f6-4930-9a80-e26be9b0acf3",
+      "device_id": "05b832ad-8b8f-4715-aad9-e84861dcb1ce",
+      "subscriber_id": "fbaa6c89-b6b2-447d-9c82-063acbe8f217",
+      "cell_id": "CELL-SP-002",
+      "timestamp": "2026-09-14T18:01:37.7417078Z"
+    },
+    {
+      "id": "2",
+      "ip_address": "10.45.0.2",
+      "from_cell_id": "CELL-SP-001",
+      "to_cell_id": "CELL-SP-002",
+      "type": "CELL_HANDOVER",
+      "session_id": "2c2d3a20-38f6-4930-9a80-e26be9b0acf3",
+      "device_id": "05b832ad-8b8f-4715-aad9-e84861dcb1ce",
+      "subscriber_id": "fbaa6c89-b6b2-447d-9c82-063acbe8f217",
+      "cell_id": "CELL-SP-002",
+      "timestamp": "2026-09-14T18:01:37.7335304Z"
+    },
+    {
+      "id": "1",
+      "ip_address": "10.45.0.2",
+      "type": "ATTACH",
+      "session_id": "2c2d3a20-38f6-4930-9a80-e26be9b0acf3",
+      "device_id": "05b832ad-8b8f-4715-aad9-e84861dcb1ce",
+      "subscriber_id": "fbaa6c89-b6b2-447d-9c82-063acbe8f217",
+      "cell_id": "CELL-SP-001",
+      "timestamp": "2026-09-14T18:01:37.7186944Z"
+    }
+  ],
+  "feed": [
+    {
+      "id": "6",
+      "ip_address": "10.45.0.3",
+      "type": "ATTACH",
+      "session_id": "038f76a5-dde4-4cfc-afd7-7a58be16dd5b",
+      "device_id": "05b832ad-8b8f-4715-aad9-e84861dcb1ce",
+      "subscriber_id": "fbaa6c89-b6b2-447d-9c82-063acbe8f217",
+      "cell_id": "CELL-SP-002",
+      "timestamp": "2026-09-14T18:01:37.7710017Z"
+    },
+    {
+      "id": "5",
+      "ip_address": "10.45.0.2",
+      "disconnect_reason": "STALE_DISCONNECT",
+      "type": "STALE_DISCONNECT",
+      "session_id": "c8c9428c-2497-4e59-b84d-191e97276ef6",
+      "device_id": "05b832ad-8b8f-4715-aad9-e84861dcb1ce",
+      "subscriber_id": "fbaa6c89-b6b2-447d-9c82-063acbe8f217",
+      "cell_id": "CELL-SP-001",
+      "timestamp": "2026-09-14T18:01:37.7710017Z"
+    },
+    {
+      "id": "4",
+      "ip_address": "10.45.0.2",
+      "type": "ATTACH",
+      "session_id": "c8c9428c-2497-4e59-b84d-191e97276ef6",
+      "device_id": "05b832ad-8b8f-4715-aad9-e84861dcb1ce",
+      "subscriber_id": "fbaa6c89-b6b2-447d-9c82-063acbe8f217",
+      "cell_id": "CELL-SP-001",
+      "timestamp": "2026-09-14T18:01:37.7652298Z"
+    },
+    {
+      "id": "3",
+      "ip_address": "10.45.0.2",
+      "disconnect_reason": "VOLUNTARY_DETACH",
+      "type": "DETACH",
+      "session_id": "2c2d3a20-38f6-4930-9a80-e26be9b0acf3",
+      "device_id": "05b832ad-8b8f-4715-aad9-e84861dcb1ce",
+      "subscriber_id": "fbaa6c89-b6b2-447d-9c82-063acbe8f217",
+      "cell_id": "CELL-SP-002",
+      "timestamp": "2026-09-14T18:01:37.7417078Z"
+    },
+    {
+      "id": "2",
+      "ip_address": "10.45.0.2",
+      "from_cell_id": "CELL-SP-001",
+      "to_cell_id": "CELL-SP-002",
+      "type": "CELL_HANDOVER",
+      "session_id": "2c2d3a20-38f6-4930-9a80-e26be9b0acf3",
+      "device_id": "05b832ad-8b8f-4715-aad9-e84861dcb1ce",
+      "subscriber_id": "fbaa6c89-b6b2-447d-9c82-063acbe8f217",
+      "cell_id": "CELL-SP-002",
+      "timestamp": "2026-09-14T18:01:37.7335304Z"
+    },
+    {
+      "id": "1",
+      "ip_address": "10.45.0.2",
+      "type": "ATTACH",
+      "session_id": "2c2d3a20-38f6-4930-9a80-e26be9b0acf3",
+      "device_id": "05b832ad-8b8f-4715-aad9-e84861dcb1ce",
+      "subscriber_id": "fbaa6c89-b6b2-447d-9c82-063acbe8f217",
+      "cell_id": "CELL-SP-001",
+      "timestamp": "2026-09-14T18:01:37.7186944Z"
+    }
+  ],
+  "telemetry": {
+    "service": "nexus-core-lab",
+    "timestamp": "2026-09-14T18:01:37.7838831Z",
+    "requests_total": 15,
+    "metrics": {
+      "active_sessions": 1,
+      "connected_devices": 1,
+      "dropped_events_total": 0
+    },
+    "events_total": {
+      "attach": 3,
+      "cell_handover": 1,
+      "detach": 1,
+      "stale_disconnect": 1
+    }
+  },
+  "requests": [
+    {
+      "time": 1789408903562,
+      "url": "http://localhost:5198/api/v1/events/recent"
+    },
+    {
+      "time": 1789408903563,
+      "url": "http://localhost:5198/api/v1/events/recent"
+    },
+    {
+      "time": 1789408909166,
+      "url": "http://localhost:5198/api/v1/events/recent"
+    },
+    {
+      "time": 1789408914104,
+      "url": "http://localhost:5198/api/v1/events/recent"
+    },
+    {
+      "time": 1789408915729,
+      "url": "http://localhost:5198/api/v1/events/recent"
+    },
+    {
+      "time": 1789408915736,
+      "url": "http://localhost:5198/api/v1/events/recent"
+    },
+    {
+      "time": 1789408920758,
+      "url": "http://localhost:5198/api/v1/events/recent"
+    },
+    {
+      "time": 1789408925779,
+      "url": "http://localhost:5198/api/v1/events/recent"
+    },
+    {
+      "time": 1789408936416,
+      "url": "http://localhost:5198/api/v1/events/recent"
+    }
+  ],
+  "errors": []
+}

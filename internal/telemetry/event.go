@@ -14,10 +14,15 @@ const (
 
 // Event encapsula os dados emitidos por transições de ciclo de vida de conectividade.
 type Event struct {
-	Type         EventType `json:"type"`
-	SessionID    string    `json:"session_id"`
-	DeviceID     string    `json:"device_id"`
-	SubscriberID string    `json:"subscriber_id"`
-	CellID       string    `json:"cell_id"`
-	Timestamp    time.Time `json:"timestamp"`
+	ID               string    `json:"id"`
+	IPAddress        string    `json:"ip_address,omitempty"`
+	FromCellID       string    `json:"from_cell_id,omitempty"`
+	ToCellID         string    `json:"to_cell_id,omitempty"`
+	DisconnectReason string    `json:"disconnect_reason,omitempty"`
+	Type             EventType `json:"type"`
+	SessionID        string    `json:"session_id"`
+	DeviceID         string    `json:"device_id"`
+	SubscriberID     string    `json:"subscriber_id"`
+	CellID           string    `json:"cell_id"`
+	Timestamp        time.Time `json:"timestamp"`
 }

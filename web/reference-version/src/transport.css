@@ -1,0 +1,13 @@
+/* Gate 2: state treatment only; preserve the approved geometry. */
+.app [data-status="offline"],.app .online[data-status="offline"]{color:#f3967b}
+.app [data-status="loading"],.app .online[data-status="loading"]{color:#a5b5c7}
+.app i[data-status="unknown"],.app i[data-status="loading"]{background:#7890a5!important;box-shadow:none!important}
+.app i[data-status="offline"]{background:#ed8a70!important;box-shadow:none!important}
+.app i[data-status="online"]{background:#50e69d!important}
+.app [data-state="stale"] .kpi-copy small,.app [data-state="stale"] .head-title p{color:#e5bb68}
+.app [data-state="error"] .kpi-copy small,.app [data-state="error"] .head-title p{color:#ed9d87}
+.app .mock-tag{font:9px 'Segoe UI',sans-serif;color:#8ba1b6;margin-left:5px;vertical-align:middle;font-style:normal}
+.app .donut-content{gap:17px}
+.app .donut-list{width:180px}
+.app .donut-list p{font-size:10px;gap:6px}
+.app .donut-list p i{flex-shrink:0}

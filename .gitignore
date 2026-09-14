@@ -36,3 +36,11 @@ Thumbs.db
 
 # Docker local overrides
 docker-compose.override.yml
+# Frontend dependencies and generated caches
+node_modules/
+.cache/
+.vite/
+*.tsbuildinfo
+
+# Local visual evidence (retain on disk; summaries remain versioned)
+/web/reference-version/evidence/**/*.png

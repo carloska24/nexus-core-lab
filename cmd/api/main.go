@@ -75,7 +75,7 @@ type telemetrySessionAdapter struct {
 	worker *telemetry.Worker
 }
 
-func (a *telemetrySessionAdapter) EmitSessionEvent(ctx context.Context, eventType session.SessionEventType, s *session.Session) {
+func (a *telemetrySessionAdapter) EmitSessionEvent(ctx context.Context, eventType session.SessionEventType, s *session.Session, fromCellID string) {
 	var tType telemetry.EventType
 	switch eventType {
 	case session.SessionEventAttach:
@@ -90,13 +90,21 @@ func (a *telemetrySessionAdapter) EmitSessionEvent(ctx context.Context, eventTyp
 		return
 	}
 
+	toCellID := ""
+	if eventType == session.SessionEventCellHandover {
+		toCellID = s.CellID
+	}
 	a.worker.Emit(telemetry.Event{
-		Type:         tType,
-		SessionID:    s.ID,
-		DeviceID:     s.DeviceID,
-		SubscriberID: s.SubscriberID,
-		CellID:       s.CellID,
-		Timestamp:    time.Now().UTC(),
+		IPAddress:        s.IPAddress,
+		FromCellID:       fromCellID,
+		ToCellID:         toCellID,
+		DisconnectReason: s.DisconnectReason,
+		Type:             tType,
+		SessionID:        s.ID,
+		DeviceID:         s.DeviceID,
+		SubscriberID:     s.SubscriberID,
+		CellID:           s.CellID,
+		Timestamp:        time.Now().UTC(),
 	})
 }
 
@@ -199,6 +207,7 @@ func main() {
 		deviceHandler.RegisterRoutes,
 		sessionHandler.RegisterRoutes,
 		telemetryHandler.RegisterRoutes,
+		telemetryWorker.RegisterRecentRoutes,
 	)
 
 	// Envolve o roteador com middleware de Request ID, log/slog e contagem de requisições

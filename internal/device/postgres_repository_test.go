@@ -105,6 +105,46 @@ func TestPostgresRepository_DevicePersistence(t *testing.T) {
 		t.Errorf("expected 2 devices, got %d", len(list))
 	}
 
+	// A device belonging to another subscriber must also appear globally.
+	otherSubID := "4a4a4a4a-4444-4444-8444-444444444444"
+	_, err = db.ExecContext(ctx, `INSERT INTO subscribers (id, imsi, msisdn, status, created_at, updated_at)
+		VALUES ($1, '724994444444444', '+5511999994444', 'ACTIVE', $2, $2)`, otherSubID, now)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		_, _ = db.ExecContext(ctx, "DELETE FROM devices WHERE subscriber_id = $1", otherSubID)
+		_, _ = db.ExecContext(ctx, "DELETE FROM subscribers WHERE id = $1", otherSubID)
+	}()
+	otherDev, err := New(otherSubID, "490154203237540", TechLTE)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := repo.Save(ctx, otherDev); err != nil {
+		t.Fatal(err)
+	}
+	global, err := repo.List(ctx)
+	if err != nil {
+		t.Fatalf("global list: %v", err)
+	}
+	foundIDs := map[string]bool{}
+	for i, d := range global {
+		foundIDs[d.ID] = true
+		if i > 0 {
+			prev := global[i-1]
+			if d.CreatedAt.Before(prev.CreatedAt) || d.CreatedAt.Equal(prev.CreatedAt) && d.ID < prev.ID {
+				t.Fatal("global list is not ordered by created_at, id")
+			}
+		}
+	}
+	if !foundIDs[dev1.ID] || !foundIDs[dev2.ID] || !foundIDs[otherDev.ID] {
+		t.Fatal("global list omitted registered devices")
+	}
+	filtered, err := repo.ListBySubscriber(ctx, subID)
+	if err != nil || len(filtered) != 2 {
+		t.Fatalf("filter after third device: %d %v", len(filtered), err)
+	}
+
 	// 5. Unique IMEI
 	dupDev, _ := New(subID, imei1, Tech5G)
 	err = repo.Save(ctx, dupDev)

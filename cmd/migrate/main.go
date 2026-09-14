@@ -23,12 +23,7 @@ type migrationFile struct {
 }
 
 func main() {
-	defaultURL := os.Getenv("DATABASE_URL")
-	if defaultURL == "" {
-		defaultURL = "postgres://nexus:nexus@localhost:5433/nexus_core_lab?sslmode=disable"
-	}
-
-	url := flag.String("url", defaultURL, "PostgreSQL connection URL")
+	url := flag.String("url", "", "PostgreSQL connection URL (defaults to DATABASE_URL)")
 	dir := flag.String("dir", "migrations", "Directory containing .sql migrations")
 	up := flag.Bool("up", false, "Apply pending migrations")
 	down := flag.Bool("down", false, "Rollback the latest applied migration")
@@ -37,6 +32,13 @@ func main() {
 	if (!*up && !*down) || (*up && *down) {
 		fmt.Println("Uso: go run ./cmd/migrate [-url <db_url>] -up | -down")
 		os.Exit(1)
+	}
+
+	if *url == "" {
+		*url = os.Getenv("DATABASE_URL")
+	}
+	if strings.TrimSpace(*url) == "" {
+		log.Fatal("DATABASE_URL is required for migrations (or provide -url); no default credentials are configured")
 	}
 
 	db, err := sql.Open("pgx", *url)

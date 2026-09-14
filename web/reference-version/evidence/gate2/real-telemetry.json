@@ -1,0 +1,51 @@
+{
+  "before": {
+    "service": "nexus-core-lab",
+    "timestamp": "2026-09-11T19:20:57.8538995Z",
+    "requests_total": 18,
+    "metrics": {
+      "active_sessions": 1,
+      "connected_devices": 1,
+      "dropped_events_total": 0
+    },
+    "events_total": {
+      "attach": 1,
+      "cell_handover": 0,
+      "detach": 0,
+      "stale_disconnect": 0
+    }
+  },
+  "attached": {
+    "service": "nexus-core-lab",
+    "timestamp": "2026-09-11T19:21:01.5780044Z",
+    "requests_total": 24,
+    "metrics": {
+      "active_sessions": 2,
+      "connected_devices": 2,
+      "dropped_events_total": 0
+    },
+    "events_total": {
+      "attach": 2,
+      "cell_handover": 0,
+      "detach": 0,
+      "stale_disconnect": 0
+    }
+  },
+  "after": {
+    "service": "nexus-core-lab",
+    "timestamp": "2026-09-11T19:21:06.6945221Z",
+    "requests_total": 28,
+    "metrics": {
+      "active_sessions": 1,
+      "connected_devices": 1,
+      "dropped_events_total": 0
+    },
+    "events_total": {
+      "attach": 2,
+      "cell_handover": 1,
+      "detach": 1,
+      "stale_disconnect": 0
+    }
+  },
+  "session_id": "6f4a71a5-b923-40f8-9da3-591cfb7e9d33"
+}

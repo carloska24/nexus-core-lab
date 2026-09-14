@@ -11,6 +11,9 @@ const defaultBufferSize = 256
 type Worker struct {
 	events    chan Event
 	done      chan struct{}
+	recentMu  sync.RWMutex
+	recent    []Event
+	sequence  uint64
 	metrics   *Metrics
 	mu        sync.RWMutex
 	closed    bool
@@ -100,5 +103,8 @@ func (w *Worker) processEvent(evt Event) {
 		w.metrics.detachTotal.Add(1)
 	case EventStaleDisconnect:
 		w.metrics.staleDisconnectTotal.Add(1)
+	default:
+		return
 	}
+	w.retain(evt)
 }

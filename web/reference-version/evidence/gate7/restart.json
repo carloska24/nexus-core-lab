@@ -1,0 +1,90 @@
+{
+  "results": [
+    "Fresh API execution starts with empty feed",
+    "Real Attach → Handover → Detach; UUID/IP and original cell preserved",
+    "Real re-attach emits STALE_DISCONNECT for old session then ATTACH for replacement",
+    "Telemetry counters count each event once"
+  ],
+  "feed": [
+    {
+      "id": "6",
+      "ip_address": "10.45.0.3",
+      "type": "ATTACH",
+      "session_id": "9632baef-41fe-43fd-b6fc-b1182027f6b9",
+      "device_id": "559e47a8-0a30-435d-bfa7-f377457bf7a9",
+      "subscriber_id": "1524362e-cdce-4c21-85e8-4c058d16bbef",
+      "cell_id": "CELL-SP-002",
+      "timestamp": "2026-09-14T18:06:26.679466Z"
+    },
+    {
+      "id": "5",
+      "ip_address": "10.45.0.2",
+      "disconnect_reason": "STALE_DISCONNECT",
+      "type": "STALE_DISCONNECT",
+      "session_id": "ee7f51f8-e209-4e8d-9118-b340efb6e67f",
+      "device_id": "559e47a8-0a30-435d-bfa7-f377457bf7a9",
+      "subscriber_id": "1524362e-cdce-4c21-85e8-4c058d16bbef",
+      "cell_id": "CELL-SP-001",
+      "timestamp": "2026-09-14T18:06:26.679466Z"
+    },
+    {
+      "id": "4",
+      "ip_address": "10.45.0.2",
+      "type": "ATTACH",
+      "session_id": "ee7f51f8-e209-4e8d-9118-b340efb6e67f",
+      "device_id": "559e47a8-0a30-435d-bfa7-f377457bf7a9",
+      "subscriber_id": "1524362e-cdce-4c21-85e8-4c058d16bbef",
+      "cell_id": "CELL-SP-001",
+      "timestamp": "2026-09-14T18:06:26.6699137Z"
+    },
+    {
+      "id": "3",
+      "ip_address": "10.45.0.2",
+      "disconnect_reason": "VOLUNTARY_DETACH",
+      "type": "DETACH",
+      "session_id": "0426406f-cada-4e28-a9d8-20977830ee66",
+      "device_id": "559e47a8-0a30-435d-bfa7-f377457bf7a9",
+      "subscriber_id": "1524362e-cdce-4c21-85e8-4c058d16bbef",
+      "cell_id": "CELL-SP-002",
+      "timestamp": "2026-09-14T18:06:26.6352126Z"
+    },
+    {
+      "id": "2",
+      "ip_address": "10.45.0.2",
+      "from_cell_id": "CELL-SP-001",
+      "to_cell_id": "CELL-SP-002",
+      "type": "CELL_HANDOVER",
+      "session_id": "0426406f-cada-4e28-a9d8-20977830ee66",
+      "device_id": "559e47a8-0a30-435d-bfa7-f377457bf7a9",
+      "subscriber_id": "1524362e-cdce-4c21-85e8-4c058d16bbef",
+      "cell_id": "CELL-SP-002",
+      "timestamp": "2026-09-14T18:06:26.6282622Z"
+    },
+    {
+      "id": "1",
+      "ip_address": "10.45.0.2",
+      "type": "ATTACH",
+      "session_id": "0426406f-cada-4e28-a9d8-20977830ee66",
+      "device_id": "559e47a8-0a30-435d-bfa7-f377457bf7a9",
+      "subscriber_id": "1524362e-cdce-4c21-85e8-4c058d16bbef",
+      "cell_id": "CELL-SP-001",
+      "timestamp": "2026-09-14T18:06:26.6152627Z"
+    }
+  ],
+  "telemetry": {
+    "service": "nexus-core-lab",
+    "timestamp": "2026-09-14T18:06:26.7002375Z",
+    "requests_total": 15,
+    "metrics": {
+      "active_sessions": 1,
+      "connected_devices": 1,
+      "dropped_events_total": 0
+    },
+    "events_total": {
+      "attach": 3,
+      "cell_handover": 1,
+      "detach": 1,
+      "stale_disconnect": 1
+    }
+  }
+}

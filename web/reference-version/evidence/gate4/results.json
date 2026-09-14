@@ -1,0 +1,502 @@
+{
+  "results": [
+    "Real empty collection and Overview KPI = 0",
+    "No active subscribers message and registration disabled",
+    "Subscriber provision/activation and LTE + 5G registration through real UI",
+    "Real subscriber filter and local search never replace global KPI",
+    "GET UUID details and subscriber enrichment from shared collection",
+    "Duplicate IMEI 409 visible, total unchanged",
+    "Inactive owners disabled; real backend 400 / 404 / 422 contracts including PENDING_ACTIVATION",
+    "Concurrent subscriber suspension: backend 422 visible with no optimistic device",
+    "Failed read preserves stale snapshot; no-snapshot error is —; manual recovery",
+    "No Devices polling or Sessions requests; Health polling preserved",
+    "Twelve real screenshots; zero uncaught browser errors"
+  ],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:5187/",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/@vite/client",
+      "method": "GET"
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/main.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/@fs/C:/Users/joaob/OneDrive/Documentos/nexus-core-lab/web/node_modules/vite/dist/client/env.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/react.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/react-dom_client.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/App.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/styles.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/comparison.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/chunk-QNDR6QZV.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/ReferenceArt.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/transport.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/monitoring.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/api.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/LivePanels.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/subscribers.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/SubscribersPage.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/devices.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/DevicesPage.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/lucide-react.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/device-api.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/subscriber-api.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/subscribers.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/devices.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/health",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/telemetry",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/health",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/telemetry",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/maps/campinas.jpg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/52e3aaa2-8b97-46ed-a74a-528d94d2ac09",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/52e3aaa2-8b97-46ed-a74a-528d94d2ac09/activate",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/c6cb03ce-d11d-48f6-9bd5-afe7bde73ec1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/c6cb03ce-d11d-48f6-9bd5-afe7bde73ec1/activate",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices?subscriber_id=52e3aaa2-8b97-46ed-a74a-528d94d2ac09",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices/251e910b-d6f1-49a9-bbe1-663884bbf57c",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices/251e910b-d6f1-49a9-bbe1-663884bbf57c",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/telemetry",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/4d6179ff-40e9-4818-9d53-0fe3dab93f11",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/4d6179ff-40e9-4818-9d53-0fe3dab93f11/activate",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/4d6179ff-40e9-4818-9d53-0fe3dab93f11/suspend",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/d14c1bb9-be16-4e91-817f-68681e3381fa",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/d14c1bb9-be16-4e91-817f-68681e3381fa/activate",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers/d14c1bb9-be16-4e91-817f-68681e3381fa/deactivate",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/@vite/client",
+      "method": "GET"
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/main.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/@fs/C:/Users/joaob/OneDrive/Documentos/nexus-core-lab/web/node_modules/vite/dist/client/env.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/react.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/react-dom_client.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/App.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/styles.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/comparison.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/chunk-QNDR6QZV.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/ReferenceArt.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/transport.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/monitoring.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/api.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/LivePanels.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/subscribers.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/SubscribersPage.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/devices.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/DevicesPage.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/node_modules/.vite/deps/lucide-react.js?v=e11c4e53",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/subscriber-api.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/subscribers.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/device-api.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/src/devices.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/health",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/telemetry",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/subscribers",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/health",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/telemetry",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/telemetry",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/health",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/telemetry",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices/a947c652-39b3-4262-8e79-c3a4b960206d",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices/a947c652-39b3-4262-8e79-c3a4b960206d",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/maps/campinas.jpg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices/a947c652-39b3-4262-8e79-c3a4b960206d",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices/a947c652-39b3-4262-8e79-c3a4b960206d",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/telemetry",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices/a947c652-39b3-4262-8e79-c3a4b960206d",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5187/api/v1/devices/a947c652-39b3-4262-8e79-c3a4b960206d",
+      "method": "GET"
+    }
+  ],
+  "errors": []
+}

@@ -102,13 +102,13 @@ func (s *Service) Attach(ctx context.Context, req AttachRequest) (*Session, erro
 	if staleSession != nil {
 		_ = s.ipPool.Release(staleSession.IPAddress)
 		if s.emitter != nil {
-			s.emitter.EmitSessionEvent(ctx, SessionEventStaleDisconnect, staleSession)
+			s.emitter.EmitSessionEvent(ctx, SessionEventStaleDisconnect, staleSession, "")
 		}
 	}
 
 	// 5. Emite evento de ATTACH para a nova sessão
 	if s.emitter != nil {
-		s.emitter.EmitSessionEvent(ctx, SessionEventAttach, newSession)
+		s.emitter.EmitSessionEvent(ctx, SessionEventAttach, newSession, "")
 	}
 
 	return newSession, nil
@@ -143,6 +143,7 @@ func (s *Service) Handover(ctx context.Context, sessionID, targetCellID string) 
 		return sess, nil // no-op idempotente (não emite evento)
 	}
 
+	fromCellID := sess.CellID
 	if err := sess.Handover(targetCellID); err != nil {
 		return nil, err
 	}
@@ -152,7 +153,7 @@ func (s *Service) Handover(ctx context.Context, sessionID, targetCellID string) 
 	}
 
 	if s.emitter != nil {
-		s.emitter.EmitSessionEvent(ctx, SessionEventCellHandover, sess)
+		s.emitter.EmitSessionEvent(ctx, SessionEventCellHandover, sess, fromCellID)
 	}
 
 	return sess, nil
@@ -190,7 +191,7 @@ func (s *Service) Detach(ctx context.Context, sessionID string) (*Session, error
 	_ = s.ipPool.Release(sess.IPAddress)
 
 	if s.emitter != nil {
-		s.emitter.EmitSessionEvent(ctx, SessionEventDetach, sess)
+		s.emitter.EmitSessionEvent(ctx, SessionEventDetach, sess, "")
 	}
 
 	return sess, nil

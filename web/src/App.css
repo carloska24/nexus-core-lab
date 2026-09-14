@@ -1,0 +1,112 @@
+/* ==========================================================================
+   Main Application Layout (NEXUS NOC Dashboard)
+   ========================================================================== */
+
+.app-root {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--bg-root);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dashboard-container {
+  padding: 12px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Central Section: Topology (65%) + Right Tables (35%) */
+.central-section {
+  display: grid;
+  grid-template-columns: 65fr 35fr;
+  gap: 12px;
+  min-height: 400px;
+  min-width: 0;
+}
+
+.topology-column {
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tables-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  min-width: 0;
+}
+
+.tables-column > * {
+  flex: 1;
+  min-height: 190px;
+  min-width: 0;
+}
+
+/* Bottom Section: 3 Analytics Cards (Activity 42%, Events by Type 28%, IP Pool 30%) */
+.bottom-section {
+  display: grid;
+  grid-template-columns: 42fr 28fr 30fr;
+  gap: 12px;
+  min-height: 195px;
+  min-width: 0;
+}
+
+.bottom-section > * {
+  min-width: 0;
+}
+
+/* Desktop NOC Adaptive breakpoints */
+@media (max-width: 1440px) {
+  .dashboard-container {
+    padding: 10px 14px 14px;
+    gap: 10px;
+  }
+
+  .central-section {
+    grid-template-columns: 63fr 37fr;
+    gap: 10px;
+    min-height: 370px;
+  }
+
+  .tables-column {
+    gap: 10px;
+  }
+
+  .tables-column > * {
+    min-height: 175px;
+  }
+
+  .bottom-section {
+    gap: 10px;
+    min-height: 185px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .central-section {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-section {
+    grid-template-columns: 1fr;
+  }
+}

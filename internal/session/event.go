@@ -19,5 +19,6 @@ type EventEmitter interface {
 		ctx context.Context,
 		eventType SessionEventType,
 		s *Session,
+		fromCellID string,
 	)
 }

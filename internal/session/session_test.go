@@ -394,8 +394,9 @@ func TestConcurrentAttach_SameDevice_Deterministic(t *testing.T) {
 }
 
 type recordEvent struct {
-	Type SessionEventType
-	Sess *Session
+	Type       SessionEventType
+	Sess       *Session
+	FromCellID string
 }
 
 type mockEventEmitter struct {
@@ -403,10 +404,10 @@ type mockEventEmitter struct {
 	events []recordEvent
 }
 
-func (m *mockEventEmitter) EmitSessionEvent(ctx context.Context, eventType SessionEventType, s *Session) {
+func (m *mockEventEmitter) EmitSessionEvent(ctx context.Context, eventType SessionEventType, s *Session, fromCellID string) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	m.events = append(m.events, recordEvent{Type: eventType, Sess: s})
+	m.events = append(m.events, recordEvent{Type: eventType, Sess: s, FromCellID: fromCellID})
 }
 
 func (m *mockEventEmitter) count(t SessionEventType) int {
@@ -456,6 +457,10 @@ func TestSession_EventEmitter(t *testing.T) {
 	}
 	if emitter.count(SessionEventCellHandover) != 1 {
 		t.Fatalf("expected 1 CELL_HANDOVER event, got %d", emitter.count(SessionEventCellHandover))
+	}
+
+	if emitter.events[1].FromCellID != "CELL-SP-001" || emitter.events[1].Sess.CellID != "CELL-SP-002" {
+		t.Fatal("handover origin/destination lost")
 	}
 
 	// 4. Re-attach emite STALE_DISCONNECT da s1 e ATTACH da s2

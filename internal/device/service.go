@@ -55,6 +55,11 @@ func (s *Service) FindByID(ctx context.Context, id string) (*Device, error) {
 	return s.repo.FindByID(ctx, id)
 }
 
+// List retorna a coleção completa de dispositivos.
+func (s *Service) List(ctx context.Context) ([]*Device, error) {
+	return s.repo.List(ctx)
+}
+
 // ListBySubscriber lista todos os equipamentos registrados para um assinante.
 func (s *Service) ListBySubscriber(ctx context.Context, subscriberID string) ([]*Device, error) {
 	if subscriberID == "" {

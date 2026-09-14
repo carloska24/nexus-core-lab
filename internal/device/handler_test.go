@@ -159,8 +159,8 @@ func TestDeviceHTTPHandlers(t *testing.T) {
 		}
 	})
 
-	t.Run("GET /api/v1/devices without subscriber_id query - 400", func(t *testing.T) {
-		req := httptest.NewRequest(http.MethodGet, "/api/v1/devices", nil)
+	t.Run("GET /api/v1/devices with empty subscriber_id query - 400", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/api/v1/devices?subscriber_id=", nil)
 		w := httptest.NewRecorder()
 
 		mux.ServeHTTP(w, req)

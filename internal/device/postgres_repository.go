@@ -105,6 +105,31 @@ type rowScanner interface {
 	Scan(dest ...any) error
 }
 
+// List recupera a coleção completa em ordem determinística.
+func (r *PostgresRepository) List(ctx context.Context) ([]*Device, error) {
+	rows, err := r.db.QueryContext(ctx, `
+		SELECT id, subscriber_id, imei, technology, status, created_at, updated_at
+		FROM devices
+		ORDER BY created_at ASC, id ASC
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	result := make([]*Device, 0)
+	for rows.Next() {
+		dev, err := scanDeviceRow(rows)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, dev)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 func scanDevice(scanner rowScanner) (*Device, error) {
 	var dev Device
 	var techStr, statusStr string

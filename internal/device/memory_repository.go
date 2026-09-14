@@ -2,6 +2,7 @@ package device
 
 import (
 	"context"
+	"sort"
 	"sync"
 )
 
@@ -72,6 +73,23 @@ func (r *MemoryRepository) FindByIMEI(ctx context.Context, imei string) (*Device
 	}
 
 	return copyDevice(dev), nil
+}
+
+// List retorna cópias defensivas em ordem de criação e ID.
+func (r *MemoryRepository) List(ctx context.Context) ([]*Device, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	result := make([]*Device, 0, len(r.byID))
+	for _, dev := range r.byID {
+		result = append(result, copyDevice(dev))
+	}
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].CreatedAt.Equal(result[j].CreatedAt) {
+			return result[i].ID < result[j].ID
+		}
+		return result[i].CreatedAt.Before(result[j].CreatedAt)
+	})
+	return result, nil
 }
 
 // ListBySubscriber lista todos os dispositivos vinculados ao assinante informado.

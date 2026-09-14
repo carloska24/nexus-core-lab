@@ -1,0 +1,146 @@
+/* Reference comparison canvas: exact native dimensions of the official image.
+   The fixed canvas intentionally scrolls on smaller viewports instead of
+   invoking the earlier density breakpoints. */
+html body{overflow:auto;background:#030b13}
+html body #root{width:100%;height:auto;min-height:100vh;overflow:visible}
+body #root .app{width:1536px;height:1024px;min-width:1536px;margin:0 auto;overflow:hidden;font-family:'Segoe UI',sans-serif;font-weight:400;background:#040e17}
+.app .sidebar{width:225px;flex:0 0 225px;background:linear-gradient(110deg,#06121d,#040c15);border-color:#102a3d}
+.app .brand{position:relative;z-index:4;width:248px;height:92px;padding:6px 0 0 38px;border:0;font-size:42px;letter-spacing:4px;line-height:49px;white-space:nowrap;background:linear-gradient(120deg,#071320,#040c15);clip-path:polygon(0 0,100% 0,100% 83%,90.7% 100%,0 100%)}
+.app .brand:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(#183348,#183348) right top/1px 77px no-repeat,linear-gradient(#183348,#183348) left bottom/225px 1px no-repeat}
+.app .brand:before{content:'';position:absolute;right:0;top:77px;width:28px;height:1px;background:#183348;transform-origin:right center;transform:rotate(-33deg)}
+.app .sidebar{overflow:visible}
+.app .sidebar:after{content:'';position:absolute;left:224px;top:92px;bottom:0;width:1px;background:#112a3d;pointer-events:none}
+.app .brand small{text-align:left;padding-left:33px;font-size:15px;letter-spacing:6px;font-weight:500;line-height:20px}
+.app .sidebar nav{padding:16px 10px 0 14px;display:flex;flex-direction:column;gap:3px}
+.app .sidebar a{height:46px;padding:0 14px;gap:18px;font-size:16px;font-weight:400;border-radius:5px}
+.app .sidebar a svg{width:24px;height:24px;flex-shrink:0}
+.app .sidebar a.active{background:linear-gradient(120deg,#0d559f,#114783);font-weight:600;border-color:#1c65a6}
+.app .side-divider{margin:15px 17px 8px;height:1px}
+.app .system-links{padding:0 14px}
+.app .system-links a{height:41px;gap:18px}
+.app .system-links a i{width:11px;height:11px;box-shadow:0 0 9px #25d77855}
+.app .skyline{height:185px;bottom:147px;border-bottom:1px solid #122333;background:none}
+.app .skyline>svg{width:100%;height:100%;display:block}
+.app .sidebar footer{height:147px;text-align:left;padding:21px 28px 0}
+.app .sidebar footer strong{font-size:16px;font-weight:600;letter-spacing:1px}
+.app .sidebar footer span{font-size:13px;letter-spacing:1.8px;margin-top:3px}
+.app .sidebar footer em{font-size:14px;line-height:22px;margin-top:13px;font-style:normal;white-space:nowrap}
+.app main{width:1311px;flex:none;min-width:0}
+.app .topbar{height:78px;flex-basis:78px;padding:0 28px 0 49px}
+.app .topbar p{font-size:15px;letter-spacing:.3px;font-weight:400;margin:0 0 2px}
+.app .topbar small{font-size:13px}
+.app .top-actions{gap:28px;font:13px 'Segoe UI',sans-serif}
+.app .online{font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px}
+.app .online i{width:17px;height:17px;margin:0;box-shadow:none}
+.app .infra{padding:10px 12px;border-radius:14px;font-size:12px;display:flex;align-items:center;gap:13px}
+.app .infra i{margin:0;width:8px;height:8px;box-shadow:none}
+.app .gear{width:23px;height:23px;fill:#6b85ae;stroke:#0a1626;stroke-width:1}
+.app .dashboard{padding:14px 18px 32px 23px;display:grid;grid-template-rows:113px 495px 265px;gap:13px;flex:none;height:946px}
+.app .kpis{gap:13px;grid-template-columns:238px 235px 248px 243px 254px}
+.app .kpi{padding:13px 15px;align-items:flex-start;gap:19px;height:113px}
+.app .kpi-icon{width:44px;height:48px;margin-top:4px;flex:0 0 44px}
+.app .kpi-icon svg{width:37px;height:37px;stroke-width:2.5}
+.app .kpi-copy>span{font-size:14px;white-space:nowrap}
+.app .kpi-copy>div{margin:4px 0 2px;align-items:baseline;gap:8px}
+.app .kpi-copy strong{font:600 33px 'Segoe UI',sans-serif;line-height:39px;color:#f2efff}
+.app .kpi-copy b{font-size:13px;font-weight:400}
+.app .kpi-copy small{font-size:13px;line-height:19px;letter-spacing:0;white-space:nowrap;color:#a3bcde}
+.app .kpi:last-child .kpi-copy small{font-size:11.5px}
+.app .panel,.app .kpi{background:radial-gradient(ellipse at 50% 0,#08172555,transparent 65%),#040f18;border-color:#163249;box-shadow:inset 0 1px 9px #0c253133;border-radius:7px}
+.app .center{grid-template-columns:778px 478px;gap:14px}
+.app .panel-head{height:64px;flex-basis:64px;padding:0 15px}
+.app .head-title{gap:13px}
+.app .head-title h2{font-size:18px;font-weight:600;line-height:24px}
+.app .head-title p{font-size:13px;margin-top:0;line-height:21px;color:#a3bbdc}
+.app .head-icon svg{width:24px;height:26px}
+.app .map-legend{font-size:11px;gap:26px;white-space:nowrap}
+.app .map-legend i{width:11px;height:11px}
+.app .map-legend .handover{width:28px;height:2px}
+.app .map-wrap{border-color:#163047}
+.app .map-wrap:after{box-shadow:inset 0 0 70px 8px #020b1544}
+.app .city{font-size:16px;letter-spacing:0;fill:#7b9abc;font-weight:500}
+.app .tower path{stroke-width:2.6;filter:drop-shadow(0 0 5px currentColor)}
+.app .tower .emitter{fill:currentColor;stroke:none}
+.app .tower text{font-family:'Segoe UI',sans-serif;font-size:15px;font-weight:600;paint-order:stroke;stroke:#05101d;stroke-width:4px}
+.app .tower .tech{font-size:15px}
+.app .device circle{stroke:none;filter:none;fill:#3ddc75}
+.app .device text{font-size:13px;font-weight:500;paint-order:stroke;stroke:#07101b;stroke-width:3px}
+.app .links path{stroke:#279b68;stroke-width:1.8;stroke-dasharray:6 5}
+.app .handover-path{filter:none;stroke:#ff821d;stroke-width:2.3;stroke-dasharray:10 5}
+.app .handover-label{font-size:14px;font-weight:600}
+.app .compass path{fill:#5d80a3}
+.app .location{left:19px;bottom:14px;font-size:12px}
+.app .zoom{right:17px;bottom:15px;gap:9px}
+.app .zoom button{width:39px;height:38px;border-color:#142e44}
+.app .right-tables{grid-template-rows:244px 237px;gap:14px}
+.app .table-panel .panel-head{height:47px;flex-basis:47px;padding:0 15px}
+.app .table-panel .head-title h2{font-size:17px}
+.app .table-panel table{font:12px 'Segoe UI',sans-serif;width:calc(100% - 26px);margin:0 13px}
+.app .table-panel th{font-size:11.5px;padding:7px 4px;background:#0b1d30;font-weight:400}
+.app .table-panel td{font:12px 'Segoe UI',sans-serif!important;padding:7px 4px;height:31px;border-color:#122434}
+.app .table-panel td:first-child{padding-left:0;padding-right:9px;width:16px}
+.app .status-dot,.app .event-dot{width:10px;height:10px;box-shadow:none}
+.app .event-name.orange{color:#d38bea}.app .table-panel tr:first-child .event-name.orange{color:#8bc4ff}
+.app .bottom{grid-template-columns:455px 386px 400px;gap:14px}
+.app .analytic{padding-bottom:13px}
+.app .analytic .panel-head{height:86px;position:relative;align-items:flex-start;padding-top:12px}
+.app .analytic .head-title{gap:12px}
+.app .analytic .head-title h2{font-size:17px}
+.app .analytic .head-icon{padding-top:3px}
+.app .chart-legend{position:absolute;right:31px;bottom:5px;gap:24px;font-size:11px}
+.app .line-chart{height:164px;padding:0 20px 0 9px;overflow:visible}
+.app .line-chart text{font:11px 'Segoe UI',sans-serif;text-anchor:middle;fill:#b5c8e1}
+.app .grid path{stroke:#193346;stroke-width:.8}
+.app .donut-panel .panel-head,.app .pool .panel-head{height:65px}
+.app .donut-content{height:179px;gap:28px;justify-content:flex-start;padding-left:25px}
+.app .donut{width:147px;height:147px;flex-shrink:0;background:conic-gradient(#399bf2 0 46%,#36cb72 46% 70%,#f14c52 70% 85%,#ffba54 85% 95%,#8d9eaa 95%)}
+.app .donut:after{inset:24px;background:#040f18}
+.app .donut span{font-size:14px}
+.app .donut strong{font:600 23px 'Segoe UI',sans-serif}
+.app .donut-list{width:166px}
+.app .donut-list p{font-size:12px;margin:12px 0;gap:10px;white-space:nowrap}
+.app .donut-list p b{font-weight:400}
+.app .pool{padding:0 16px}
+.app .pool .panel-head{padding-left:0;padding-right:0}
+.app .pool-stat{font:14px 'Segoe UI',sans-serif;margin:5px 5px 8px}
+.app .pool-stat b{font-weight:400}
+.app .progress{height:27px;border-radius:8px;background:#354c63}
+.app .pool-legend{margin:16px 0 19px;gap:78px;font-size:12px}
+.app .warm{height:63px;margin:0;padding:12px;border-color:#102b42;background:#09192a;gap:12px}
+.app .warm b{font-size:12px;font-weight:500}
+.app .warm small{font-size:12px;margin-top:4px}
+.app .corrected-chart + .line-chart{display:none}
+.app .sidebar nav a:nth-child(2) svg{fill:#83a6d6;stroke-width:1.2}
+.app .sidebar nav a:nth-child(8) svg{fill:#83a6d6;stroke:#081523;stroke-width:1.5}
+.app .sidebar a:nth-child(1) svg{stroke-width:2.5}
+html body{overflow:hidden}
+html body #root{height:100vh;min-height:0;display:flex;justify-content:center;align-items:flex-start;overflow:hidden}
+.fit-shell{position:relative;flex-shrink:0}
+body #root .app{margin:0}
+.app a,.app button{cursor:pointer;font-family:inherit}
+.app button{color:inherit}
+.app button:focus-visible,.app a:focus-visible{outline:2px solid #4ca8ff;outline-offset:3px}
+.app .brand:before,.app .brand:after{display:none}
+.brand-outline{position:absolute;top:0;left:0;width:249px;height:94px;z-index:8;pointer-events:none;overflow:visible}
+.brand-outline path{stroke:#234158;stroke-width:1;fill:none}
+.settings-action{border:0;background:none;padding:0;display:flex}
+.app button.infra{background:transparent;color:#c0d5f2}
+.workspace{padding:30px 24px;color:#cbdaf0;overflow:auto;height:946px}
+.workspace header{display:flex;justify-content:space-between;margin-bottom:25px}
+.workspace h1{font-size:30px;margin:12px 0}.workspace h2{font-size:20px;color:#eef4ff}
+.workspace p,.workspace small{color:#91abc8}
+.workspace input,.workspace select{background:#0a1b2b;color:#dbeaff;border:1px solid #294960;border-radius:6px;padding:12px;font:15px 'Segoe UI';margin-bottom:18px}
+.workspace-card{padding:24px;background:#071523;border:1px solid #1b3851;border-radius:9px}
+.workspace table{width:100%;border-collapse:collapse;font-size:15px}
+.workspace th{text-align:left;color:#8eb3d7;background:#0b2236;padding:14px}
+.workspace td{padding:17px 14px;border-bottom:1px solid #173044}
+.workspace button{border:1px solid #29618b;border-radius:5px;padding:10px 17px;background:#0e3655;font:14px 'Segoe UI'}
+.workspace button:hover{background:#165483}
+.workspace dl{line-height:1.9}.workspace dt{color:#8ba6c5}.workspace dd{margin:0 0 12px;color:#e6f1ff}
+.network-workspace{height:680px}.telemetry-workspace{display:grid;grid-template-columns:455px 386px 400px;gap:12px;height:265px}
+.sim-actions{display:flex;gap:12px;margin:24px 0}.workspace li{padding:10px;border-bottom:1px solid #1b3348}
+.config-form{max-width:650px}.config-form label{display:flex;gap:15px;align-items:center;margin:20px 0}.config-form input,.config-form select{margin:0}
+.modal-shade{position:absolute;inset:0;z-index:20;background:#0009;display:grid;place-items:center}
+.record-modal{width:520px;box-shadow:0 20px 100px #000}.record-modal>button{float:right}.mock-notice{color:#e5bb68!important}
+.app .map-attribution{position:absolute;bottom:3px;left:19px;font-size:9px;color:#8faac0;z-index:4;text-decoration:none}
+.app .location{bottom:20px}

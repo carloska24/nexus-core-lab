@@ -1,0 +1,10 @@
+.recent-events{position:relative;min-width:0;overflow:hidden}
+.app .recent-events table{width:calc(100% - 26px);table-layout:fixed}
+.app .recent-events th:nth-child(1){width:16%}.app .recent-events th:nth-child(2){width:29%}.app .recent-events th:nth-child(3){width:19%}
+.app .recent-events td{height:26px;padding:4px;font-size:11px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.recent-events td button{border:0;background:none;color:#adcae3;padding:0;font:inherit;cursor:pointer}
+.recent-events td button:hover{text-decoration:underline}.recent-note{font-size:10px!important;color:#8dabc5;margin:7px 12px!important;white-space:normal}
+.recent-type.type-ATTACH{color:#48e29d}.recent-type.type-CELL_HANDOVER{color:#ca8aff}.recent-type.type-DETACH,.recent-type.type-STALE_DISCONNECT{color:#ff9b69}
+.recent-detail{position:absolute;inset:4px;background:#071725;border:1px solid #315779;border-radius:5px;padding:12px;overflow:auto;z-index:8;font-size:11px}
+.recent-detail>button{float:right;background:none;border:0;color:#a7c4df;cursor:pointer}.recent-detail svg{width:16px}.recent-detail h3{margin:0 0 8px}.recent-detail dl{margin:0}.recent-detail dl>div{display:grid;grid-template-columns:110px 1fr;gap:5px;margin-bottom:4px}.recent-detail dd{margin:0;overflow-wrap:anywhere}.recent-detail dt{color:#89a5bd}
+.recent-full{height:auto!important;max-height:700px;overflow:auto}.app .recent-full td{height:38px;font-size:13px!important}.app .recent-full th:nth-child(2){width:23%}

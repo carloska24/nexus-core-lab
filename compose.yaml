@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: nexus
-      POSTGRES_PASSWORD: nexus
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your environment or local .env}"
       POSTGRES_DB: nexus_core_lab
     ports:
       - "${POSTGRES_PORT:-5433}:5432"

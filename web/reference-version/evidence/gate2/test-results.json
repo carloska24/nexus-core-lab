@@ -1,0 +1,16 @@
+{
+  "passed": [
+    "Initial network/telemetry failures: unavailable, no zero fallback, DB unknown",
+    "Real Go /health and /telemetry via Vite proxy match rendered KPIs",
+    "Real provision → activate → register → attach observed by UI: +1 active, +1 event",
+    "Real handover/detach observed: active returns to baseline; event total +3",
+    "Telemetry 500 keeps last snapshot marked stale; independent health stays online",
+    "Network failure after success: offline health, stale telemetry retains last values",
+    "Polling recovers automatically",
+    "Approved canvas fits 1440×900 and 1366×768",
+    "Telemetry route shares real charts and exact event categories",
+    "Slow telemetry times out without overlapping polling",
+    "No further polling after page teardown",
+    "No uncaught browser errors"
+  ]
+}

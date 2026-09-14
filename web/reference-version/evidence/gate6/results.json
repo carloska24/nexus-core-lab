@@ -1,0 +1,1377 @@
+{
+  "results": [
+    "One real Device without session has no green link",
+    "Attach in Sessions becomes a real topology connection on next poll",
+    "Handover changes association; same UUID/IP, no permanent physical trajectory",
+    "Detach removes connection without deleting registered Device",
+    "Five real Devices rendered",
+    "Ten Devices on one cell have distinct deterministic positions; preview shares snapshot",
+    "Device 5G on LTE cell displayed honestly without compatibility filtering",
+    "Partial failure retains stale Device, never disconnected",
+    "Total failure: stale with known snapshot, error/unknown without snapshot",
+    "Automatic next-round recovery",
+    "Concurrency capped at 4; slow round not overlapped; >=5s after completion",
+    "Topology polling cancelled when leaving topology routes",
+    "Existing per-Device contract only; zero uncaught browser errors"
+  ],
+  "hero": [
+    {
+      "action": "Attach",
+      "id": "f80031d1-e6a5-4dfc-b231-fcf2a7deaf8d",
+      "device_id": "0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "subscriber_id": "8c24c9fb-0fac-4089-afc3-3c90363f77fd",
+      "cell_id": "CELL-SP-001",
+      "ip_address": "10.45.0.2",
+      "status": "CONNECTED",
+      "attached_at": "2026-09-14T09:28:42.5435655Z",
+      "updated_at": "2026-09-14T09:28:42.5435655Z"
+    },
+    {
+      "action": "Handover",
+      "id": "f80031d1-e6a5-4dfc-b231-fcf2a7deaf8d",
+      "device_id": "0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "subscriber_id": "8c24c9fb-0fac-4089-afc3-3c90363f77fd",
+      "cell_id": "CELL-SP-002",
+      "ip_address": "10.45.0.2",
+      "status": "CONNECTED",
+      "attached_at": "2026-09-14T09:28:42.5435655Z",
+      "updated_at": "2026-09-14T09:28:47.2771698Z"
+    },
+    {
+      "action": "Detach",
+      "id": "f80031d1-e6a5-4dfc-b231-fcf2a7deaf8d",
+      "device_id": "0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "subscriber_id": "8c24c9fb-0fac-4089-afc3-3c90363f77fd",
+      "cell_id": "CELL-SP-002",
+      "ip_address": "10.45.0.2",
+      "status": "DISCONNECTED",
+      "disconnect_reason": "VOLUNTARY_DETACH",
+      "attached_at": "2026-09-14T09:28:42.5435655Z",
+      "updated_at": "2026-09-14T09:28:51.9419315Z",
+      "closed_at": "2026-09-14T09:28:51.9419315Z"
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/",
+      "at": 1789378111937
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/@vite/client",
+      "at": 1789378112145
+    },
+    {
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "at": 1789378112145
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/main.tsx",
+      "at": 1789378112145
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/@fs/C:/Users/joaob/OneDrive/Documentos/nexus-core-lab/web/node_modules/vite/dist/client/env.mjs",
+      "at": 1789378112410
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=e11c4e53",
+      "at": 1789378112489
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react.js?v=e11c4e53",
+      "at": 1789378112490
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react-dom_client.js?v=e11c4e53",
+      "at": 1789378112490
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/App.tsx",
+      "at": 1789378112490
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/styles.css",
+      "at": 1789378112491
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/comparison.css",
+      "at": 1789378112491
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/chunk-QNDR6QZV.js?v=e11c4e53",
+      "at": 1789378112753
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/ReferenceArt.tsx",
+      "at": 1789378112881
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/transport.css",
+      "at": 1789378112881
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/monitoring.tsx",
+      "at": 1789378112881
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/api.ts",
+      "at": 1789378112881
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/LivePanels.tsx",
+      "at": 1789378112881
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscribers.tsx",
+      "at": 1789378112881
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/SubscribersPage.tsx",
+      "at": 1789378112881
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/devices.tsx",
+      "at": 1789378112882
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/DevicesPage.tsx",
+      "at": 1789378112882
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/SessionsPage.tsx",
+      "at": 1789378112882
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/network-catalog.ts",
+      "at": 1789378112883
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/topology.tsx",
+      "at": 1789378112883
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/LiveTopology.tsx",
+      "at": 1789378112883
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/lucide-react.js?v=e11c4e53",
+      "at": 1789378112884
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/device-api.ts",
+      "at": 1789378113154
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscriber-api.ts",
+      "at": 1789378113256
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/session-api.ts",
+      "at": 1789378113256
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscribers.css",
+      "at": 1789378113404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/sessions.css",
+      "at": 1789378113404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/devices.css",
+      "at": 1789378113448
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/topology.css",
+      "at": 1789378113482
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/maps/campinas.jpg",
+      "at": 1789378113937
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/devices",
+      "at": 1789378114275
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/subscribers",
+      "at": 1789378114277
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378114284
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378114302
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/devices",
+      "at": 1789378114303
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/subscribers",
+      "at": 1789378114304
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378114308
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378114309
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378114537
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378119510
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378119656
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378124374
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378124556
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378124697
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378129576
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378129729
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378134385
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378134590
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378134756
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/",
+      "at": 1789378137014
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/@vite/client",
+      "at": 1789378137308
+    },
+    {
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "at": 1789378137308
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/main.tsx",
+      "at": 1789378137647
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/@fs/C:/Users/joaob/OneDrive/Documentos/nexus-core-lab/web/node_modules/vite/dist/client/env.mjs",
+      "at": 1789378137662
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=e11c4e53",
+      "at": 1789378137662
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react.js?v=e11c4e53",
+      "at": 1789378137662
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react-dom_client.js?v=e11c4e53",
+      "at": 1789378137663
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/App.tsx",
+      "at": 1789378137663
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/styles.css",
+      "at": 1789378137663
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/comparison.css",
+      "at": 1789378137663
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/chunk-QNDR6QZV.js?v=e11c4e53",
+      "at": 1789378137663
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/ReferenceArt.tsx",
+      "at": 1789378137746
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/transport.css",
+      "at": 1789378137746
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/monitoring.tsx",
+      "at": 1789378137746
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/api.ts",
+      "at": 1789378137746
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/LivePanels.tsx",
+      "at": 1789378137746
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscribers.tsx",
+      "at": 1789378137747
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/SubscribersPage.tsx",
+      "at": 1789378137747
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/devices.tsx",
+      "at": 1789378137747
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/DevicesPage.tsx",
+      "at": 1789378137747
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/SessionsPage.tsx",
+      "at": 1789378137747
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/network-catalog.ts",
+      "at": 1789378137747
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/topology.tsx",
+      "at": 1789378137747
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/LiveTopology.tsx",
+      "at": 1789378137747
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/lucide-react.js?v=e11c4e53",
+      "at": 1789378137747
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscriber-api.ts",
+      "at": 1789378137860
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscribers.css",
+      "at": 1789378137860
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/device-api.ts",
+      "at": 1789378137860
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/devices.css",
+      "at": 1789378137860
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/session-api.ts",
+      "at": 1789378137936
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/sessions.css",
+      "at": 1789378137937
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/topology.css",
+      "at": 1789378137938
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/maps/campinas.jpg",
+      "at": 1789378137981
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/devices",
+      "at": 1789378137982
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/subscribers",
+      "at": 1789378137982
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378137982
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378137989
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/devices",
+      "at": 1789378137989
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/subscribers",
+      "at": 1789378137989
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378137989
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378137989
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378138036
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4171eca0-c91e-486c-88ea-fdb65ac189bf",
+      "at": 1789378138036
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=419b595d-c0db-4991-b771-95e6abbd1088",
+      "at": 1789378138036
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6158efa0-e468-4d2d-a410-33e6085a98cc",
+      "at": 1789378138036
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6e54a6aa-44ab-424f-9b8e-df6c50891bb0",
+      "at": 1789378138049
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/",
+      "at": 1789378138937
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/@vite/client",
+      "at": 1789378139001
+    },
+    {
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "at": 1789378139001
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/main.tsx",
+      "at": 1789378139001
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=e11c4e53",
+      "at": 1789378139086
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react.js?v=e11c4e53",
+      "at": 1789378139091
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react-dom_client.js?v=e11c4e53",
+      "at": 1789378139091
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/App.tsx",
+      "at": 1789378139092
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/styles.css",
+      "at": 1789378139092
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/comparison.css",
+      "at": 1789378139132
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/chunk-QNDR6QZV.js?v=e11c4e53",
+      "at": 1789378139132
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/@fs/C:/Users/joaob/OneDrive/Documentos/nexus-core-lab/web/node_modules/vite/dist/client/env.mjs",
+      "at": 1789378139132
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/ReferenceArt.tsx",
+      "at": 1789378139133
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/transport.css",
+      "at": 1789378139133
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/monitoring.tsx",
+      "at": 1789378139133
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/api.ts",
+      "at": 1789378139133
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/LivePanels.tsx",
+      "at": 1789378139133
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscribers.tsx",
+      "at": 1789378139133
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/SubscribersPage.tsx",
+      "at": 1789378139134
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/devices.tsx",
+      "at": 1789378139134
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/DevicesPage.tsx",
+      "at": 1789378139142
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/SessionsPage.tsx",
+      "at": 1789378139142
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/network-catalog.ts",
+      "at": 1789378139143
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/topology.tsx",
+      "at": 1789378139143
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/LiveTopology.tsx",
+      "at": 1789378139143
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/lucide-react.js?v=e11c4e53",
+      "at": 1789378139143
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscriber-api.ts",
+      "at": 1789378139172
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscribers.css",
+      "at": 1789378139179
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/device-api.ts",
+      "at": 1789378139180
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/devices.css",
+      "at": 1789378139181
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/session-api.ts",
+      "at": 1789378139182
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/sessions.css",
+      "at": 1789378139182
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/topology.css",
+      "at": 1789378139182
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/maps/campinas.jpg",
+      "at": 1789378139415
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/devices",
+      "at": 1789378139582
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/subscribers",
+      "at": 1789378139582
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378139582
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378139625
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/devices",
+      "at": 1789378139625
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/subscribers",
+      "at": 1789378139632
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378139633
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378139633
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378139840
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=115c895f-f4e9-400a-b2e2-d239a0f100ab",
+      "at": 1789378139842
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=3cd2fe9a-6667-4d5e-85f2-aecbe76f1167",
+      "at": 1789378139842
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4171eca0-c91e-486c-88ea-fdb65ac189bf",
+      "at": 1789378139842
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=419b595d-c0db-4991-b771-95e6abbd1088",
+      "at": 1789378140015
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4ad9bd4c-2792-4ef0-9052-60bc78acadc4",
+      "at": 1789378140015
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6158efa0-e468-4d2d-a410-33e6085a98cc",
+      "at": 1789378140015
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6e54a6aa-44ab-424f-9b8e-df6c50891bb0",
+      "at": 1789378140015
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=8364a55a-c141-43e7-b7d2-a74b2636ff49",
+      "at": 1789378140016
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=a4795e11-c4e9-4e19-8908-a586bbd90aad",
+      "at": 1789378140016
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378144727
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378144971
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=115c895f-f4e9-400a-b2e2-d239a0f100ab",
+      "at": 1789378144976
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=3cd2fe9a-6667-4d5e-85f2-aecbe76f1167",
+      "at": 1789378144985
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4171eca0-c91e-486c-88ea-fdb65ac189bf",
+      "at": 1789378144986
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=419b595d-c0db-4991-b771-95e6abbd1088",
+      "at": 1789378145001
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4ad9bd4c-2792-4ef0-9052-60bc78acadc4",
+      "at": 1789378145019
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6158efa0-e468-4d2d-a410-33e6085a98cc",
+      "at": 1789378145021
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6e54a6aa-44ab-424f-9b8e-df6c50891bb0",
+      "at": 1789378145025
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=8364a55a-c141-43e7-b7d2-a74b2636ff49",
+      "at": 1789378145029
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=a4795e11-c4e9-4e19-8908-a586bbd90aad",
+      "at": 1789378145053
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378149723
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378149793
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378150081
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=115c895f-f4e9-400a-b2e2-d239a0f100ab",
+      "at": 1789378150083
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=3cd2fe9a-6667-4d5e-85f2-aecbe76f1167",
+      "at": 1789378150084
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4171eca0-c91e-486c-88ea-fdb65ac189bf",
+      "at": 1789378150085
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=419b595d-c0db-4991-b771-95e6abbd1088",
+      "at": 1789378150099
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4ad9bd4c-2792-4ef0-9052-60bc78acadc4",
+      "at": 1789378150102
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6158efa0-e468-4d2d-a410-33e6085a98cc",
+      "at": 1789378150103
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6e54a6aa-44ab-424f-9b8e-df6c50891bb0",
+      "at": 1789378150104
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=8364a55a-c141-43e7-b7d2-a74b2636ff49",
+      "at": 1789378150111
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=a4795e11-c4e9-4e19-8908-a586bbd90aad",
+      "at": 1789378150118
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/",
+      "at": 1789378150153
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/@vite/client",
+      "at": 1789378150228
+    },
+    {
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "at": 1789378150230
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/main.tsx",
+      "at": 1789378150230
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=e11c4e53",
+      "at": 1789378150293
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react.js?v=e11c4e53",
+      "at": 1789378150293
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/react-dom_client.js?v=e11c4e53",
+      "at": 1789378150298
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/App.tsx",
+      "at": 1789378150298
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/styles.css",
+      "at": 1789378150298
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/comparison.css",
+      "at": 1789378150298
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/@fs/C:/Users/joaob/OneDrive/Documentos/nexus-core-lab/web/node_modules/vite/dist/client/env.mjs",
+      "at": 1789378150298
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/chunk-QNDR6QZV.js?v=e11c4e53",
+      "at": 1789378150339
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/ReferenceArt.tsx",
+      "at": 1789378150404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/transport.css",
+      "at": 1789378150404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/monitoring.tsx",
+      "at": 1789378150405
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/api.ts",
+      "at": 1789378150405
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/LivePanels.tsx",
+      "at": 1789378150405
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscribers.tsx",
+      "at": 1789378150405
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/SubscribersPage.tsx",
+      "at": 1789378150405
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/devices.tsx",
+      "at": 1789378150434
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/DevicesPage.tsx",
+      "at": 1789378150440
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/SessionsPage.tsx",
+      "at": 1789378150443
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/network-catalog.ts",
+      "at": 1789378150443
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/topology.tsx",
+      "at": 1789378150448
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/LiveTopology.tsx",
+      "at": 1789378150448
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/node_modules/.vite/deps/lucide-react.js?v=e11c4e53",
+      "at": 1789378150448
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscriber-api.ts",
+      "at": 1789378150474
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/subscribers.css",
+      "at": 1789378150548
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/device-api.ts",
+      "at": 1789378150556
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/devices.css",
+      "at": 1789378150569
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/session-api.ts",
+      "at": 1789378150574
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/sessions.css",
+      "at": 1789378150574
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/src/topology.css",
+      "at": 1789378150574
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/maps/campinas.jpg",
+      "at": 1789378150726
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/devices",
+      "at": 1789378150819
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/subscribers",
+      "at": 1789378150825
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378150825
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378150825
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/devices",
+      "at": 1789378150825
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/subscribers",
+      "at": 1789378150825
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378150825
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378150825
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378151061
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=115c895f-f4e9-400a-b2e2-d239a0f100ab",
+      "at": 1789378151062
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=3cd2fe9a-6667-4d5e-85f2-aecbe76f1167",
+      "at": 1789378151063
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4171eca0-c91e-486c-88ea-fdb65ac189bf",
+      "at": 1789378151065
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=419b595d-c0db-4991-b771-95e6abbd1088",
+      "at": 1789378151095
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4ad9bd4c-2792-4ef0-9052-60bc78acadc4",
+      "at": 1789378151096
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6158efa0-e468-4d2d-a410-33e6085a98cc",
+      "at": 1789378151097
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6e54a6aa-44ab-424f-9b8e-df6c50891bb0",
+      "at": 1789378151098
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=8364a55a-c141-43e7-b7d2-a74b2636ff49",
+      "at": 1789378151110
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=a4795e11-c4e9-4e19-8908-a586bbd90aad",
+      "at": 1789378151111
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378155974
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378156122
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=115c895f-f4e9-400a-b2e2-d239a0f100ab",
+      "at": 1789378156123
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=3cd2fe9a-6667-4d5e-85f2-aecbe76f1167",
+      "at": 1789378156124
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4171eca0-c91e-486c-88ea-fdb65ac189bf",
+      "at": 1789378156125
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=419b595d-c0db-4991-b771-95e6abbd1088",
+      "at": 1789378156141
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4ad9bd4c-2792-4ef0-9052-60bc78acadc4",
+      "at": 1789378156141
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6158efa0-e468-4d2d-a410-33e6085a98cc",
+      "at": 1789378156155
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6e54a6aa-44ab-424f-9b8e-df6c50891bb0",
+      "at": 1789378156156
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=8364a55a-c141-43e7-b7d2-a74b2636ff49",
+      "at": 1789378156156
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=a4795e11-c4e9-4e19-8908-a586bbd90aad",
+      "at": 1789378156182
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378156803
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=115c895f-f4e9-400a-b2e2-d239a0f100ab",
+      "at": 1789378156806
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=3cd2fe9a-6667-4d5e-85f2-aecbe76f1167",
+      "at": 1789378156815
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4171eca0-c91e-486c-88ea-fdb65ac189bf",
+      "at": 1789378156816
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/maps/campinas.jpg",
+      "at": 1789378156817
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=419b595d-c0db-4991-b771-95e6abbd1088",
+      "at": 1789378156963
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4ad9bd4c-2792-4ef0-9052-60bc78acadc4",
+      "at": 1789378156995
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6158efa0-e468-4d2d-a410-33e6085a98cc",
+      "at": 1789378156998
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6e54a6aa-44ab-424f-9b8e-df6c50891bb0",
+      "at": 1789378157087
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=8364a55a-c141-43e7-b7d2-a74b2636ff49",
+      "at": 1789378157120
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=a4795e11-c4e9-4e19-8908-a586bbd90aad",
+      "at": 1789378157122
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378160905
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378160985
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378166007
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=0d9d4d27-4fd6-4f24-803b-3e457d1e677c",
+      "at": 1789378167379
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=115c895f-f4e9-400a-b2e2-d239a0f100ab",
+      "at": 1789378167382
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=3cd2fe9a-6667-4d5e-85f2-aecbe76f1167",
+      "at": 1789378167384
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4171eca0-c91e-486c-88ea-fdb65ac189bf",
+      "at": 1789378167385
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=419b595d-c0db-4991-b771-95e6abbd1088",
+      "at": 1789378167540
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=4ad9bd4c-2792-4ef0-9052-60bc78acadc4",
+      "at": 1789378167541
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6158efa0-e468-4d2d-a410-33e6085a98cc",
+      "at": 1789378167542
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=6e54a6aa-44ab-424f-9b8e-df6c50891bb0",
+      "at": 1789378167543
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=8364a55a-c141-43e7-b7d2-a74b2636ff49",
+      "at": 1789378167719
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/api/v1/sessions?device_id=a4795e11-c4e9-4e19-8908-a586bbd90aad",
+      "at": 1789378167721
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/health",
+      "at": 1789378170929
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5192/telemetry",
+      "at": 1789378171038
+    }
+  ],
+  "errors": []
+}

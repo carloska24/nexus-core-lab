@@ -1,0 +1,20 @@
+.device-filters{display:flex;gap:12px;align-items:center;min-width:0}
+.device-filters input{width:310px;margin:0}
+.device-filters select{width:360px;max-width:100%;margin:0}
+.device-table{overflow-x:auto}
+.device-table table{width:100%}
+.device-table td{font-size:12px;padding:15px 8px}
+.device-table th{padding:12px 8px}
+.device-table .device-owner{white-space:normal;overflow-wrap:anywhere;max-width:200px}
+.device-owner small{display:block;color:#8ba7c3;font-size:11px;margin-top:4px}
+.device-status-REGISTERED{color:#5ee7aa;background:#0c2c27;border-color:#23564a}
+.device-status-INACTIVE{color:#bcacbb;background:#27202b;border-color:#51404e}
+.device-tech{color:#65b9ff}.tech-5G{color:#c68afa}
+.device-dialog select{width:100%;margin-bottom:16px}
+.device-dialog .subscriber-provision{display:grid;gap:12px}
+.device-dialog .subscriber-provision input{margin-bottom:0}
+.device-dialog .subscriber-error{color:#f5ab96;background:#281c21;border:1px solid #644039;padding:12px;border-radius:6px;overflow-wrap:anywhere}
+.device-dialog .subscriber-success{color:#66dca7}
+.device-dialog button:disabled{opacity:.45;cursor:not-allowed}
+.device-empty-owners a{color:#6bbcff}
+.device-dialog .device-owner-id{grid-column:1/-1}
