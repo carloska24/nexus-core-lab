@@ -1,0 +1,28 @@
+{
+  "real": {
+    "health": {
+      "status": "ok",
+      "service": "nexus-core-lab"
+    },
+    "storage": {
+      "mode": "MEMORY",
+      "database_configured": false,
+      "database_status": "NOT_APPLICABLE"
+    }
+  },
+  "controlledPostgres": true,
+  "results": [
+    "Real MEMORY and health OK; loading then success",
+    "Real MEMORY screenshots at three resolutions",
+    "Database page reflects authoritative MEMORY",
+    "Controlled PostgreSQL AVAILABLE independent of API liveness",
+    "Controlled PostgreSQL UNAVAILABLE independent of API liveness",
+    "Request failure preserves last snapshot as stale, never a fresh OFFLINE",
+    "Initial error unknown and automatic recovery",
+    "Inconsistent storage response rejected",
+    "Shared polling waits ten seconds after completion without overlap",
+    "Actual delayed HTTP response reaches transport timeout and preserves snapshot",
+    "Unmount stops polling; zero uncaught JavaScript errors"
+  ],
+  "errors": []
+}

@@ -17,6 +17,7 @@ import (
 	"github.com/carloska24/nexus-core-lab/internal/network"
 	"github.com/carloska24/nexus-core-lab/internal/platform/httpserver"
 	"github.com/carloska24/nexus-core-lab/internal/platform/postgres"
+	"github.com/carloska24/nexus-core-lab/internal/platform/storage"
 	"github.com/carloska24/nexus-core-lab/internal/session"
 	"github.com/carloska24/nexus-core-lab/internal/subscriber"
 	"github.com/carloska24/nexus-core-lab/internal/telemetry"
@@ -209,6 +210,7 @@ func main() {
 		telemetryHandler.RegisterRoutes,
 		telemetryWorker.RegisterRecentRoutes,
 		network.NewIPPoolHandler(ipPool).RegisterRoutes,
+		storage.NewHandler(sqlDB).RegisterRoutes,
 	)
 
 	// Envolve o roteador com middleware de Request ID, log/slog e contagem de requisições

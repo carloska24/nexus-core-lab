@@ -1,3 +1,4 @@
+import {getStorage, type StorageSnapshot} from './storage-api';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { getHealth, getTelemetry, type Health, type Telemetry } from './api';
 
@@ -11,9 +12,10 @@ export type Observation = { timestamp: string; active_sessions: number; gap: boo
 const initial = { status: 'loading' } as const;
 const Monitoring = createContext<{
   health: ReadState<Health>;
+  storage: ReadState<StorageSnapshot>;
   telemetry: ReadState<Telemetry>;
   observations: Observation[];
-}>({ health: initial, telemetry: initial, observations: [] });
+}>({ health: initial, storage: initial, telemetry: initial, observations: [] });
 
 // One subscription per resource for the entire app, not one per card/route.
 // Schedule after completion so slow requests never overlap. All reads time out.
@@ -66,8 +68,9 @@ export function MonitoringProvider({ children }: { children: ReactNode }) {
     });
   });
   const health = usePolling(getHealth, 10000);
+  const storage = usePolling(getStorage, 10000);
   const telemetry = usePolling(getTelemetry, 5000, record);
-  return <Monitoring.Provider value={{ health, telemetry, observations }}>{children}</Monitoring.Provider>;
+  return <Monitoring.Provider value={{ health, storage, telemetry, observations }}>{children}</Monitoring.Provider>;
 }
 
 export const useMonitoring = () => useContext(Monitoring);

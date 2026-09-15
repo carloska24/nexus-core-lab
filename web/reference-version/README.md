@@ -16,16 +16,19 @@ npm run dev
 
 O comando inicia frontend e backend. Abra a URL informada pelo Vite; a porta pode variar. Sem `DATABASE_URL`, o backend usa memória e perde os cadastros ao encerrar. Detalhes em [DEV.md](DEV.md).
 
-## Estado atual — 14/09/2026
+## Estado atual — 15/09/2026
 
 - Gates 2 a 5: Health/Telemetry, Subscribers, Devices e Sessions por Device integrados.
 - Micro-gate de estabilização: teste global de Devices corrigido; suíte Go e race detector passaram. PostgreSQL real não foi testado nesse micro-gate por ausência de `TEST_DATABASE_URL`.
 - **Gate 6 — Live Network Topology: aprovado pelo Human Review.** Topologia e preview compartilham sessões reais por Device.
 - **Gate 7 — Recent Events Feed: aprovado pelo Human Review.** Overview e Events usam os últimos 100 eventos consumidos pelo worker de Telemetry, somente na execução atual da API.
 - **Gate 8 — Authoritative IP Pool Status: aprovado pelo Human Review em 15/09/2026.** Card integrado ao mesmo allocator usado pelas Sessions; correção local dos endereços livres ignorados após warm-up.
+- **Gate 9 — Storage & Database Diagnostics: aprovado pelo Human Review.** Diagnóstico separado de liveness, com MEMORY legítimo e PingContext no mesmo DB da API.
 - Google Maps continua pausado.
 
 ## Documentos atuais
+
+- [Gate 9 — Storage: contrato e evidências](GATE9_STORAGE_DIAGNOSTICS.md)
 
 - [Gate 8 — IP Pool: contrato, testes e evidências](GATE8_IP_POOL_STATUS.md)
 - [Execução local](DEV.md)
@@ -41,4 +44,4 @@ O relatório de estabilização foi transferido da raiz do repositório para est
 
 [Documentos anteriores](docs/archive/) preservam auditorias, planos e entregas dos Gates anteriores. São registros do estado na data em que foram escritos, não instruções atuais. Afirmações antigas como “somente mock” e “nenhuma integração implementada” foram superadas pelos Gates posteriores. Os caminhos mencionados nesses registros podem se referir à localização original dos documentos.
 
-O checkpoint até Gate 7 foi enviado ao remoto e está documentado em [Integration checkpoint](../../docs/engineering/INTEGRATION_CHECKPOINT_GATE7.md). Gate 8 aprovado pelo Human Review, com checkpoint de código autorizado. O relatório do Gate 8 registra a entrega e suas limitações de validação. Gate 9 não foi iniciado.
+O checkpoint até Gate 7 foi enviado ao remoto e está documentado em [Integration checkpoint](../../docs/engineering/INTEGRATION_CHECKPOINT_GATE7.md). Gate 8 aprovado pelo Human Review, com checkpoint de código autorizado. O relatório do Gate 8 registra a entrega e suas limitações de validação. Checkpoint do Gate 9 autorizado pelo Human Review. Gate 10 não foi iniciado.

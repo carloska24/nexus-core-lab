@@ -1,3 +1,4 @@
+import {storageView} from './storage-api';
 import { useState, useEffect, createContext, useContext } from 'react';
 import { UrbanMap, ReferenceIcon, SkylineArt } from './ReferenceArt';
 import './comparison.css';
@@ -52,14 +53,15 @@ function Brand() {
 }
 
 function Sidebar() {
-  const {health}=useMonitoring();
+  const {health,storage}=useMonitoring();
+  const storageDisplay=storageView(storage);
   const {page,go}=useContext(Navigation);
   return <aside className="sidebar">
     <Brand />
     <nav>{nav.map(([Icon,label])=><a href={`#${label.toLowerCase()}`} onClick={()=>go(label)} className={page===label?'active':''} key={label}><Icon/><span>{label}</span></a>)}</nav>
     <div className="side-divider" />
     <div className="system-links">
-      {[[Settings,'System'],[Gauge,'API Status'],[Database,'Database'],[Settings,'Configuration']].map(([Icon,label]:any)=><a key={label} href={`#${label.toLowerCase().replaceAll(' ','-')}`} className={page===label?'active':''} onClick={()=>go(label)}><Icon/><span>{label}</span>{['API Status','Database'].includes(label)&&<i data-status={label==='Database'?'unknown':health.status==='success'?'online':health.status==='loading'?'loading':'offline'} title={label==='Database'?'Database: UNKNOWN':`API: ${health.status}`}/>}</a>)}
+      {[[Settings,'System'],[Gauge,'API Status'],[Database,'Database'],[Settings,'Configuration']].map(([Icon,label]:any)=><a key={label} href={`#${label.toLowerCase().replaceAll(' ','-')}`} className={page===label?'active':''} onClick={()=>go(label)}><Icon/><span>{label}</span>{['API Status','Database'].includes(label)&&<i data-status={label==='Database'?storageDisplay.dot:health.status==='success'?'online':health.status==='loading'?'loading':'offline'} title={label==='Database'?`Storage: ${storageDisplay.label}`:`API: ${health.status}`}/>}</a>)}
     </div>
     <div className="skyline" aria-hidden="true">
       <SkylineArt/>
@@ -70,11 +72,12 @@ function Sidebar() {
 
 function Topbar() {
   const {go}=useContext(Navigation);
-  const {health}=useMonitoring();
+  const {health,storage}=useMonitoring();
+  const storageDisplay=storageView(storage);
   const status=health.status==='success'?'online':health.status==='loading'?'loading':'offline';
   return <header className="topbar">
     <div><p>Telecom Network Simulator &amp; Core Lab</p><small>Build&nbsp;&nbsp;•&nbsp;&nbsp;Learn&nbsp;&nbsp;•&nbsp;&nbsp;Simulate&nbsp;&nbsp;•&nbsp;&nbsp;Explore</small></div>
-    <div className="top-actions"><span className="online" data-status={status} data-testid="system-status" title="HTTP availability only; not full system readiness"><i data-status={status}/> SYSTEM {status.toUpperCase()}</span><time>{health.receivedAt?new Date(health.receivedAt).toLocaleString('pt-BR'):'Checking API…'}</time><button className="settings-action" aria-label="Open configuration" onClick={()=>go('Configuration')}><Settings className="gear"/></button><button className="infra" onClick={()=>go('API Status')} title="API: HTTP health. Database: UNKNOWN — no readiness endpoint.">API <i data-status={status}/> Database <i data-status="unknown"/></button></div>
+    <div className="top-actions"><span className="online" data-status={status} data-testid="system-status" title="HTTP availability only; not full system readiness"><i data-status={status}/> SYSTEM {status.toUpperCase()}</span><time>{health.receivedAt?new Date(health.receivedAt).toLocaleString('pt-BR'):'Checking API…'}</time><button className="settings-action" aria-label="Open configuration" onClick={()=>go('Configuration')}><Settings className="gear"/></button><button className="infra" onClick={()=>go('API Status')} title={`API: HTTP health. Storage: ${storageDisplay.label}`}>API <i data-status={status}/> <span data-testid="storage-status" data-state={storage.status}>Storage {storageDisplay.label}</span> <i data-status={storageDisplay.dot}/></button></div>
   </header>;
 }
 
@@ -146,7 +149,7 @@ function Workspace({page}:{page:string}){
   const [alerts,setAlerts]=useState(true);
   const rows=sessions;
   const headers=page==='Events'?['Time','Event type','Device','Details']:['Device ID','Subscriber','Cell','IP Address','Duration'];
-  return <section className="workspace"><header><div><small>NEXUS CORE LAB / {page.toUpperCase()}</small><h1>{page}</h1><p>{page==='Telemetry'?'Live telemetry · IP pool remains mock':['System','API Status','Database'].includes(page)?'HTTP monitoring · database status unknown':'Explore the telecom lab · demonstration data'}</p></div></header>
+  return <section className="workspace"><header><div><small>NEXUS CORE LAB / {page.toUpperCase()}</small><h1>{page}</h1><p>{page==='Telemetry'?'Live telemetry · IP pool remains mock':['System','API Status','Database'].includes(page)?'HTTP liveness and storage diagnostics':'Explore the telecom lab · demonstration data'}</p></div></header>
     {['Sessions','Events'].includes(page)?<><input aria-label="Search records" placeholder="Search records…" value={query} onChange={e=>setQuery(e.target.value)}/><div className="workspace-card"><table><thead><tr>{headers.map(h=><th key={h}>{h}</th>)}<th>Details</th></tr></thead><tbody>{rows.filter(r=>r.join(' ').toLowerCase().includes(query.toLowerCase())).map((r,i)=><tr key={i}>{r.map((v,j)=><td key={j}>{v}</td>)}<td><button onClick={()=>setSelected(r)}>Open →</button></td></tr>)}</tbody></table>{!rows.some(r=>r.join(' ').toLowerCase().includes(query.toLowerCase()))&&<p>No matching records.</p>}</div></>:page==='Network'?<div className="network-workspace"><Topology/></div>:page==='Telemetry'?<div className="telemetry-workspace"><ActivityChart/><Donut/><IPPoolCard/></div>:page==='Simulator'?<div className="workspace-card"><h2>Network event simulator</h2><p>Run a local demonstration event. No requests are sent to a backend.</p><div className="sim-actions">{['ATTACH','CELL_HANDOVER','DETACH'].map(t=><button key={t} onClick={()=>setSimEvents(prev=>[`${new Date().toLocaleTimeString()} · ${t} · UE-01 · ${t==='CELL_HANDOVER'?'SP-001 → SP-003':t==='ATTACH'?'Connected to SP-001':'Session terminated'}`,...prev])}>{t}</button>)}<button onClick={()=>setSimEvents([])}>Clear</button></div><ul aria-live="polite">{simEvents.map((e,i)=><li key={i}>{e}</li>)}</ul>{simEvents.length===0&&<p>No simulated events yet.</p>}</div>:page==='Configuration'?<form className="workspace-card config-form" onSubmit={e=>{e.preventDefault();setSaved(true)}}><h2>Display preferences</h2><label>Refresh interval (seconds)<select value={interval} onChange={e=>{setIntervalValue(e.target.value);setSaved(false)}}><option>5</option><option>10</option><option>30</option></select></label><label><input type="checkbox" checked={alerts} onChange={e=>{setAlerts(e.target.checked);setSaved(false)}}/> Show event notifications</label><button type="submit">Save preferences</button>{saved&&<p role="status">Preferences saved for this screen.</p>}</form>:<OperationalStatus page={page}/>}
     {selected&&<div className="modal-shade" onClick={()=>setSelected(null)}><section role="dialog" aria-modal="true" aria-label="Record details" className="workspace-card record-modal" onClick={e=>e.stopPropagation()}><button aria-label="Close details" onClick={()=>setSelected(null)}>×</button><h2>Record details</h2><dl>{selected.map((v,i)=><div key={i}><dt>{headers[i]}</dt><dd>{v}</dd></div>)}</dl></section></div>}
   </section>;

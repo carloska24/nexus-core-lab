@@ -1,14 +1,16 @@
+import {storageView} from './storage-api';
 import { useId } from 'react';
 import { Activity, BarChart3 } from 'lucide-react';
 import { totalEvents } from './api';
 import { readLabel, useMonitoring } from './monitoring';
 
 export function OperationalStatus({ page }: { page: string }) {
-  const { health, telemetry } = useMonitoring();
+  const { health, storage, telemetry } = useMonitoring();
   const database = page === 'Database';
   return <div className="workspace-card"><h2>{database ? 'Database overview' : page === 'API Status' ? 'API status' : 'System overview'}</h2>
-    <p>{database ? 'UNKNOWN — no database readiness endpoint is available.' : 'Availability reflects GET /health only, not full system readiness.'}</p>
-    <dl><dt>Status</dt><dd data-testid="workspace-status">{database ? 'UNKNOWN' : health.status === 'success' ? 'HTTP ONLINE' : health.status === 'loading' ? 'Checking…' : 'HTTP OFFLINE'}</dd>
+    <p>{database ? 'Storage mode and connection reachability. MEMORY is a valid temporary storage mode.' : 'Availability reflects GET /health only, not full system readiness.'}</p>
+    <dl><dt>Status</dt><dd data-testid="workspace-status">{database ? storageView(storage).label : health.status === 'success' ? 'HTTP ONLINE' : health.status === 'loading' ? 'Checking…' : 'HTTP OFFLINE'}</dd>
+      {database && <><dt>Storage mode</dt><dd>{storage.data?.mode ?? '—'}</dd><dt>Database configured</dt><dd>{storage.data ? String(storage.data.database_configured) : '—'}</dd><dt>Last reported database status</dt><dd>{storage.data?.database_status ?? '—'}</dd><dt>Diagnostic observation</dt><dd>{storage.status === 'error' ? 'Unknown · request failed' : readLabel(storage)}</dd><dt>Last successful check</dt><dd>{storage.receivedAt ? new Date(storage.receivedAt).toLocaleString() : '—'}</dd></>}
       {!database && <><dt>Service</dt><dd>{health.data?.service ?? '—'}</dd><dt>Last successful health check</dt><dd>{health.receivedAt ? new Date(health.receivedAt).toLocaleString() : '—'}</dd><dt>Telemetry</dt><dd>{readLabel(telemetry)}</dd><dt>Requests since process start</dt><dd>{telemetry.data?.requests_total ?? '—'}</dd></>}
     </dl>
   </div>;

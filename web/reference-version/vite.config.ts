@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/health': { target, changeOrigin: true },
+      '/api/v1/system/storage': { target, changeOrigin: true },
       '/telemetry': { target, changeOrigin: true },
       '/api/v1/subscribers': { target, changeOrigin: true },
       '/api/v1/devices': { target, changeOrigin: true },
