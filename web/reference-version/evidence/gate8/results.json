@@ -1,0 +1,166 @@
+{
+  "results": [
+    "Loading is unknown, then authoritative empty pool at three resolutions",
+    "First Attach changes pool from zero to one",
+    "Second Attach: two allocated, distinct IPs from the same allocator",
+    "Handover preserves allocation count and Session IP",
+    "Detach reduces allocated to one; available increases",
+    "Re-attach ends with one allocated; released address reused; Recent Events preserved",
+    "Failed read keeps last allocated value as stale",
+    "Initial error is unknown, not zero; polling recovers",
+    "Inconsistent JSON rejected without corrupting last snapshot",
+    "Slow reads never overlap; next poll five seconds after completion",
+    "Unmount cancels pool polling; read-only transport; zero uncaught JavaScript errors"
+  ],
+  "snapshots": [
+    {
+      "step": "initial",
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 0,
+      "available": 65533,
+      "utilization_percent": 0
+    },
+    {
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 0,
+      "available": 65533,
+      "utilization_percent": 0
+    },
+    {
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 1,
+      "available": 65532,
+      "utilization_percent": 0.0015259487586406848
+    },
+    {
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 2,
+      "available": 65531,
+      "utilization_percent": 0.0030518975172813697
+    },
+    {
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 2,
+      "available": 65531,
+      "utilization_percent": 0.0030518975172813697
+    },
+    {
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 2,
+      "available": 65531,
+      "utilization_percent": 0.0030518975172813697
+    },
+    {
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 1,
+      "available": 65532,
+      "utilization_percent": 0.0015259487586406848
+    },
+    {
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 1,
+      "available": 65532,
+      "utilization_percent": 0.0015259487586406848
+    },
+    {
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 1,
+      "available": 65532,
+      "utilization_percent": 0.0015259487586406848
+    },
+    {
+      "cidr": "10.45.0.0/16",
+      "capacity": 65533,
+      "allocated": 1,
+      "available": 65532,
+      "utilization_percent": 0.0015259487586406848
+    }
+  ],
+  "requests": [
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427420805,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427420809,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427427492,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427432511,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427433437,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427433439,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427438513,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427443534,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427445139,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427445160,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427450232,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427455252,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427460272,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427465294,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:5208/api/v1/network/ip-pool",
+      "time": 1789427475910,
+      "method": "GET"
+    }
+  ],
+  "errors": []
+}

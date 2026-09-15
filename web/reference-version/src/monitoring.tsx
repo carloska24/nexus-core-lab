@@ -17,7 +17,7 @@ const Monitoring = createContext<{
 
 // One subscription per resource for the entire app, not one per card/route.
 // Schedule after completion so slow requests never overlap. All reads time out.
-function usePolling<T>(read: (signal: AbortSignal) => Promise<T>, interval: number, onSuccess?: (data: T, gap: boolean) => void) {
+export function usePolling<T>(read: (signal: AbortSignal) => Promise<T>, interval: number, onSuccess?: (data: T, gap: boolean) => void) {
   const [state, setState] = useState<ReadState<T>>(initial);
   useEffect(() => {
     let disposed = false;

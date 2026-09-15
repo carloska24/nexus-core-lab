@@ -1,0 +1,4 @@
+.app .live-ip-pool .progress i{min-width:0;transition:width .2s}
+.live-ip-pool .warm>div{min-width:0}.live-ip-pool .warm small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.live-ip-pool[data-state="stale"] .warm>svg,.live-ip-pool[data-state="error"] .warm>svg{color:#ffad68}
+.live-ip-pool[data-state="loading"] .warm>svg{color:#89aac9}

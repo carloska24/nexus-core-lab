@@ -208,6 +208,7 @@ func main() {
 		sessionHandler.RegisterRoutes,
 		telemetryHandler.RegisterRoutes,
 		telemetryWorker.RegisterRecentRoutes,
+		network.NewIPPoolHandler(ipPool).RegisterRoutes,
 	)
 
 	// Envolve o roteador com middleware de Request ID, log/slog e contagem de requisições

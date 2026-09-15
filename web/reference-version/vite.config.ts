@@ -11,6 +11,7 @@ export default defineConfig({
       '/api/v1/devices': { target, changeOrigin: true },
       '/api/v1/sessions': { target, changeOrigin: true },
       '/api/v1/events/recent': { target, changeOrigin: true },
+      '/api/v1/network/ip-pool': { target, changeOrigin: true },
     },
   },
 });

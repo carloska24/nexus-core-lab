@@ -52,15 +52,17 @@ func (p *IPPool) Allocate() (string, error) {
 		return ip, nil
 	}
 
-	if p.nextHost > maxHost {
-		return "", ErrIPPoolExhausted
+	// Warm-up may mark any host; scan forward without skipping free holes.
+	for p.nextHost <= maxHost {
+		ip := hostToIPv4String(p.nextHost)
+		p.nextHost++
+		if _, occupied := p.allocated[ip]; occupied {
+			continue
+		}
+		p.allocated[ip] = struct{}{}
+		return ip, nil
 	}
-
-	ip := hostToIPv4String(p.nextHost)
-	p.nextHost++
-
-	p.allocated[ip] = struct{}{}
-	return ip, nil
+	return "", ErrIPPoolExhausted
 }
 
 // Release devolve um endereço IPv4 ao pool para futuro reaproveitamento.
@@ -121,6 +123,8 @@ func (p *IPPool) MarkAllocated(ip string) error {
 		return ErrInvalidIPFormat
 	}
 
+	// Store the canonical IPv4 identity, including IPv4-mapped input.
+	ip = ipv4.String()
 	if _, ok := p.allocated[ip]; ok {
 		return ErrIPAlreadyAllocated
 	}
@@ -133,11 +137,7 @@ func (p *IPPool) MarkAllocated(ip string) error {
 		}
 	}
 
-	// Se o IP estiver à frente ou igual a nextHost, avança nextHost para host + 1
-	if host >= p.nextHost {
-		p.nextHost = host + 1
-	}
-
+	// Do not advance nextHost: lower unallocated hosts remain eligible.
 	p.allocated[ip] = struct{}{}
 	return nil
 }
