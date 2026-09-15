@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Plus, RefreshCw, Users, X } from 'lucide-react';
-import { readLabel } from './monitoring';
+import { snapshotLabel } from './monitoring';
 import { useSubscribers } from './subscribers';
 import { activateSubscriber, deactivateSubscriber, getSubscriber, getSubscriberByIMSI, provisionSubscriber,
   subscriberError, suspendSubscriber, validIMSI, validMSISDN, type Subscriber, type SubscriberStatus } from './subscriber-api';
@@ -126,7 +126,7 @@ export function SubscribersPage(){
     <header><div><small>NEXUS CORE LAB / SUBSCRIBERS</small><h1>Subscribers</h1><p>Subscriber registry · real API data</p></div><button type="button" className="provision-action" onClick={()=>setModal({id:null})}><Plus size={17}/>Provision subscriber</button></header>
     <div className="subscriber-toolbar"><div className="subscriber-search"><input aria-label="Search subscribers" value={query} onChange={event=>{setQuery(event.target.value);setSearchError('');}} placeholder="Search IMSI, MSISDN or status…"/><button type="button" disabled={!validIMSI(query)||searching} onClick={()=>void exactSearch()}>{searching?'Searching…':'Find exact IMSI'}</button></div><button type="button" disabled={refreshing} onClick={()=>void refresh()}><RefreshCw size={15}/>{refreshing?'Refreshing…':'Refresh'}</button></div>
     {searchError&&<p className="subscriber-error" role="alert">{searchError}</p>}
-    <div className="subscriber-collection-meta"><span><Users size={15}/> <strong data-testid="subscriber-total">{collection.data?.length??'—'}</strong> total subscribers</span><span>{refreshing?'Refreshing collection…':readLabel(collection)}{collection.receivedAt&&` · ${new Date(collection.receivedAt).toLocaleTimeString()}`}</span></div>
+    <div className="subscriber-collection-meta"><span><Users size={15}/> <strong data-testid="subscriber-total">{collection.data?.length??'—'}</strong> total subscribers</span><span>{refreshing?'Refreshing collection…':snapshotLabel(collection)}{collection.receivedAt&&` · ${new Date(collection.receivedAt).toLocaleTimeString()}`}</span></div>
     {collection.error&&<p className="subscriber-error" role="alert">{collection.error} {collection.data!==undefined?'Showing the last known collection.':'No collection is available. Use Refresh to retry.'}</p>}
     <div className="workspace-card subscriber-table"><table><thead><tr>{['MSISDN','IMSI','Status','Created At','Updated At','Details'].map(label=><th key={label}>{label}</th>)}</tr></thead><tbody>
       {rows?.map(subscriber=><tr key={subscriber.id} data-testid="subscriber-row"><td>{subscriber.msisdn}</td><td>{subscriber.imsi}</td><td><StatusBadge status={subscriber.status}/></td><td title={subscriber.created_at}>{date(subscriber.created_at)}</td><td title={subscriber.updated_at}>{date(subscriber.updated_at)}</td><td><button type="button" onClick={()=>setModal({id:subscriber.id})} aria-label={`Open subscriber ${subscriber.imsi}`}>Open →</button></td></tr>)}

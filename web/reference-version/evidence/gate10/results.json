@@ -1,0 +1,177 @@
+{
+  "results": [
+    "Polling source checked; obsolete mock claim, dead fixtures and fake Save absent",
+    "Honest KPI/chart labels, legend and valid MEMORY",
+    "Configuration read-only; six intervals match code; no Save or alerts toggle",
+    "Sandbox actions and Clear: zero backend requests",
+    "UI provision/activate/register/attach; topology, telemetry, events and pool follow",
+    "Handover CELL-SP-002 confirmed; event and connection update; pool stable",
+    "Detach: session disconnected, pool and telemetry zero, topology and event updated",
+    "Twelve pages at three sizes; fifteen visual screenshots",
+    "Zero uncaught JavaScript errors"
+  ],
+  "errors": [],
+  "responses": [
+    {
+      "url": "http://localhost:5220/api/v1/subscribers",
+      "status": 201
+    },
+    {
+      "url": "http://localhost:5220/api/v1/subscribers/5c00c05e-17d9-4071-ae4e-a1447d7d6f70/activate",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:5220/api/v1/devices",
+      "status": 201
+    },
+    {
+      "url": "http://localhost:5220/api/v1/sessions/attach",
+      "status": 201
+    },
+    {
+      "url": "http://localhost:5220/api/v1/sessions/a51f9f29-4c13-4b03-89dd-8d75faf42266/handover",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:5220/api/v1/sessions/a51f9f29-4c13-4b03-89dd-8d75faf42266/detach",
+      "status": 200
+    }
+  ],
+  "layouts": [
+    {
+      "route": "overview",
+      "width": 1920,
+      "height": 1080,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "network",
+      "width": 1920,
+      "height": 1080,
+      "overflow": {
+        "x": 0,
+        "y": 18
+      }
+    },
+    {
+      "route": "telemetry",
+      "width": 1920,
+      "height": 1080,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "simulator",
+      "width": 1920,
+      "height": 1080,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "configuration",
+      "width": 1920,
+      "height": 1080,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "overview",
+      "width": 1440,
+      "height": 900,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "network",
+      "width": 1440,
+      "height": 900,
+      "overflow": {
+        "x": 0,
+        "y": 18
+      }
+    },
+    {
+      "route": "telemetry",
+      "width": 1440,
+      "height": 900,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "simulator",
+      "width": 1440,
+      "height": 900,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "configuration",
+      "width": 1440,
+      "height": 900,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "overview",
+      "width": 1366,
+      "height": 768,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "network",
+      "width": 1366,
+      "height": 768,
+      "overflow": {
+        "x": 0,
+        "y": 18
+      }
+    },
+    {
+      "route": "telemetry",
+      "width": 1366,
+      "height": 768,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "simulator",
+      "width": 1366,
+      "height": 768,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "route": "configuration",
+      "width": 1366,
+      "height": 768,
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  ]
+}

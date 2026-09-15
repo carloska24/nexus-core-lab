@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Plus, RefreshCw, Smartphone, X } from 'lucide-react';
 import { useDevices } from './devices';
 import { useSubscribers } from './subscribers';
-import { readLabel, type ReadState } from './monitoring';
+import { snapshotLabel, type ReadState } from './monitoring';
 import { deviceError, getDevice, getDevicesBySubscriber, registerDevice, validIMEI, type Device, type DeviceTechnology } from './device-api';
 import './subscribers.css';
 import './devices.css';
@@ -79,7 +79,7 @@ function DeviceDialog({ id, onClose }: { id: string | null; onClose: () => void 
         <option value="">Select an ACTIVE subscriber</option>
         {subscribers.collection.data?.map(sub => <option key={sub.id} value={sub.id} disabled={sub.status !== 'ACTIVE'}>{sub.msisdn} · {sub.imsi} · {sub.status}</option>)}
       </select></label>
-      {!canSelect && <p role="status">Subscriber collection: {readLabel(subscribers.collection)}. Refresh before selecting.</p>}
+      {!canSelect && <p role="status">Subscriber collection: {snapshotLabel(subscribers.collection)}. Refresh before selecting.</p>}
       {canSelect && eligible.length === 0 && <p className="device-empty-owners">No active subscribers available. <a href="#subscribers" onClick={onClose}>Create or activate a Subscriber</a> to register a device.</p>}
       <button type="button" disabled={busy || subscribers.refreshing} onClick={() => void subscribers.refresh()}>Refresh subscribers</button>
       <label>IMEI<input aria-label="Register IMEI" inputMode="numeric" autoComplete="off" placeholder="15 digits" value={imei} disabled={busy} onChange={event => setIMEI(event.target.value)}/></label>
@@ -121,9 +121,9 @@ export function DevicesPage() {
     <div className="subscriber-toolbar"><div className="device-filters"><input aria-label="Search devices" placeholder="IMEI, technology, status or subscriber…" value={query} onChange={event => setQuery(event.target.value)}/>
       <select aria-label="Filter devices by subscriber" value={subscriberID} onChange={event => { setSubscriberID(event.target.value); setFiltered({ status: 'loading' }); }}><option value="">All subscribers</option>{subscribers.collection.data?.map(sub => <option value={sub.id} key={sub.id}>{sub.msisdn} · {sub.imsi}</option>)}</select>
     </div><button disabled={refreshing} onClick={() => { void refresh(); setRetry(value => value + 1); }}><RefreshCw size={15}/>{refreshing ? 'Refreshing…' : 'Refresh'}</button></div>
-    <div className="subscriber-collection-meta"><span><Smartphone size={15}/><strong data-testid="device-total">{collection.data?.length ?? '—'}</strong> total devices{source.data && <span> · {rows?.length} shown</span>}</span><span>{refreshing ? 'Refreshing collection…' : readLabel(collection)}</span></div>
+    <div className="subscriber-collection-meta"><span><Smartphone size={15}/><strong data-testid="device-total">{collection.data?.length ?? '—'}</strong> total devices{source.data && <span> · {rows?.length} shown</span>}</span><span>{refreshing ? 'Refreshing collection…' : snapshotLabel(collection)}</span></div>
     {collection.error && <p className="subscriber-error" role="alert">{collection.error} {collection.data ? 'Showing the last known global collection.' : 'Global collection unavailable.'}</p>}
-    {subscriberID && <p role="status">Subscriber filter: {readLabel(filtered)}{filtered.error && ` · ${filtered.error}`}</p>}
+    {subscriberID && <p role="status">Subscriber filter: {snapshotLabel(filtered)}{filtered.error && ` · ${filtered.error}`}</p>}
     <div className="workspace-card subscriber-table device-table"><table><thead><tr>{['IMEI', 'Technology', 'Status', 'Subscriber', 'Created At', 'Updated At', 'Details'].map(label => <th key={label}>{label}</th>)}</tr></thead><tbody>
       {rows?.map(device => { const owner = owners.get(device.subscriber_id); return <tr key={device.id} data-testid="device-row"><td>{device.imei}</td><td><span className={`device-tech tech-${device.technology}`}>{device.technology}</span></td><td><Badge status={device.status}/></td><td className="device-owner" title={device.subscriber_id}>{owner ? <>{owner.msisdn}<small>{owner.imsi}</small></> : device.subscriber_id}</td><td title={device.created_at}>{date(device.created_at)}</td><td title={device.updated_at}>{date(device.updated_at)}</td><td><button aria-label={`Open device ${device.imei}`} onClick={() => setModal({ id: device.id })}>Open →</button></td></tr>; })}
     </tbody></table>

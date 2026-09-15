@@ -1,0 +1,374 @@
+{
+  "pages": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "overview",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nTotal Subscribers\n0\nLive\nTotal Devices\n0\nLive\nActive Sessions\n0\nLive\nNetwork Cells\n3\nConfigured cells · Campinas\nTotal Events\n0\nLive\nNetwork Topology\n\nObserved connections · illustrative positions, not GPS\n\nLTE Cell\n5G Cell\nConnected Device\nHandover\nCAMPINAS / SP\nCELL-SP-001\nLTE\nCELL-SP-002\n5G\nCELL-SP-003\n5G\nN\nSUCCESS · 0 connected · 0 without session\nCampinas, SP - Brazil\n© OpenStreetMap contributors · Sj1mor · CC BY-SA 4.0\nActive Sessions (0)\nManage\n\tIMEI\tSubscriber\tCell\tIP Address\tDuration\n\nNo active sessions observed.\n\nRecent Events\nView all\nTime\tEvent Type\tDevice\tDetails\n\nNo events observed in this API execution.\n\nLive · 0 / 100 · Current API execution only\n\nSession Activity\n\nLive · observation since opening\n\nActive Sessions\n0\n1\n2\n3\n4\nCollecting telemetry…\nEvents by Type\n\nLive · process counters\n\n0\nNo events\n\nATTACH\n0%\n\nCELL_HANDOVER\n0%\n\nDETACH\n0%\n\nSTALE_DISCONNECT\n0%\n\nIP Pool Usage\n\n10.45.0.0/16 (Virtual Network)\n\n0 / 65,533 IPs allocated\n0%\nAllocated (0)\nAvailable (\n65,533\n)\nLive · IP pool\nObserved 10:30:37 · allocator snapshot",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "subscribers",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SUBSCRIBERS\nSubscribers\n\nSubscriber registry · real API data\n\nProvision subscriber\nFind exact IMSI\nRefresh\n0\ntotal subscribers\nLive · 10:30:38\nMSISDN\tIMSI\tStatus\tCreated At\tUpdated At\tDetails\n\nNo subscribers provisioned yet.",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "devices",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / DEVICES\nDevices\n\nDevice registry · real API data\n\nRegister device\nAll subscribers\nRefresh\n0\ntotal devices\n· 0 shown\nLive\nIMEI\tTechnology\tStatus\tSubscriber\tCreated At\tUpdated At\tDetails\n\nNo devices registered yet.",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "sessions",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SESSIONS\nSessions\n\nConnection management · select a device\n\nDevice\nSelect a registered device\nRefresh devices\n\nDevices: Live · Sessions are queried individually on selection or refresh.\n\nSelect a device\n\nNo devices available. Register a device first.\n\nOpen Devices →",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "network",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / NETWORK\nNetwork\n\nExplore the telecom lab · demonstration data\n\nNetwork Topology\n\nObserved connections · illustrative positions, not GPS\n\nLTE Cell\n5G Cell\nConnected Device\nHandover\nCAMPINAS / SP\nCELL-SP-001\nLTE\nCELL-SP-002\n5G\nCELL-SP-003\n5G\nN\nSUCCESS · 0 connected · 0 without session\nCampinas, SP - Brazil\n© OpenStreetMap contributors · Sj1mor · CC BY-SA 4.0",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "events",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / EVENTS\nEvents\n\nLast 100 observed events · resets when the API restarts\n\nRecent Events\nTime\tEvent Type\tDevice\tDetails\tSubscriber\n\nNo events observed in this API execution.\n\nLive · 0 / 100 · Current API execution only",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "telemetry",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / TELEMETRY\nTelemetry\n\nLive telemetry · IP pool remains mock\n\nSession Activity\n\nLive · observation since opening\n\nActive Sessions\n0\n1\n2\n3\n4\n10:30:38\n10:30:43\nEvents by Type\n\nLive · process counters\n\n0\nNo events\n\nATTACH\n0%\n\nCELL_HANDOVER\n0%\n\nDETACH\n0%\n\nSTALE_DISCONNECT\n0%\n\nIP Pool Usage\n\n10.45.0.0/16 (Virtual Network)\n\n0 / 65,533 IPs allocated\n0%\nAllocated (0)\nAvailable (\n65,533\n)\nLive · IP pool\nObserved 10:30:45 · allocator snapshot",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "database",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / DATABASE\nDatabase\n\nHTTP liveness and storage diagnostics\n\nDatabase overview\n\nStorage mode and connection reachability. MEMORY is a valid temporary storage mode.\n\nStatus\nMEMORY\nStorage mode\nMEMORY\nDatabase configured\nfalse\nLast reported database status\nNOT_APPLICABLE\nDiagnostic observation\nLive\nLast successful check\n15/09/2026, 10:30:38",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "system",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SYSTEM\nSystem\n\nHTTP liveness and storage diagnostics\n\nSystem overview\n\nAvailability reflects GET /health only, not full system readiness.\n\nStatus\nHTTP ONLINE\nService\nnexus-core-lab\nLast successful health check\n15/09/2026, 10:30:38\nTelemetry\nLive\nRequests since process start\n17",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "api-status",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / API STATUS\nAPI Status\n\nHTTP liveness and storage diagnostics\n\nAPI status\n\nAvailability reflects GET /health only, not full system readiness.\n\nStatus\nHTTP ONLINE\nService\nnexus-core-lab\nLast successful health check\n15/09/2026, 10:30:38\nTelemetry\nLive\nRequests since process start\n17",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "simulator",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SIMULATOR\nSimulator\n\nExplore the telecom lab · demonstration data\n\nNetwork event simulator\n\nRun a local demonstration event. No requests are sent to a backend.\n\nATTACH\nCELL_HANDOVER\nDETACH\nClear\n\nNo simulated events yet.",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "configuration",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:38\nAPI\nStorage MEMORY\nNEXUS CORE LAB / CONFIGURATION\nConfiguration\n\nExplore the telecom lab · demonstration data\n\nDisplay preferences\nRefresh interval (seconds)\n5\n10\n30\nShow event notifications\nSave preferences",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "overview",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nTotal Subscribers\n0\nLive\nTotal Devices\n0\nLive\nActive Sessions\n0\nLive\nNetwork Cells\n3\nConfigured cells · Campinas\nTotal Events\n0\nLive\nNetwork Topology\n\nObserved connections · illustrative positions, not GPS\n\nLTE Cell\n5G Cell\nConnected Device\nHandover\nCAMPINAS / SP\nCELL-SP-001\nLTE\nCELL-SP-002\n5G\nCELL-SP-003\n5G\nN\nSUCCESS · 0 connected · 0 without session\nCampinas, SP - Brazil\n© OpenStreetMap contributors · Sj1mor · CC BY-SA 4.0\nActive Sessions (0)\nManage\n\tIMEI\tSubscriber\tCell\tIP Address\tDuration\n\nNo active sessions observed.\n\nRecent Events\nView all\nTime\tEvent Type\tDevice\tDetails\n\nNo events observed in this API execution.\n\nLive · 0 / 100 · Current API execution only\n\nSession Activity\n\nLive · observation since opening\n\nActive Sessions\n0\n1\n2\n3\n4\n10:30:38\n10:30:48\nEvents by Type\n\nLive · process counters\n\n0\nNo events\n\nATTACH\n0%\n\nCELL_HANDOVER\n0%\n\nDETACH\n0%\n\nSTALE_DISCONNECT\n0%\n\nIP Pool Usage\n\n10.45.0.0/16 (Virtual Network)\n\n0 / 65,533 IPs allocated\n0%\nAllocated (0)\nAvailable (\n65,533\n)\nLive · IP pool\nObserved 10:30:48 · allocator snapshot",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "subscribers",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SUBSCRIBERS\nSubscribers\n\nSubscriber registry · real API data\n\nProvision subscriber\nFind exact IMSI\nRefresh\n0\ntotal subscribers\nLive · 10:30:38\nMSISDN\tIMSI\tStatus\tCreated At\tUpdated At\tDetails\n\nNo subscribers provisioned yet.",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "devices",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / DEVICES\nDevices\n\nDevice registry · real API data\n\nRegister device\nAll subscribers\nRefresh\n0\ntotal devices\n· 0 shown\nLive\nIMEI\tTechnology\tStatus\tSubscriber\tCreated At\tUpdated At\tDetails\n\nNo devices registered yet.",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "sessions",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SESSIONS\nSessions\n\nConnection management · select a device\n\nDevice\nSelect a registered device\nRefresh devices\n\nDevices: Live · Sessions are queried individually on selection or refresh.\n\nSelect a device\n\nNo devices available. Register a device first.\n\nOpen Devices →",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "network",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / NETWORK\nNetwork\n\nExplore the telecom lab · demonstration data\n\nNetwork Topology\n\nObserved connections · illustrative positions, not GPS\n\nLTE Cell\n5G Cell\nConnected Device\nHandover\nCAMPINAS / SP\nCELL-SP-001\nLTE\nCELL-SP-002\n5G\nCELL-SP-003\n5G\nN\nSUCCESS · 0 connected · 0 without session\nCampinas, SP - Brazil\n© OpenStreetMap contributors · Sj1mor · CC BY-SA 4.0",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "events",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / EVENTS\nEvents\n\nLast 100 observed events · resets when the API restarts\n\nRecent Events\nTime\tEvent Type\tDevice\tDetails\tSubscriber\n\nNo events observed in this API execution.\n\nLive · 0 / 100 · Current API execution only",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "telemetry",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / TELEMETRY\nTelemetry\n\nLive telemetry · IP pool remains mock\n\nSession Activity\n\nLive · observation since opening\n\nActive Sessions\n0\n1\n2\n3\n4\n10:30:38\n10:30:48\nEvents by Type\n\nLive · process counters\n\n0\nNo events\n\nATTACH\n0%\n\nCELL_HANDOVER\n0%\n\nDETACH\n0%\n\nSTALE_DISCONNECT\n0%\n\nIP Pool Usage\n\n10.45.0.0/16 (Virtual Network)\n\n0 / 65,533 IPs allocated\n0%\nAllocated (0)\nAvailable (\n65,533\n)\nLive · IP pool\nObserved 10:30:53 · allocator snapshot",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "database",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / DATABASE\nDatabase\n\nHTTP liveness and storage diagnostics\n\nDatabase overview\n\nStorage mode and connection reachability. MEMORY is a valid temporary storage mode.\n\nStatus\nMEMORY\nStorage mode\nMEMORY\nDatabase configured\nfalse\nLast reported database status\nNOT_APPLICABLE\nDiagnostic observation\nLive\nLast successful check\n15/09/2026, 10:30:48",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "system",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SYSTEM\nSystem\n\nHTTP liveness and storage diagnostics\n\nSystem overview\n\nAvailability reflects GET /health only, not full system readiness.\n\nStatus\nHTTP ONLINE\nService\nnexus-core-lab\nLast successful health check\n15/09/2026, 10:30:48\nTelemetry\nLive\nRequests since process start\n29",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "api-status",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / API STATUS\nAPI Status\n\nHTTP liveness and storage diagnostics\n\nAPI status\n\nAvailability reflects GET /health only, not full system readiness.\n\nStatus\nHTTP ONLINE\nService\nnexus-core-lab\nLast successful health check\n15/09/2026, 10:30:48\nTelemetry\nLive\nRequests since process start\n29",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "simulator",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SIMULATOR\nSimulator\n\nExplore the telecom lab · demonstration data\n\nNetwork event simulator\n\nRun a local demonstration event. No requests are sent to a backend.\n\nATTACH\nCELL_HANDOVER\nDETACH\nClear\n\nNo simulated events yet.",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "route": "configuration",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / CONFIGURATION\nConfiguration\n\nExplore the telecom lab · demonstration data\n\nDisplay preferences\nRefresh interval (seconds)\n5\n10\n30\nShow event notifications\nSave preferences",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "overview",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nTotal Subscribers\n0\nLive\nTotal Devices\n0\nLive\nActive Sessions\n0\nLive\nNetwork Cells\n3\nConfigured cells · Campinas\nTotal Events\n0\nLive\nNetwork Topology\n\nObserved connections · illustrative positions, not GPS\n\nLTE Cell\n5G Cell\nConnected Device\nHandover\nCAMPINAS / SP\nCELL-SP-001\nLTE\nCELL-SP-002\n5G\nCELL-SP-003\n5G\nN\nSUCCESS · 0 connected · 0 without session\nCampinas, SP - Brazil\n© OpenStreetMap contributors · Sj1mor · CC BY-SA 4.0\nActive Sessions (0)\nManage\n\tIMEI\tSubscriber\tCell\tIP Address\tDuration\n\nNo active sessions observed.\n\nRecent Events\nView all\nTime\tEvent Type\tDevice\tDetails\n\nNo events observed in this API execution.\n\nLive · 0 / 100 · Current API execution only\n\nSession Activity\n\nLive · observation since opening\n\nActive Sessions\n0\n1\n2\n3\n4\n10:30:38\n10:30:53\nEvents by Type\n\nLive · process counters\n\n0\nNo events\n\nATTACH\n0%\n\nCELL_HANDOVER\n0%\n\nDETACH\n0%\n\nSTALE_DISCONNECT\n0%\n\nIP Pool Usage\n\n10.45.0.0/16 (Virtual Network)\n\n0 / 65,533 IPs allocated\n0%\nAllocated (0)\nAvailable (\n65,533\n)\nLive · IP pool\nObserved 10:30:56 · allocator snapshot",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "subscribers",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SUBSCRIBERS\nSubscribers\n\nSubscriber registry · real API data\n\nProvision subscriber\nFind exact IMSI\nRefresh\n0\ntotal subscribers\nLive · 10:30:38\nMSISDN\tIMSI\tStatus\tCreated At\tUpdated At\tDetails\n\nNo subscribers provisioned yet.",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "devices",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:48\nAPI\nStorage MEMORY\nNEXUS CORE LAB / DEVICES\nDevices\n\nDevice registry · real API data\n\nRegister device\nAll subscribers\nRefresh\n0\ntotal devices\n· 0 shown\nLive\nIMEI\tTechnology\tStatus\tSubscriber\tCreated At\tUpdated At\tDetails\n\nNo devices registered yet.",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "sessions",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:58\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SESSIONS\nSessions\n\nConnection management · select a device\n\nDevice\nSelect a registered device\nRefresh devices\n\nDevices: Live · Sessions are queried individually on selection or refresh.\n\nSelect a device\n\nNo devices available. Register a device first.\n\nOpen Devices →",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "network",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:58\nAPI\nStorage MEMORY\nNEXUS CORE LAB / NETWORK\nNetwork\n\nExplore the telecom lab · demonstration data\n\nNetwork Topology\n\nObserved connections · illustrative positions, not GPS\n\nLTE Cell\n5G Cell\nConnected Device\nHandover\nCAMPINAS / SP\nCELL-SP-001\nLTE\nCELL-SP-002\n5G\nCELL-SP-003\n5G\nN\nSUCCESS · 0 connected · 0 without session\nCampinas, SP - Brazil\n© OpenStreetMap contributors · Sj1mor · CC BY-SA 4.0",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "events",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:58\nAPI\nStorage MEMORY\nNEXUS CORE LAB / EVENTS\nEvents\n\nLast 100 observed events · resets when the API restarts\n\nRecent Events\nTime\tEvent Type\tDevice\tDetails\tSubscriber\n\nNo events observed in this API execution.\n\nLive · 0 / 100 · Current API execution only",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "telemetry",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:58\nAPI\nStorage MEMORY\nNEXUS CORE LAB / TELEMETRY\nTelemetry\n\nLive telemetry · IP pool remains mock\n\nSession Activity\n\nLive · observation since opening\n\nActive Sessions\n0\n1\n2\n3\n4\n10:30:38\n10:30:58\nEvents by Type\n\nLive · process counters\n\n0\nNo events\n\nATTACH\n0%\n\nCELL_HANDOVER\n0%\n\nDETACH\n0%\n\nSTALE_DISCONNECT\n0%\n\nIP Pool Usage\n\n10.45.0.0/16 (Virtual Network)\n\n0 / 65,533 IPs allocated\n0%\nAllocated (0)\nAvailable (\n65,533\n)\nLive · IP pool\nObserved 10:31:00 · allocator snapshot",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "database",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:58\nAPI\nStorage MEMORY\nNEXUS CORE LAB / DATABASE\nDatabase\n\nHTTP liveness and storage diagnostics\n\nDatabase overview\n\nStorage mode and connection reachability. MEMORY is a valid temporary storage mode.\n\nStatus\nMEMORY\nStorage mode\nMEMORY\nDatabase configured\nfalse\nLast reported database status\nNOT_APPLICABLE\nDiagnostic observation\nLive\nLast successful check\n15/09/2026, 10:30:58",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "system",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:58\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SYSTEM\nSystem\n\nHTTP liveness and storage diagnostics\n\nSystem overview\n\nAvailability reflects GET /health only, not full system readiness.\n\nStatus\nHTTP ONLINE\nService\nnexus-core-lab\nLast successful health check\n15/09/2026, 10:30:58\nTelemetry\nLive\nRequests since process start\n35",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "api-status",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:58\nAPI\nStorage MEMORY\nNEXUS CORE LAB / API STATUS\nAPI Status\n\nHTTP liveness and storage diagnostics\n\nAPI status\n\nAvailability reflects GET /health only, not full system readiness.\n\nStatus\nHTTP ONLINE\nService\nnexus-core-lab\nLast successful health check\n15/09/2026, 10:30:58\nTelemetry\nLive\nRequests since process start\n35",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "simulator",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:58\nAPI\nStorage MEMORY\nNEXUS CORE LAB / SIMULATOR\nSimulator\n\nExplore the telecom lab · demonstration data\n\nNetwork event simulator\n\nRun a local demonstration event. No requests are sent to a backend.\n\nATTACH\nCELL_HANDOVER\nDETACH\nClear\n\nNo simulated events yet.",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "configuration",
+      "text": "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:30:58\nAPI\nStorage MEMORY\nNEXUS CORE LAB / CONFIGURATION\nConfiguration\n\nExplore the telecom lab · demonstration data\n\nDisplay preferences\nRefresh interval (seconds)\n5\n10\n30\nShow event notifications\nSave preferences",
+      "overflow": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  ],
+  "errors": [],
+  "hero": [
+    "SUBSCRIBER REGISTRY\nSubscriber details\n19999999901\nACTIVE\nUUID\n380051a4-3f5c-41d3-9c0e-d1e1674885e6\nIMSI\n724059999999901\nMSISDN\n19999999901\nCreated At\n15 Sept 2026, 10:31\n2026-09-15T13:31:04.1769111Z\nUpdated At\n15 Sept 2026, 10:31\n2026-09-15T13:31:04.3658449Z\nReason\n(optional, for suspend/deactivate)\nSuspend\nDeactivate permanently\n\nServer confirmed: ACTIVE",
+    "DEVICE REGISTRY\nDevice details\n860010009999901\nREGISTERED\nUUID\ne62ffea9-9af9-41aa-83f7-705e1f8d4139\nIMEI\n860010009999901\nTechnology\n5G\nStatus\nREGISTERED\nSubscriber ID\n31497f92-c709-466e-b26c-eb5927955aae\nSubscriber MSISDN\n+5519979059000\nSubscriber IMSI\n724990679059000\nCreated At\n15 Sept 2026, 10:31\n2026-09-15T13:31:06.0028833Z\nUpdated At\n15 Sept 2026, 10:31\n2026-09-15T13:31:06.0028833Z\n\nDevice registered. Server status: REGISTERED",
+    "Device session\n\nIMEI 860000679059000\n\nRefresh session\nCONNECTED\nSession UUID\n15eb2bca-fe2c-498f-8a9e-cc96ecda0f7b\nDevice UUID\nc70feb7e-6f8f-4d07-8890-c1bdcd740916\nSubscriber UUID\n31497f92-c709-466e-b26c-eb5927955aae\nCell\nCELL-SP-002\nIP address\n10.45.0.2\nAttached at\n2026-09-15T13:31:07.1508671Z\nUpdated at\n2026-09-15T13:31:07.1508671Z\nManage connection\nNetwork cell\nCELL-SP-001 · Campinas Centro · LTE\nCELL-SP-002 · Campinas Barão Geraldo · 5G\nCELL-SP-003 · Campinas Cambuí · 5G\nHandover\nDetach\n\nServer confirmed attach: CONNECTED.",
+    "Device session\n\nIMEI 860000679059000\n\nRefresh session\nCONNECTED\nSession UUID\n15eb2bca-fe2c-498f-8a9e-cc96ecda0f7b\nDevice UUID\nc70feb7e-6f8f-4d07-8890-c1bdcd740916\nSubscriber UUID\n31497f92-c709-466e-b26c-eb5927955aae\nCell\nCELL-SP-003\nIP address\n10.45.0.2\nAttached at\n2026-09-15T13:31:07.1508671Z\nUpdated at\n2026-09-15T13:31:07.3002239Z\nManage connection\nNetwork cell\nCELL-SP-001 · Campinas Centro · LTE\nCELL-SP-002 · Campinas Barão Geraldo · 5G\nCELL-SP-003 · Campinas Cambuí · 5G\nHandover\nDetach\n\nServer confirmed handover: CONNECTED.",
+    "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:31:08\nAPI\nStorage MEMORY\nTotal Subscribers\n2\nLive\nTotal Devices\n2\nLive\nActive Sessions\n1\nLive\nNetwork Cells\n3\nConfigured cells · Campinas\nTotal Events\n5\nLive\nNetwork Topology\n\nObserved connections · illustrative positions, not GPS\n\nLTE Cell\n5G Cell\nConnected Device\nHandover\nCAMPINAS / SP\nCELL-SP-001\nLTE\nCELL-SP-002\n5G\nCELL-SP-003\n5G\nD-01\nN\nSUCCESS · 1 connected · 1 without session\nCampinas, SP - Brazil\n© OpenStreetMap contributors · Sj1mor · CC BY-SA 4.0\nActive Sessions (1)\nManage\n\tIMEI\tSubscriber\tCell\tIP Address\tDuration\n\n\t860000679059000\t+5519979059000\tSP-003\t10.45.0.2\t00:00:05\n\n1 of 1 observed · topology snapshot\n\nRecent Events\nView all\nTime\tEvent Type\tDevice\tDetails\n10:31:07\tCELL_HANDOVER\tc70feb7e\tSP-002 → SP-003\n10:31:07\tATTACH\tc70feb7e\tSP-002 · 10.45.0.2\n10:30:59\tDETACH\tc70feb7e\tVOLUNTARY_DETACH\n10:30:59\tCELL_HANDOVER\tc70feb7e\tSP-001 → SP-002\n10:30:59\tATTACH\tc70feb7e\tSP-001 · 10.45.0.2\n\nLive · 5 / 100 · Current API execution only\n\nSession Activity\n\nLive · observation since opening\n\nActive Sessions\n0\n1\n2\n3\n4\n10:30:38\n10:31:13\nEvents by Type\n\nLive · process counters\n\n5\nEvents\n\nATTACH\n40.0%\n\nCELL_HANDOVER\n40.0%\n\nDETACH\n20.0%\n\nSTALE_DISCONNECT\n0.0%\n\nIP Pool Usage\n\n10.45.0.0/16 (Virtual Network)\n\n1 / 65,533 IPs allocated\n0.0015%\nAllocated (1)\nAvailable (\n65,532\n)\nLive · IP pool\nObserved 10:31:13 · allocator snapshot",
+    "Device session\n\nIMEI 860000679059000\n\nRefresh session\nDISCONNECTED\nSession UUID\n15eb2bca-fe2c-498f-8a9e-cc96ecda0f7b\nDevice UUID\nc70feb7e-6f8f-4d07-8890-c1bdcd740916\nSubscriber UUID\n31497f92-c709-466e-b26c-eb5927955aae\nCell\nCELL-SP-003\nIP address\n10.45.0.2\nAttached at\n2026-09-15T13:31:07.1508671Z\nUpdated at\n2026-09-15T13:31:15.3860698Z\nClosed at\n2026-09-15T13:31:15.3860698Z\nDisconnect reason\nVOLUNTARY_DETACH\nConnect to a cell\nNetwork cell\nCELL-SP-001 · Campinas Centro · LTE\nCELL-SP-002 · Campinas Barão Geraldo · 5G\nCELL-SP-003 · Campinas Cambuí · 5G\nAttach\n\nServer confirmed detach: DISCONNECTED.",
+    "Telecom Network Simulator & Core Lab\n\nBuild  •  Learn  •  Simulate  •  Explore\nSYSTEM ONLINE\n15/09/2026, 10:31:18\nAPI\nStorage MEMORY\nNEXUS CORE LAB / EVENTS\nEvents\n\nLast 100 observed events · resets when the API restarts\n\nRecent Events\nTime\tEvent Type\tDevice\tDetails\tSubscriber\n10:31:15\tDETACH\tc70feb7e\tVOLUNTARY_DETACH\t31497f92\n10:31:07\tCELL_HANDOVER\tc70feb7e\tSP-002 → SP-003\t31497f92\n10:31:07\tATTACH\tc70feb7e\tSP-002 · 10.45.0.2\t31497f92\n10:30:59\tDETACH\tc70feb7e\tVOLUNTARY_DETACH\t31497f92\n10:30:59\tCELL_HANDOVER\tc70feb7e\tSP-001 → SP-002\t31497f92\n10:30:59\tATTACH\tc70feb7e\tSP-001 · 10.45.0.2\t31497f92\n\nLive · 6 / 100 · Current API execution only"
+  ]
+}

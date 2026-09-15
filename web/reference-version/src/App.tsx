@@ -3,7 +3,7 @@ import { useState, useEffect, createContext, useContext } from 'react';
 import { UrbanMap, ReferenceIcon, SkylineArt } from './ReferenceArt';
 import './comparison.css';
 import './transport.css';
-import { MonitoringProvider, useMonitoring, readLabel } from './monitoring';
+import { MonitoringProvider, useMonitoring, readLabel, snapshotLabel } from './monitoring';
 import { totalEvents } from './api';
 import { ActivityChart, Donut, OperationalStatus } from './LivePanels';
 import { SubscribersProvider, useSubscribers } from './subscribers';
@@ -38,15 +38,6 @@ const kpis = [
   [RadioTower, 'Network Cells', String(networkCells.length), '', 'Configured cells · Campinas', 'blue'],
   [Server, 'Total Events', '—', '', 'Process counters', 'purple']
 ] as const;
-
-// MOCK fixtures. No Subscriber/Device/Session integration in Gate 2.
-const sessions = [
-  ['860010001234567','5511999990001','SP-001','10.45.0.8','00:12:34'],
-  ['860010001234568','5511999990002','SP-002','10.45.0.14','00:08:21'],
-  ['860010001234569','5511999990003','SP-003','10.45.0.22','00:05:17'],
-  ['860010001234570','5511999990004','SP-002','10.45.0.31','00:03:45'],
-  ['860010001234571','5511999990005','SP-001','10.45.0.33','00:02:11']
-];
 
 function Brand() {
   return <><div className="brand"><div>NE<span>X</span>US</div><small>CORE LAB</small></div><svg className="brand-outline" viewBox="0 0 249 94"><path d="M248 0V77L225 92H0"/></svg></>;
@@ -85,14 +76,14 @@ function Kpis() {
   const {telemetry}=useMonitoring();
   const {collection}=useSubscribers();
   const {collection:devices}=useDevices();
-  return <section className="kpis">{kpis.map(([Icon,label,mockValue,trend,sub,color])=>{
+  return <section className="kpis">{kpis.map(([Icon,label,configuredValue,trend,sub,color])=>{
     const subscriberCard=label==='Total Subscribers';
     const deviceCard=label==='Total Devices';
     const real=subscriberCard||deviceCard||label==='Active Sessions'||label==='Total Events';
     const state=subscriberCard?collection:deviceCard?devices:telemetry;
-    const value=subscriberCard?collection.data?.length??'—':deviceCard?devices.data?.length??'—':real?telemetry.data?label==='Active Sessions'?telemetry.data.metrics.active_sessions:totalEvents(telemetry.data):'—':mockValue;
-    return <article className="kpi" key={label} data-testid={subscriberCard?'subscribers-kpi':deviceCard?'devices-kpi':label==='Active Sessions'?'active-kpi':label==='Total Events'?'events-kpi':undefined} data-state={real?state.status:'configured'} title={real?state.error:'Configured cells · static backend catalogue mirror; not physical health'}>
-    <div className={`kpi-icon ${color}`}>{label==='Total Subscribers'?<ReferenceIcon name="users"/>:label==='Total Devices'?<ReferenceIcon name="phone"/>:label==='Total Events'?<ReferenceIcon name="file"/>:<Icon/>}</div><div className="kpi-copy"><span>{label}</span><div><strong>{value}</strong></div><small>{real?readLabel({status:state.status}):sub}</small></div>
+    const value=subscriberCard?collection.data?.length??'—':deviceCard?devices.data?.length??'—':real?telemetry.data?label==='Active Sessions'?telemetry.data.metrics.active_sessions:totalEvents(telemetry.data):'—':configuredValue;
+    return <article className="kpi" key={label} data-testid={subscriberCard?'subscribers-kpi':deviceCard?'devices-kpi':label==='Active Sessions'?'active-kpi':label==='Total Events'?'events-kpi':undefined} data-state={real?state.status:'configured'} title={real?(state.error || ((subscriberCard||deviceCard) ? `Collection snapshot${state.receivedAt ? ` · Last refreshed ${new Date(state.receivedAt).toLocaleString()}` : ''}. No continuous polling.` : label==='Total Events' ? 'Counters from the current API process; not persisted history.' : undefined)):'Configured cells · static backend catalogue mirror; not physical health'}>
+    <div className={`kpi-icon ${color}`}>{label==='Total Subscribers'?<ReferenceIcon name="users"/>:label==='Total Devices'?<ReferenceIcon name="phone"/>:label==='Total Events'?<ReferenceIcon name="file"/>:<Icon/>}</div><div className="kpi-copy"><span>{label}</span><div><strong>{value}</strong></div><small>{subscriberCard||deviceCard?snapshotLabel({status:state.status}):label==='Total Events'&&state.status==='success'?'Current API process':real?readLabel({status:state.status}):sub}</small></div>
   </article>})}</section>;
 }
 
@@ -116,7 +107,7 @@ function Topology() {
   const [zoom,setZoom]=useState(1);
   return <article className="panel topology-panel">
     <div className="panel-head"><div className="head-title"><span className="head-icon"><ReferenceIcon name="topology"/></span><div><h2>Network Topology</h2><p>Observed connections · illustrative positions, not GPS</p></div></div>
-      <div className="map-legend"><span><i className="lte"/>LTE Cell</span><span><i className="g5"/>5G Cell</span><span><i className="dev"/>Connected Device</span><span><i className="handover"/>Handover</span></div>
+      <div className="map-legend"><span><i className="lte"/>LTE Cell</span><span><i className="g5"/>5G Cell</span><span><i className="dev"/>Connected Device</span></div>
     </div>
     <div className="map-wrap">
       <svg viewBox="0 0 850 480" preserveAspectRatio="none" style={{transform:`scale(${zoom})`}}>
@@ -141,17 +132,9 @@ function Topology() {
 }
 
 function Workspace({page}:{page:string}){
-  const [query,setQuery]=useState('');
-  const [selected,setSelected]=useState<string[]|null>(null);
   const [simEvents,setSimEvents]=useState<string[]>([]);
-  const [saved,setSaved]=useState(false);
-  const [interval,setIntervalValue]=useState('5');
-  const [alerts,setAlerts]=useState(true);
-  const rows=sessions;
-  const headers=page==='Events'?['Time','Event type','Device','Details']:['Device ID','Subscriber','Cell','IP Address','Duration'];
-  return <section className="workspace"><header><div><small>NEXUS CORE LAB / {page.toUpperCase()}</small><h1>{page}</h1><p>{page==='Telemetry'?'Live telemetry · IP pool remains mock':['System','API Status','Database'].includes(page)?'HTTP liveness and storage diagnostics':'Explore the telecom lab · demonstration data'}</p></div></header>
-    {['Sessions','Events'].includes(page)?<><input aria-label="Search records" placeholder="Search records…" value={query} onChange={e=>setQuery(e.target.value)}/><div className="workspace-card"><table><thead><tr>{headers.map(h=><th key={h}>{h}</th>)}<th>Details</th></tr></thead><tbody>{rows.filter(r=>r.join(' ').toLowerCase().includes(query.toLowerCase())).map((r,i)=><tr key={i}>{r.map((v,j)=><td key={j}>{v}</td>)}<td><button onClick={()=>setSelected(r)}>Open →</button></td></tr>)}</tbody></table>{!rows.some(r=>r.join(' ').toLowerCase().includes(query.toLowerCase()))&&<p>No matching records.</p>}</div></>:page==='Network'?<div className="network-workspace"><Topology/></div>:page==='Telemetry'?<div className="telemetry-workspace"><ActivityChart/><Donut/><IPPoolCard/></div>:page==='Simulator'?<div className="workspace-card"><h2>Network event simulator</h2><p>Run a local demonstration event. No requests are sent to a backend.</p><div className="sim-actions">{['ATTACH','CELL_HANDOVER','DETACH'].map(t=><button key={t} onClick={()=>setSimEvents(prev=>[`${new Date().toLocaleTimeString()} · ${t} · UE-01 · ${t==='CELL_HANDOVER'?'SP-001 → SP-003':t==='ATTACH'?'Connected to SP-001':'Session terminated'}`,...prev])}>{t}</button>)}<button onClick={()=>setSimEvents([])}>Clear</button></div><ul aria-live="polite">{simEvents.map((e,i)=><li key={i}>{e}</li>)}</ul>{simEvents.length===0&&<p>No simulated events yet.</p>}</div>:page==='Configuration'?<form className="workspace-card config-form" onSubmit={e=>{e.preventDefault();setSaved(true)}}><h2>Display preferences</h2><label>Refresh interval (seconds)<select value={interval} onChange={e=>{setIntervalValue(e.target.value);setSaved(false)}}><option>5</option><option>10</option><option>30</option></select></label><label><input type="checkbox" checked={alerts} onChange={e=>{setAlerts(e.target.checked);setSaved(false)}}/> Show event notifications</label><button type="submit">Save preferences</button>{saved&&<p role="status">Preferences saved for this screen.</p>}</form>:<OperationalStatus page={page}/>}
-    {selected&&<div className="modal-shade" onClick={()=>setSelected(null)}><section role="dialog" aria-modal="true" aria-label="Record details" className="workspace-card record-modal" onClick={e=>e.stopPropagation()}><button aria-label="Close details" onClick={()=>setSelected(null)}>×</button><h2>Record details</h2><dl>{selected.map((v,i)=><div key={i}><dt>{headers[i]}</dt><dd>{v}</dd></div>)}</dl></section></div>}
+  return <section className="workspace"><header><div><small>NEXUS CORE LAB / {page.toUpperCase()}</small><h1>{page==='Simulator'?'Local Event Sandbox':page}</h1><p>{page==='Telemetry'?'Current API counters · browser observations · authoritative IP pool snapshot':['System','API Status','Database'].includes(page)?'HTTP liveness and storage diagnostics':page==='Network'?'Real session associations · configured cells':page==='Simulator'?'Frontend-only simulation':page==='Configuration'?'Effective settings · read-only':'Explore the telecom lab'}</p></div></header>
+    {page==='Network'?<div className="network-workspace"><Topology/></div>:page==='Telemetry'?<div className="telemetry-workspace"><ActivityChart/><Donut/><IPPoolCard/></div>:page==='Simulator'?<div className="workspace-card"><h2>Simulate locally</h2><p>These sandbox actions only change this page. They do not send backend requests or change Subscribers, Devices or Sessions.</p><p>For the real Hero Flow, use Subscribers → Devices → Sessions. The separate <code>cmd/simulator</code> CLI also runs the real flow over HTTP; this page does not start it.</p><div className="sim-actions">{['ATTACH','CELL_HANDOVER','DETACH'].map(t=><button key={t} onClick={()=>setSimEvents(prev=>[`${new Date().toLocaleTimeString()} · ${t} · UE-01 · ${t==='CELL_HANDOVER'?'SP-001 → SP-003':t==='ATTACH'?'Connected to SP-001':'Session terminated'}`,...prev])}>{t}</button>)}<button onClick={()=>setSimEvents([])}>Clear</button></div><ul aria-live="polite">{simEvents.map((e,i)=><li key={i}>{e}</li>)}</ul>{simEvents.length===0&&<p>No simulated events yet.</p>}</div>:page==='Configuration'?<div className="workspace-card config-form"><h2>Effective polling intervals</h2><p>Read-only · not configurable in this demo. Delays apply after each request or polling round completes.</p><dl data-testid="effective-polling"><dt>Telemetry</dt><dd>~5 s</dd><dt>Topology</dt><dd>~5 s · Overview and Network only</dd><dt>IP Pool</dt><dd>~5 s · while its panel is open</dd><dt>Recent Events</dt><dd>~5 s</dd><dt>Storage</dt><dd>~10 s</dd><dt>Health</dt><dd>~10 s</dd></dl><p>Subscribers and Devices: collection snapshots, refreshed on load, manual refresh or related operations. No continuous polling.</p><p>Event notifications: not implemented in this demo.</p></div>:<OperationalStatus page={page}/>}
   </section>;
 }
 

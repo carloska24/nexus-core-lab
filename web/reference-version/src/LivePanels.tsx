@@ -34,7 +34,7 @@ export function ActivityChart() {
   const hasGap = positions.some(point => point.gap);
   const time = (timestamp: string) => new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   return <article className="panel analytic" data-testid="activity" data-state={telemetry.status}>
-    <div className="panel-head"><div className="head-title"><span className="head-icon"><Activity/></span><div><h2>Session Activity</h2><p>{readLabel(telemetry)} · observation since opening</p></div></div><div className="chart-legend"><span><i className="green"/>Active Sessions</span></div></div>
+    <div className="panel-head"><div className="head-title"><span className="head-icon"><Activity/></span><div><h2>Session Activity</h2><p title="Observed in this browser session; not persisted. Reload clears the observation window.">{telemetry.status === 'success' ? 'Local observation · this browser' : `${readLabel(telemetry)} · local observation`}</p></div></div><div className="chart-legend"><span><i className="green"/>Active Sessions</span></div></div>
     <svg className="line-chart corrected-chart" viewBox="0 0 500 160" preserveAspectRatio="none" aria-label={`Observed active sessions: ${observations.length} samples`}>
       <defs><linearGradient id={gradient} x1="0" y1="0" x2="0" y2="1"><stop stopColor="#23c983" stopOpacity=".3"/><stop offset="1" stopColor="#23c983" stopOpacity=".03"/></linearGradient></defs>
       <g className="grid">{[0,1,2,3,4].map(step=><g key={step}><path d={`M38 ${140-step*30}H488`}/><text x="14" y={144-step*30}>{ceiling*step/4}</text></g>)}{[38,113,188,263,338,413,488].map(x=><path key={x} d={`M${x} 20V140`}/>)}</g>
@@ -60,7 +60,7 @@ export function Donut() {
     return `${color} ${start}% ${cumulative}%`;
   });
   return <article className="panel analytic donut-panel" data-testid="events-donut" data-state={telemetry.status}>
-    <div className="panel-head"><div className="head-title"><span className="head-icon"><BarChart3/></span><div><h2>Events by Type</h2><p title={telemetry.error}>{readLabel(telemetry)} · process counters</p></div></div></div>
+    <div className="panel-head"><div className="head-title"><span className="head-icon"><BarChart3/></span><div><h2>Events by Type</h2><p title={telemetry.error || 'Derived from real counters; resets when the API process restarts.'}>{telemetry.status === 'success' ? 'Current API process' : `${readLabel(telemetry)} · process counters`}</p></div></div></div>
     <div className="donut-content"><div className="donut" style={{ background: total ? `conic-gradient(${slices.join(',')})` : '#243748' }}><span><strong>{total ?? '—'}</strong>{total === 0 ? 'No events' : 'Events'}</span></div><div className="donut-list">{types.map(([label,value,color])=><p key={label} title={`${label}: ${value ?? 'unavailable'}`}><i style={{background:color}}/>{label}<b>{total === undefined ? '—' : `${total === 0 ? 0 : ((value ?? 0)/total*100).toFixed(1)}%`}</b></p>)}</div></div>
   </article>;
 }

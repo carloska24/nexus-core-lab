@@ -74,6 +74,10 @@ export function MonitoringProvider({ children }: { children: ReactNode }) {
 }
 
 export const useMonitoring = () => useContext(Monitoring);
+// Collection reads are snapshots, not continuously polled resources.
+export function snapshotLabel<T>(state: ReadState<T>) {
+  return state.status === 'success' ? 'Snapshot' : readLabel(state);
+}
 export function readLabel<T>(state: ReadState<T>) {
   if (state.status === 'success') return 'Live';
   if (state.status === 'stale') return 'Stale · last known';
