@@ -14,12 +14,14 @@ type mockDeviceChecker struct {
 	mu      sync.Mutex
 	devices map[string]*DeviceInfo
 	allowed map[string]bool
+	errors  map[string]error
 }
 
 func newMockDeviceChecker() *mockDeviceChecker {
 	return &mockDeviceChecker{
 		devices: make(map[string]*DeviceInfo),
 		allowed: make(map[string]bool),
+		errors:  make(map[string]error),
 	}
 }
 
@@ -30,6 +32,12 @@ func (m *mockDeviceChecker) addDevice(deviceID, subscriberID string, eligible bo
 	m.allowed[deviceID] = eligible
 }
 
+func (m *mockDeviceChecker) setAttachError(deviceID string, err error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.errors[deviceID] = err
+}
+
 func (m *mockDeviceChecker) CheckDeviceAttachable(ctx context.Context, deviceID string) (*DeviceInfo, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -38,10 +46,87 @@ func (m *mockDeviceChecker) CheckDeviceAttachable(ctx context.Context, deviceID 
 	if !exists {
 		return nil, ErrDeviceNotFound
 	}
+	if err := m.errors[deviceID]; err != nil {
+		return nil, err
+	}
 	if !m.allowed[deviceID] {
 		return nil, ErrDeviceNotEligible
 	}
 	return dev, nil
+}
+
+func TestAttach_RequiresActiveSubscriberWithoutSideEffects(t *testing.T) {
+	for _, status := range []string{"PENDING_ACTIVATION", "SUSPENDED", "DEACTIVATED"} {
+		t.Run(status, func(t *testing.T) {
+			ctx := context.Background()
+			repo := NewMemoryRepository()
+			checker := newMockDeviceChecker()
+			checker.addDevice("DEV-"+status, "SUB-"+status, true)
+			checker.setAttachError("DEV-"+status, ErrSubscriberNotActive)
+			ipPool := network.NewIPPool()
+			emitter := &mockEventEmitter{}
+			svc := NewService(repo, checker, ipPool, emitter)
+
+			_, err := svc.Attach(ctx, AttachRequest{DeviceID: "DEV-" + status, CellID: "CELL-SP-001"})
+			if !errors.Is(err, ErrSubscriberNotActive) {
+				t.Fatalf("expected ErrSubscriberNotActive, got %v", err)
+			}
+			if ipPool.AllocatedCount() != 0 {
+				t.Fatalf("expected no allocated IP after rejected attach, got %d", ipPool.AllocatedCount())
+			}
+			if emitter.count(SessionEventAttach) != 0 {
+				t.Fatalf("expected no ATTACH event after rejected attach")
+			}
+			if _, err := svc.GetActiveByDevice(ctx, "DEV-"+status); !errors.Is(err, ErrSessionNotFound) {
+				t.Fatalf("expected no active session, got %v", err)
+			}
+		})
+	}
+}
+
+func TestReAttach_NonActiveSubscriberPreservesConnectedSession(t *testing.T) {
+	ctx := context.Background()
+	repo := NewMemoryRepository()
+	checker := newMockDeviceChecker()
+	checker.addDevice("DEV-SUSPENDED", "SUB-SUSPENDED", true)
+	ipPool := network.NewIPPool()
+	emitter := &mockEventEmitter{}
+	svc := NewService(repo, checker, ipPool, emitter)
+
+	original, err := svc.Attach(ctx, AttachRequest{DeviceID: "DEV-SUSPENDED", CellID: "CELL-SP-001"})
+	if err != nil {
+		t.Fatalf("initial attach failed: %v", err)
+	}
+	originalID, originalIP := original.ID, original.IPAddress
+	checker.setAttachError("DEV-SUSPENDED", ErrSubscriberNotActive)
+
+	if _, err := svc.Attach(ctx, AttachRequest{DeviceID: "DEV-SUSPENDED", CellID: "CELL-SP-002"}); !errors.Is(err, ErrSubscriberNotActive) {
+		t.Fatalf("expected rejected re-attach, got %v", err)
+	}
+
+	active, err := svc.GetActiveByDevice(ctx, "DEV-SUSPENDED")
+	if err != nil {
+		t.Fatalf("existing connected session was lost: %v", err)
+	}
+	if active.ID != originalID || active.IPAddress != originalIP || active.Status != StatusConnected {
+		t.Fatalf("existing session changed after rejected re-attach: %+v", active)
+	}
+	if ipPool.AllocatedCount() != 1 || !ipPool.IsAllocated(originalIP) {
+		t.Fatalf("IPPool changed after rejected re-attach")
+	}
+	if emitter.count(SessionEventAttach) != 1 || emitter.count(SessionEventStaleDisconnect) != 0 {
+		t.Fatalf("unexpected events after rejected re-attach: attach=%d stale=%d", emitter.count(SessionEventAttach), emitter.count(SessionEventStaleDisconnect))
+	}
+
+	// Gate 11 affects only new Attach. Existing connected sessions may still hand over and detach.
+	handedOver, err := svc.Handover(ctx, originalID, "CELL-SP-002")
+	if err != nil || handedOver.ID != originalID || handedOver.IPAddress != originalIP {
+		t.Fatalf("handover of existing session should remain allowed: session=%+v err=%v", handedOver, err)
+	}
+	detached, err := svc.Detach(ctx, originalID)
+	if err != nil || detached.Status != StatusDisconnected {
+		t.Fatalf("detach of existing session should remain allowed: session=%+v err=%v", detached, err)
+	}
 }
 
 func TestAttach_SuccessAndValidations(t *testing.T) {

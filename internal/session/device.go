@@ -6,8 +6,9 @@ import (
 )
 
 var (
-	ErrDeviceNotFound    = errors.New("device not found")
-	ErrDeviceNotEligible = errors.New("device is not eligible for attach")
+	ErrDeviceNotFound      = errors.New("device not found")
+	ErrDeviceNotEligible   = errors.New("device is not eligible for attach")
+	ErrSubscriberNotActive = errors.New("subscriber must be active to attach")
 )
 
 // DeviceInfo carrega os dados essenciais retornados pelo contrato de verificação de dispositivo.

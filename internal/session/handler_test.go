@@ -26,6 +26,8 @@ func TestHTTP_Attach(t *testing.T) {
 	mux, checker := setupTestServer()
 	checker.addDevice("DEV-HTTP-001", "SUB-HTTP-001", true)
 	checker.addDevice("DEV-HTTP-INELIGIBLE", "SUB-HTTP-002", false)
+	checker.addDevice("DEV-HTTP-SUSPENDED", "SUB-HTTP-SUSPENDED", true)
+	checker.setAttachError("DEV-HTTP-SUSPENDED", ErrSubscriberNotActive)
 
 	// 1. Sucesso
 	body, _ := json.Marshal(AttachRequest{
@@ -59,6 +61,25 @@ func TestHTTP_Attach(t *testing.T) {
 	mux.ServeHTTP(wInel, reqInel)
 	if wInel.Code != http.StatusUnprocessableEntity {
 		t.Fatalf("expected 422 Unprocessable Entity, got %d", wInel.Code)
+	}
+
+	// Subscriber não ACTIVE -> 422 com código semântico próprio.
+	bodySuspended, _ := json.Marshal(AttachRequest{
+		DeviceID: "DEV-HTTP-SUSPENDED",
+		CellID:   "CELL-SP-001",
+	})
+	reqSuspended := httptest.NewRequest(http.MethodPost, "/api/v1/sessions/attach", bytes.NewReader(bodySuspended))
+	wSuspended := httptest.NewRecorder()
+	mux.ServeHTTP(wSuspended, reqSuspended)
+	if wSuspended.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for non-active subscriber, got %d: %s", wSuspended.Code, wSuspended.Body.String())
+	}
+	var suspendedError errorResponse
+	if err := json.NewDecoder(wSuspended.Body).Decode(&suspendedError); err != nil {
+		t.Fatalf("failed to decode non-active subscriber response: %v", err)
+	}
+	if suspendedError.Code != "SUBSCRIBER_NOT_ACTIVE" {
+		t.Fatalf("expected SUBSCRIBER_NOT_ACTIVE, got %q", suspendedError.Code)
 	}
 
 	// 3. Dispositivo inexistente -> 404

@@ -9,6 +9,9 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
+// ExpectedSchemaVersion é a versão mínima exigida pelo processo da API.
+const ExpectedSchemaVersion = 4
+
 // Config define os parâmetros de conexão e pool para o PostgreSQL.
 type Config struct {
 	URL             string
@@ -82,13 +85,15 @@ func ValidateSchema(ctx context.Context, db *sql.DB, expectedVersion int) error 
 		return fmt.Errorf("failed to query max schema version: %w", err)
 	}
 
-	if !maxVersion.Valid || int(maxVersion.Int64) < expectedVersion {
-		current := 0
-		if maxVersion.Valid {
-			current = int(maxVersion.Int64)
-		}
-		return fmt.Errorf("database schema is out of date (current version: %d, expected: %d)", current, expectedVersion)
-	}
+	return validateCurrentSchemaVersion(int(maxVersion.Int64), maxVersion.Valid, expectedVersion)
+}
 
+func validateCurrentSchemaVersion(current int, hasVersion bool, expected int) error {
+	if !hasVersion {
+		current = 0
+	}
+	if !hasVersion || current < expected {
+		return fmt.Errorf("database schema is out of date (current version: %d, expected: %d)", current, expected)
+	}
 	return nil
 }

@@ -69,13 +69,15 @@ func (s *Service) Attach(ctx context.Context, req AttachRequest) (*Session, erro
 		return nil, err
 	}
 
+	unlock := s.lockDevice(req.DeviceID)
+	defer unlock()
+
+	// Revalida Device e Subscriber sob o mesmo lock que protege os efeitos do
+	// attach/re-attach. Uma rejeição não pode substituir a sessão já conectada.
 	devInfo, err := s.deviceChecker.CheckDeviceAttachable(ctx, req.DeviceID)
 	if err != nil {
 		return nil, err
 	}
-
-	unlock := s.lockDevice(req.DeviceID)
-	defer unlock()
 
 	// 1. Aloca novo IP do pool
 	newIP, err := s.ipPool.Allocate()

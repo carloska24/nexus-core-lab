@@ -49,6 +49,7 @@ func (a *subscriberCheckerAdapter) CheckSubscriberActive(ctx context.Context, su
 // sem vazar structs ou tipos internos de Device para o pacote Session.
 type deviceCheckerAdapter struct {
 	deviceService *device.Service
+	subService    *subscriber.Service
 }
 
 func (a *deviceCheckerAdapter) CheckDeviceAttachable(ctx context.Context, deviceID string) (*session.DeviceInfo, error) {
@@ -62,6 +63,17 @@ func (a *deviceCheckerAdapter) CheckDeviceAttachable(ctx context.Context, device
 
 	if dev.Status != device.StatusRegistered {
 		return nil, session.ErrDeviceNotEligible
+	}
+
+	sub, err := a.subService.FindByID(ctx, dev.SubscriberID)
+	if err != nil {
+		if errors.Is(err, subscriber.ErrSubscriberNotFound) {
+			return nil, session.ErrSubscriberNotActive
+		}
+		return nil, err
+	}
+	if sub.Status != subscriber.StatusActive {
+		return nil, session.ErrSubscriberNotActive
 	}
 
 	return &session.DeviceInfo{
@@ -172,8 +184,7 @@ func main() {
 		defer sqlDB.Close()
 
 		// Valida se as migrações esperadas foram executadas
-		const expectedSchemaVersion = 3
-		if err := postgres.ValidateSchema(ctx, sqlDB, expectedSchemaVersion); err != nil {
+		if err := postgres.ValidateSchema(ctx, sqlDB, postgres.ExpectedSchemaVersion); err != nil {
 			log.Fatalf("fatal: database schema validation failed: %v. Please run: go run ./cmd/migrate -up", err)
 		}
 
@@ -197,7 +208,10 @@ func main() {
 
 	// Composição de dependências dos módulos Network e Session (Milestone 3 & 6)
 	sessionAdapter := &telemetrySessionAdapter{worker: telemetryWorker}
-	sessionService := session.NewService(sessionRepo, &deviceCheckerAdapter{deviceService: deviceService}, ipPool, sessionAdapter)
+	sessionService := session.NewService(sessionRepo, &deviceCheckerAdapter{
+		deviceService: deviceService,
+		subService:    subscriberService,
+	}, ipPool, sessionAdapter)
 	sessionHandler := session.NewHandler(sessionService)
 
 	// Composição de dependências do módulo Telemetry (Milestone 4 & 6)

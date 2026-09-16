@@ -51,6 +51,8 @@ func (h *Handler) handleAttach(w http.ResponseWriter, r *http.Request) {
 			writeJSONError(w, http.StatusNotFound, "not_found", "associated device not found", "DEVICE_NOT_FOUND")
 		case errors.Is(err, ErrDeviceNotEligible):
 			writeJSONError(w, http.StatusUnprocessableEntity, "unprocessable_entity", "device is not eligible for network attach", "DEVICE_NOT_ELIGIBLE")
+		case errors.Is(err, ErrSubscriberNotActive):
+			writeJSONError(w, http.StatusUnprocessableEntity, "unprocessable_entity", "subscriber must be ACTIVE to start a new session", "SUBSCRIBER_NOT_ACTIVE")
 		default:
 			writeJSONError(w, http.StatusInternalServerError, "internal_error", "failed to attach session", "INTERNAL_SERVER_ERROR")
 		}

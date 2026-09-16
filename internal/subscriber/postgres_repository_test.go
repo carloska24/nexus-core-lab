@@ -118,3 +118,43 @@ func TestPostgresRepository_SubscriberPersistence(t *testing.T) {
 	// Cleanup
 	_, _ = db.ExecContext(ctx, "DELETE FROM subscribers WHERE id = $1", sub.ID)
 }
+
+func TestPostgresRepository_MSISDNMaximumRepresentation(t *testing.T) {
+	db := getTestDB(t)
+	defer db.Close()
+
+	ctx := context.Background()
+	repo := NewPostgresRepository(db)
+	const (
+		imsi          = "724000000009991"
+		duplicateIMSI = "724000000009992"
+		maximumMSISDN = "+123456789012345"
+	)
+
+	_, _ = db.ExecContext(ctx, "DELETE FROM sessions WHERE subscriber_id IN (SELECT id FROM subscribers WHERE imsi IN ($1, $2) OR msisdn = $3)", imsi, duplicateIMSI, maximumMSISDN)
+	_, _ = db.ExecContext(ctx, "DELETE FROM devices WHERE subscriber_id IN (SELECT id FROM subscribers WHERE imsi IN ($1, $2) OR msisdn = $3)", imsi, duplicateIMSI, maximumMSISDN)
+	_, _ = db.ExecContext(ctx, "DELETE FROM subscribers WHERE imsi IN ($1, $2) OR msisdn = $3", imsi, duplicateIMSI, maximumMSISDN)
+	defer func() {
+		_, _ = db.ExecContext(context.Background(), "DELETE FROM subscribers WHERE imsi IN ($1, $2) OR msisdn = $3", imsi, duplicateIMSI, maximumMSISDN)
+	}()
+
+	sub, err := New(imsi, maximumMSISDN)
+	if err != nil {
+		t.Fatalf("maximum MSISDN should be valid: %v", err)
+	}
+	if err := repo.Save(ctx, sub); err != nil {
+		t.Fatalf("failed to persist 16-character MSISDN: %v", err)
+	}
+	found, err := repo.FindByID(ctx, sub.ID)
+	if err != nil || found.MSISDN != maximumMSISDN {
+		t.Fatalf("maximum MSISDN did not round-trip: found=%+v err=%v", found, err)
+	}
+
+	duplicate, err := New(duplicateIMSI, maximumMSISDN)
+	if err != nil {
+		t.Fatalf("failed to create duplicate test subscriber: %v", err)
+	}
+	if err := repo.Save(ctx, duplicate); !errors.Is(err, ErrDuplicateMSISDN) {
+		t.Fatalf("expected ErrDuplicateMSISDN, got %v", err)
+	}
+}

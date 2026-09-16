@@ -50,10 +50,12 @@ func TestSubscriberCreation(t *testing.T) {
 
 	t.Run("invalid MSISDN format", func(t *testing.T) {
 		invalidMSISDNs := []string{
-			"123",          // curto
-			"+0123456789",  // prefixo zero inválido
-			"not-a-number", // letras
-			"",             // vazio
+			"123",               // curto
+			"+0123456789",       // prefixo zero inválido
+			"not-a-number",      // letras
+			"1234567890123456",  // 16 dígitos sem prefixo
+			"+1234567890123456", // 16 dígitos com prefixo
+			"",                  // vazio
 		}
 
 		for _, msisdn := range invalidMSISDNs {
@@ -63,6 +65,48 @@ func TestSubscriberCreation(t *testing.T) {
 			}
 		}
 	})
+
+	t.Run("MSISDN contract boundaries", func(t *testing.T) {
+		validMSISDNs := []string{
+			"1234567890",       // mínimo sem +
+			"+1234567890",      // mínimo com +
+			"123456789012345",  // máximo sem +
+			"+123456789012345", // máximo com + ocupa 16 caracteres
+		}
+
+		for i, msisdn := range validMSISDNs {
+			imsi := fmt.Sprintf("724000000000%03d", i)
+			if _, err := New(imsi, msisdn); err != nil {
+				t.Errorf("expected MSISDN %q to be valid, got %v", msisdn, err)
+			}
+		}
+	})
+}
+
+func TestMemoryRepository_MSISDNMaximumRepresentationAndUniqueness(t *testing.T) {
+	ctx := context.Background()
+	repo := NewMemoryRepository()
+	const maximumMSISDN = "+123456789012345"
+
+	sub, err := New("724000000000001", maximumMSISDN)
+	if err != nil {
+		t.Fatalf("maximum MSISDN should be valid: %v", err)
+	}
+	if err := repo.Save(ctx, sub); err != nil {
+		t.Fatalf("failed to persist maximum MSISDN in memory: %v", err)
+	}
+	found, err := repo.FindByID(ctx, sub.ID)
+	if err != nil || found.MSISDN != maximumMSISDN {
+		t.Fatalf("maximum MSISDN did not round-trip: found=%+v err=%v", found, err)
+	}
+
+	duplicate, err := New("724000000000002", maximumMSISDN)
+	if err != nil {
+		t.Fatalf("failed to create duplicate test subscriber: %v", err)
+	}
+	if err := repo.Save(ctx, duplicate); !errors.Is(err, ErrDuplicateMSISDN) {
+		t.Fatalf("expected ErrDuplicateMSISDN, got %v", err)
+	}
 }
 
 func TestSubscriberStateTransitions(t *testing.T) {

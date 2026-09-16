@@ -1,0 +1,2 @@
+ALTER TABLE subscribers
+ALTER COLUMN msisdn TYPE VARCHAR(16);
