@@ -1,21 +1,52 @@
-# Executar frontend e backend
+# Local dashboard development
 
-Na pasta `web/reference-version`, execute:
+Run these commands from `web/reference-version`:
 
-```bat
+```sh
+npm ci
 npm run dev
 ```
 
-Requisitos: Node/npm, Go e dependências frontend já instaladas.
+`npm run dev` performs the following steps:
 
-O comando compila a API em uma pasta temporária, inicia o backend, aguarda `/health` e inicia o Vite com o proxy apontando para essa API. Abra o endereço informado pelo Vite. Ctrl+C encerra ambos.
+1. compiles `cmd/api` to an operating-system temporary directory;
+2. starts the API on `PORT` or `8080`;
+3. waits for a valid `/health` response;
+4. starts the Vite development server;
+5. shuts down both processes and removes the temporary API executable on
+   `Ctrl+C`.
 
-- `PORT`: porta da API, padrão 8080. Porta ocupada gera mensagem; nenhum processo externo é encerrado.
-- `DATABASE_URL`: se definida, é preservada. Sem ela, armazenamento em memória; dados desaparecem ao encerrar a API.
-- `NEXUS_API_TARGET`: no comando combinado é definido automaticamente para a API iniciada.
-- `npm run dev -- --port 5177`: escolhe a porta frontend.
-- `npm run dev:frontend`: inicia somente Vite, para quem já executa backend separadamente; nesse caso, respeita NEXUS_API_TARGET.
+No database or migration is started automatically. Without `DATABASE_URL`, the
+API uses MEMORY mode. To use PostgreSQL, configure the environment and apply
+migrations from the repository root before starting this command; see
+[Local PostgreSQL setup](../../docs/engineering/LOCAL_POSTGRES_SETUP.md).
 
-Nenhuma migration ou serviço PostgreSQL é iniciado automaticamente.
+Useful options:
 
-Validação: execução combinada com API 18085 e Vite 5185; HTTP 200 na página, `/health` via proxy e `/api/v1/subscribers`; porta ocupada rejeitada; Ctrl+C encerrou ambas as portas. Nenhuma alteração em Go ou no contrato do Gate 4A.
+```sh
+# Choose the API port used by the combined runner.
+PORT=18080 npm run dev
+
+# Start only Vite against the default API at 127.0.0.1:8080.
+npm run dev:frontend
+
+# Start only Vite against another API.
+NEXUS_API_TARGET=http://127.0.0.1:18080 npm run dev:frontend
+
+# Forward Vite options through the combined runner.
+npm run dev -- --port 5175 --host 127.0.0.1 --strictPort
+```
+
+PowerShell sets environment variables with `$env:PORT = '18080'` or
+`$env:NEXUS_API_TARGET = 'http://127.0.0.1:18080'` before the npm command.
+
+Build validation:
+
+```sh
+npm ci
+npm run build
+```
+
+The scripts under `tests/` are historical engineering browser checks. They use
+an external browser automation runtime that is not declared as a project
+dependency, so they are not exposed as a clean-clone npm test command.

@@ -1,5 +1,10 @@
 # NEXUS Core Lab — Project Vision
 
+> Documento histórico de visão. Algumas tecnologias possíveis discutidas abaixo
+> foram intencionalmente descartadas. A arquitetura e o escopo atuais estão no
+> [README](../../README.md), em [Arquitetura](../ARCHITECTURE.md) e nos ADRs
+> aceitos.
+
 ## 1. Visão
 
 O NEXUS Core Lab é uma plataforma educacional de backend para simulação de conceitos presentes em redes móveis 4G/5G.

@@ -96,7 +96,9 @@ Para garantir que o código pareça escrito por engenheiros experientes, as segu
 
 - Criptografia SIM / Algoritmos Milenage / Chaves Ki e OPc.
 - Protocolos binários de baixo nível (ASN.1, GTP-U, NAS, SCTP).
-- Interface web/frontend (o foco do laboratório é 100% backend/sistemas).
+- Execução de CLI ou comandos do host a partir do navegador. O dashboard
+  operacional usa somente a API HTTP; sua área Simulator/Sandbox permanece
+  local ao frontend.
 - Kubernetes / Helm Charts / Service Mesh.
 - Módulos experimentais em C (postergados até que o núcleo em Go esteja 100% consolidado e haja necessidade mensurável de benchmark).
 
@@ -111,4 +113,4 @@ O projeto documentará no `README.md` (sob a seção **Engineering Process & AI 
 >
 > - **Papel do Engenheiro Humano:** Direção de produto, definição de escopo, especificação dos modelos de telecomunicações, desafio de arquitetura (/grill-me), revisão técnica de código e critérios de aceitação.
 > - **Papel do Agente de IA:** Assistente de implementação, validação estática de requisitos, geração de testes unitários orientados a casos de borda e documentação de decisões.
-> - **Governança:** Todas as decisões respeitam o [AI_ENGINEERING_GUIDELINES.md](docs/engineering/AI_ENGINEERING_GUIDELINES.md) e os ADRs do repositório, garantindo código idiomático em Go, livre de complexidade acidental ou abstrações artificiais.
+> - **Governança:** Todas as decisões respeitam o [AI_ENGINEERING_GUIDELINES.md](AI_ENGINEERING_GUIDELINES.md) e os ADRs do repositório, garantindo código idiomático em Go, livre de complexidade acidental ou abstrações artificiais.

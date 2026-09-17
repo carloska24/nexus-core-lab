@@ -1,5 +1,10 @@
 # NEXUS Core Lab — Project Vision
 
+> Historical vision document. Some possible technologies discussed below were
+> intentionally not implemented. The current architecture and supported scope
+> are defined by the root [README](../README.md),
+> [Architecture](ARCHITECTURE.md), and accepted ADRs.
+
 ## 1. Vision
 
 NEXUS Core Lab is an educational backend platform designed to simulate

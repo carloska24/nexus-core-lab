@@ -27,6 +27,8 @@ npm run dev
 
 Troque o placeholder antes de executar. DATABASE_URL é herdada pelo backend iniciado pelo script combinado. O argumento -url permanece compatível, mas a variável evita incluir a credencial diretamente na linha de comando. Não execute migrations sem intenção de alterar o banco configurado.
 
-Volumes PostgreSQL já inicializados conservam a senha existente: alterar POSTGRES_PASSWORD no Compose não altera automaticamente a senha do banco. Não remova volumes para aplicar esta correção. Este checkpoint não inicia banco, não executa migrations nem muda senhas de instâncias existentes.
+Volumes PostgreSQL já inicializados conservam a senha existente: alterar
+`POSTGRES_PASSWORD` no Compose não altera automaticamente a senha do banco. Só
+remova um volume quando pretender descartar seus dados e reinicializar o banco.
 
 As credenciais literais anteriores foram removidas do estado atual, mas permanecem nos commits anteriores. O histórico não foi reescrito. Caso tenham sido reutilizadas fora do desenvolvimento local, precisam ser rotacionadas antes de compartilhar o repositório.

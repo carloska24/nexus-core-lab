@@ -1,47 +1,62 @@
-# NEXUS Core Lab — Reference Version
+# NEXUS Core Lab — Canonical Dashboard
 
-Esta é a interface em desenvolvimento, com integração ao backend Go do NEXUS.
+This is the official operational frontend for NEXUS Core Lab. It is a
+React/TypeScript/Vite application integrated with the Go HTTP API.
 
-**Pasta de trabalho:** `C:\Users\joaob\OneDrive\Documentos\nexus-core-lab\web\reference-version`
+The older mock-oriented frontend under the parent `web/` directory is retained
+as legacy source history. This application does not import its code, assets,
+configuration, lockfile, or dependencies.
 
-A interface original está na pasta pai `web/` e deve ser preservada. Os documentos desta versão ficam nesta pasta; os históricos ficam em `docs/archive/`.
+## Requirements
 
-## Executar
+- Node.js 22+
+- npm 10+
+- Go 1.27
 
-Abra um terminal nesta pasta e execute:
+## Install and run
+
+From this directory:
 
 ```sh
+npm ci
 npm run dev
 ```
 
-O comando inicia frontend e backend. Abra a URL informada pelo Vite; a porta pode variar. Sem `DATABASE_URL`, o backend usa memória e perde os cadastros ao encerrar. Detalhes em [DEV.md](DEV.md).
+The combined development command builds the Go API into a temporary directory,
+starts it on port 8080 by default, waits for `/health`, and then starts Vite.
+Without `DATABASE_URL`, the API uses temporary in-memory repositories. Press
+`Ctrl+C` to stop both processes.
 
-## Estado atual — 15/09/2026
+To run only the frontend against an API already available at
+`http://127.0.0.1:8080`:
 
-- Gates 2 a 5: Health/Telemetry, Subscribers, Devices e Sessions por Device integrados.
-- Micro-gate de estabilização: teste global de Devices corrigido; suíte Go e race detector passaram. PostgreSQL real não foi testado nesse micro-gate por ausência de `TEST_DATABASE_URL`.
-- **Gate 6 — Live Network Topology: aprovado pelo Human Review.** Topologia e preview compartilham sessões reais por Device.
-- **Gate 7 — Recent Events Feed: aprovado pelo Human Review.** Overview e Events usam os últimos 100 eventos consumidos pelo worker de Telemetry, somente na execução atual da API.
-- **Gate 8 — Authoritative IP Pool Status: aprovado pelo Human Review em 15/09/2026.** Card integrado ao mesmo allocator usado pelas Sessions; correção local dos endereços livres ignorados após warm-up.
-- **Gate 9 — Storage & Database Diagnostics: aprovado pelo Human Review.** Diagnóstico separado de liveness, com MEMORY legítimo e PingContext no mesmo DB da API.
-- Google Maps continua pausado.
+```sh
+npm run dev:frontend
+```
 
-## Documentos atuais
+Set `NEXUS_API_TARGET` before `npm run dev:frontend` to use another development
+API origin.
 
-- [Gate 9 — Storage: contrato e evidências](GATE9_STORAGE_DIAGNOSTICS.md)
+## Build
 
-- [Gate 8 — IP Pool: contrato, testes e evidências](GATE8_IP_POOL_STATUS.md)
-- [Execução local](DEV.md)
-- [PostgreSQL local e migrations](../../docs/engineering/LOCAL_POSTGRES_SETUP.md)
-- [Gate 7 — Recent Events: entrega e evidências](GATE7_RECENT_EVENTS.md)
-- [Gate 6 — Live Network Topology: entrega e evidências](GATE6_LIVE_NETWORK_TOPOLOGY.md)
-- [Gate 5 — Sessions: entrega e limitações](GATE5_SESSIONS_IMPLEMENTATION.md)
-- [Estabilização da listagem global de Devices](DEVICE_GLOBAL_LIST_STABILIZATION.md)
+```sh
+npm ci
+npm run build
+```
 
-O relatório de estabilização foi transferido da raiz do repositório para esta pasta para reunir a documentação da interface no mesmo lugar.
+The lockfile in this directory makes installation independent of
+`../node_modules` and the legacy frontend manifest.
 
-## Histórico
+## Product boundaries
 
-[Documentos anteriores](docs/archive/) preservam auditorias, planos e entregas dos Gates anteriores. São registros do estado na data em que foram escritos, não instruções atuais. Afirmações antigas como “somente mock” e “nenhuma integração implementada” foram superadas pelos Gates posteriores. Os caminhos mencionados nesses registros podem se referir à localização original dos documentos.
+- Operational pages use the Go API for Subscribers, Devices, Sessions,
+  Telemetry, recent events, IP pool, and storage diagnostics.
+- Network cells and the Campinas map are an illustrative local catalog.
+- The Simulator/Sandbox page is frontend-only and never executes the Go CLI.
+- Historical Gate reports remain versioned as engineering records; they are not
+  current operating instructions.
 
-O checkpoint até Gate 7 foi enviado ao remoto e está documentado em [Integration checkpoint](../../docs/engineering/INTEGRATION_CHECKPOINT_GATE7.md). Gate 8 aprovado pelo Human Review, com checkpoint de código autorizado. O relatório do Gate 8 registra a entrega e suas limitações de validação. Checkpoint do Gate 9 autorizado pelo Human Review. Gate 10 não foi iniciado.
+Start with the repository [README](../../README.md). See the
+[architecture](../../docs/ARCHITECTURE.md), [API reference](../../docs/API.md),
+[development notes](DEV.md), and
+[PostgreSQL setup](../../docs/engineering/LOCAL_POSTGRES_SETUP.md).

@@ -12,7 +12,6 @@ simulation of telecommunications systems, including:
 - devices
 - sessions
 - network
-- location
 - telemetry
 
 Although these domains may eventually become independent services,
@@ -42,13 +41,12 @@ NEXUS Core Lab will initially use a **Modular Monolith** architecture.
 The application will run as a single deployable backend while maintaining
 clear boundaries between its internal domains.
 
-Initial modules:
+Implemented modules:
 
 - Subscriber
 - Device
 - Session
 - Network
-- Location
 - Telemetry
 
 Each module should own its business logic and expose only the interfaces
@@ -68,6 +66,6 @@ internal/
 ├── device/
 ├── session/
 ├── network/
-├── location/
-└── telemetry/
+├── telemetry/
+└── platform/
 ```
