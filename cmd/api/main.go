@@ -150,6 +150,19 @@ func warmUpIPPool(ctx context.Context, db *sql.DB, ipPool *network.IPPool) error
 
 func main() {
 	ctx := context.Background()
+	demoConfig, err := loadPublicDemoConfig()
+	if err != nil {
+		log.Fatalf("fatal: invalid public demo configuration: %v", err)
+	}
+	if demoConfig.Enabled {
+		if os.Getenv("DATABASE_URL") != "" {
+			log.Fatal("fatal: PUBLIC_DEMO_MODE cannot be combined with DATABASE_URL")
+		}
+		log.Println("public_demo_mode=enabled storage_backend=memory")
+		registry := newPublicDemoRegistry(demoConfig)
+		runHTTPServer(publicDemoSafety(registry, demoConfig), registry.Shutdown)
+		return
+	}
 
 	// Infraestrutura de Telemetria e Observabilidade (Milestone 4)
 	var requestsCounter atomic.Uint64
@@ -230,13 +243,16 @@ func main() {
 	// Envolve o roteador com middleware de Request ID, log/slog e contagem de requisições
 	handler := httpserver.TelemetryMiddleware(&requestsCounter)(router)
 
+	runHTTPServer(handler, telemetryWorker.Shutdown)
+}
+
+func runHTTPServer(handler http.Handler, shutdown func(context.Context) error) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
 	address := ":" + port
-
 	server := &http.Server{
 		Addr:              address,
 		Handler:           handler,
@@ -276,9 +292,11 @@ func main() {
 		log.Printf("HTTP server shutdown error: %v", err)
 	}
 
-	log.Println("shutting down telemetry worker")
-	if err := telemetryWorker.Shutdown(shutdownContext); err != nil {
-		log.Printf("telemetry worker shutdown error: %v", err)
+	log.Println("shutting down application runtime")
+	if shutdown != nil {
+		if err := shutdown(shutdownContext); err != nil {
+			log.Printf("application runtime shutdown error: %v", err)
+		}
 	}
 
 	log.Println("HTTP server stopped")

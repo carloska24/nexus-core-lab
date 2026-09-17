@@ -137,7 +137,7 @@ body #root .app{margin:0}
 .workspace button{border:1px solid #29618b;border-radius:5px;padding:10px 17px;background:#0e3655;font:14px 'Segoe UI'}
 .workspace button:hover{background:#165483}
 .workspace dl{line-height:1.9}.workspace dt{color:#8ba6c5}.workspace dd{margin:0 0 12px;color:#e6f1ff}
-.network-workspace{height:680px}.telemetry-workspace{display:grid;grid-template-columns:455px 386px 400px;gap:12px;height:265px}
+.network-workspace{height:680px}.network-workspace>.topology-panel{height:100%}.telemetry-workspace{display:grid;grid-template-columns:455px 386px 400px;gap:12px;height:265px}
 .sim-actions{display:flex;gap:12px;margin:24px 0}.workspace li{padding:10px;border-bottom:1px solid #1b3348}
 .config-form{max-width:650px}.config-form label{display:flex;gap:15px;align-items:center;margin:20px 0}.config-form input,.config-form select{margin:0}
 .modal-shade{position:absolute;inset:0;z-index:20;background:#0009;display:grid;place-items:center}
