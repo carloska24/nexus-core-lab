@@ -1,0 +1,72 @@
+{
+  "results": [
+    "Real Campinas cartography loads with honest simulated-topology label and visible attribution",
+    "Network has no clipping or overflow at 1920x1080, 1440x900 and 1366x768",
+    "Attach renders the authoritative connected Session, Cell and inspectable IP",
+    "Handover moves the association while preserving Session ID and IP; event remains visible",
+    "Detach removes the map association, releases the IP and leaves the event evidence",
+    "A second public-demo visitor remains isolated from the complete Hero Flow",
+    "Provider failure selects the local map; all three Cells and the live-state layer remain available",
+    "No browser geolocation behavior and zero uncaught JavaScript exceptions in the normal flow"
+  ],
+  "errors": [],
+  "expectedHTTP404ConsoleMessages": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "hero": [
+    {
+      "action": "Provision + Activate",
+      "imsi": "724059640127986"
+    },
+    {
+      "action": "Register",
+      "imei": "860010640127986"
+    },
+    {
+      "action": "Attach",
+      "device": "4fc39e7e-cd0d-44bd-860e-1ad9df450656",
+      "session": "048f7068-2549-45a3-89af-074fc377d209",
+      "cell": "CELL-SP-001",
+      "ip": "10.45.0.2"
+    },
+    {
+      "action": "Handover",
+      "session": "048f7068-2549-45a3-89af-074fc377d209",
+      "cell": "CELL-SP-002",
+      "ip": "10.45.0.2"
+    },
+    {
+      "action": "Detach",
+      "session": "048f7068-2549-45a3-89af-074fc377d209",
+      "releasedIP": "10.45.0.2"
+    }
+  ],
+  "layouts": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "clientWidth": 1311,
+      "scrollWidth": 1311,
+      "clientHeight": 946,
+      "scrollHeight": 946
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "clientWidth": 1311,
+      "scrollWidth": 1311,
+      "clientHeight": 946,
+      "scrollHeight": 946
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "clientWidth": 1311,
+      "scrollWidth": 1311,
+      "clientHeight": 946,
+      "scrollHeight": 946
+    }
+  ],
+  "headed": true
+}

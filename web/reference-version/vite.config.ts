@@ -3,6 +3,9 @@ import { defineConfig } from 'vite';
 // Development only. Production must route these paths to Go on the same origin.
 const target = process.env.NEXUS_API_TARGET || 'http://127.0.0.1:8080';
 export default defineConfig({
+  // MapLibre v6 resolves its module worker relative to the package. Keeping it
+  // out of Vite's dependency pre-bundle preserves that worker URL in dev.
+  optimizeDeps: { exclude: ['maplibre-gl'] },
   server: {
     proxy: {
       '/health': { target, changeOrigin: true },

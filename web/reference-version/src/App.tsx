@@ -1,6 +1,6 @@
 import {storageView} from './storage-api';
 import { useState, useEffect, createContext, useContext } from 'react';
-import { UrbanMap, ReferenceIcon, SkylineArt } from './ReferenceArt';
+import { ReferenceIcon, SkylineArt } from './ReferenceArt';
 import './comparison.css';
 import './transport.css';
 import { MonitoringProvider, useMonitoring, readLabel, snapshotLabel } from './monitoring';
@@ -16,10 +16,11 @@ import { RecentEventsProvider } from './recent-events';
 import { RecentEvents } from './RecentEvents';
 import { IPPoolCard } from './IPPoolCard';
 import { TopologyProvider } from './topology';
-import { TopologyOverlay, TopologyStatus, ActiveSessionsPreview } from './LiveTopology';
+import { ActiveSessionsPreview } from './LiveTopology';
+import { MapTopology } from './MapTopology';
 import {
   Activity, Antenna, ArrowRight, BarChart3, Check, CirclePlay, Clock3, Database,
-  FileText, Gauge, Home, List, MapPin, Minus, Network, Plus, RadioTower,
+  FileText, Gauge, Home, List, Network, RadioTower,
   Server, Settings, Smartphone, Users, Wifi, X
 } from 'lucide-react';
 
@@ -87,53 +88,18 @@ function Kpis() {
   </article>})}</section>;
 }
 
-const minorRoads = Array.from({length: 20},(_,i)=>({
-  d: i%2===0 ? `M ${-80+i*53} 0 Q ${180+i*19} 210 ${60+i*42} 500` : `M 0 ${20+i*24} Q 400 ${100+i*11} 850 ${10+i*23}`
-}));
-
-function Tower({x,y,type,id}:{x:number;y:number;type:'lte'|'g5';id:string}) {
-  return <g className={`tower ${type}`} transform={`translate(${x} ${y})`}>
-    <path d="M0 -9L-9 24L0 18L9 24L0 -9M-5 10L5 17M5 10L-5 17"/>
-    <circle className="emitter" cy="-10" r="3"/>
-    <path d="M-7 -18Q-15 -10 -7 -2M7 -18Q15 -10 7 -2M-11 -22Q-24 -10 -11 3M11 -22Q24 -10 11 3M-15 -26Q-33 -10 -15 8M15 -26Q33 -10 15 8"/><text y="43">{id}</text><text className="tech" y="62">{type==='lte'?'LTE':'5G'}</text>
-  </g>;
-}
-
-function Device({x,y,id}:{x:number;y:number;id:string}) {
-  return <g className="device" transform={`translate(${x} ${y})`}><circle r="6"/><text y="20">{id}</text></g>;
-}
-
 function Topology() {
-  const [zoom,setZoom]=useState(1);
   return <article className="panel topology-panel">
-    <div className="panel-head"><div className="head-title"><span className="head-icon"><ReferenceIcon name="topology"/></span><div><h2>Network Topology</h2><p>Observed connections · illustrative positions, not GPS</p></div></div>
+    <div className="panel-head"><div className="head-title"><span className="head-icon"><ReferenceIcon name="topology"/></span><div><h2>Network Topology</h2><p>Real Campinas map · simulated telecom positions · no GPS</p></div></div>
       <div className="map-legend"><span><i className="lte"/>LTE Cell</span><span><i className="g5"/>5G Cell</span><span><i className="dev"/>Connected Device</span></div>
     </div>
-    <div className="map-wrap">
-      <svg viewBox="0 0 850 480" preserveAspectRatio="none" style={{transform:`scale(${zoom})`}}>
-        <defs>
-          <radialGradient id="mapBg"><stop stopColor="#10223a"/><stop offset="1" stopColor="#06101d"/></radialGradient>
-          <filter id="night-cartography" colorInterpolationFilters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="linear" slope="-.18" intercept=".20"/><feFuncG type="linear" slope="-.25" intercept=".30"/><feFuncB type="linear" slope="-.30" intercept=".38"/></feComponentTransfer></filter>
-          <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <pattern id="blocks" width="72" height="54" patternUnits="userSpaceOnUse" patternTransform="rotate(-11)"><path d="M2 2H67V48H2Z" fill="none" stroke="#19304a" strokeWidth=".7"/><path d="M18 2V48M48 2V48M2 26H67" stroke="#142941" strokeWidth=".55"/></pattern>
-        </defs>
-        <rect width="850" height="480" fill="url(#mapBg)"/><rect width="850" height="480" fill="url(#blocks)" opacity=".6"/>
-        <g className="districts"><path d="M0 35L180 0l90 96-54 109L42 180Z"/><path d="M255 0h245l67 105-93 102-208-51Z"/><path d="M570 8l280 38v162l-166 41-119-120Z"/><path d="M0 237l180-69 129 103-59 186L0 480Z"/><path d="M310 207l203-38 113 134-83 165-258-23Z"/><path d="M650 238l200-61v303H582Z"/></g>
-        <g className="roads">{minorRoads.map((r,i)=><path d={r.d} key={i}/>)}<path className="artery" d="M-30 413 Q180 258 354 281 T880 151"/><path className="artery" d="M60 -20 Q248 172 410 247 T826 503"/><path className="artery2" d="M-20 165 Q219 211 404 173 T884 290"/></g>
-        <image href="/maps/campinas.jpg" x="-160" y="-190" width="1250" height="870" preserveAspectRatio="none" filter="url(#night-cartography)"/>
-        <text className="city" x="422" y="203">CAMPINAS / SP</text>
-        {networkCells.map(cell=><Tower key={cell.id} x={cell.x} y={cell.y} type={cell.tech==='LTE'?'lte':'g5'} id={cell.id}/>)}<TopologyOverlay/>
-        <g className="compass" transform="translate(805 52)"><text y="-23">N</text><circle r="20"/><path d="M0-16L5 2H-5Z M0 16L-5-2H5Z"/></g>
-      </svg>
-      <TopologyStatus/><span className="location"><MapPin/>Campinas, SP - Brazil</span><a className="map-attribution" href="https://commons.wikimedia.org/wiki/File:OSM_Campinas_map.jpg" target="_blank" rel="noreferrer">© OpenStreetMap contributors · Sj1mor · CC BY-SA 4.0</a>
-      <div className="zoom"><button onClick={()=>setZoom(Math.max(.9,zoom-.05))}><Minus/></button><button onClick={()=>setZoom(Math.min(1.15,zoom+.05))}><Plus/></button></div>
-    </div>
+    <MapTopology />
   </article>;
 }
 
 function Workspace({page}:{page:string}){
   const [simEvents,setSimEvents]=useState<string[]>([]);
-  return <section className="workspace"><header><div><small>NEXUS CORE LAB / {page.toUpperCase()}</small><h1>{page==='Simulator'?'Local Event Sandbox':page}</h1><p>{page==='Telemetry'?'Current API counters · browser observations · authoritative IP pool snapshot':['System','API Status','Database'].includes(page)?'HTTP liveness and storage diagnostics':page==='Network'?'Real session associations · configured cells':page==='Simulator'?'Frontend-only simulation':page==='Configuration'?'Effective settings · read-only':'Explore the telecom lab'}</p></div></header>
+  return <section className={`workspace${page==='Network'?' network-page':''}`}><header><div><small>NEXUS CORE LAB / {page.toUpperCase()}</small><h1>{page==='Simulator'?'Local Event Sandbox':page}</h1><p>{page==='Telemetry'?'Current API counters · browser observations · authoritative IP pool snapshot':['System','API Status','Database'].includes(page)?'HTTP liveness and storage diagnostics':page==='Network'?'Real session associations · configured cells':page==='Simulator'?'Frontend-only simulation':page==='Configuration'?'Effective settings · read-only':'Explore the telecom lab'}</p></div></header>
     {page==='Network'?<div className="network-workspace"><Topology/></div>:page==='Telemetry'?<div className="telemetry-workspace"><ActivityChart/><Donut/><IPPoolCard/></div>:page==='Simulator'?<div className="workspace-card"><h2>Simulate locally</h2><p>These sandbox actions only change this page. They do not send backend requests or change Subscribers, Devices or Sessions.</p><p>For the real Hero Flow, use Subscribers → Devices → Sessions. The separate <code>cmd/simulator</code> CLI also runs the real flow over HTTP; this page does not start it.</p><div className="sim-actions">{['ATTACH','CELL_HANDOVER','DETACH'].map(t=><button key={t} onClick={()=>setSimEvents(prev=>[`${new Date().toLocaleTimeString()} · ${t} · UE-01 · ${t==='CELL_HANDOVER'?'SP-001 → SP-003':t==='ATTACH'?'Connected to SP-001':'Session terminated'}`,...prev])}>{t}</button>)}<button onClick={()=>setSimEvents([])}>Clear</button></div><ul aria-live="polite">{simEvents.map((e,i)=><li key={i}>{e}</li>)}</ul>{simEvents.length===0&&<p>No simulated events yet.</p>}</div>:page==='Configuration'?<div className="workspace-card config-form"><h2>Effective polling intervals</h2><p>Read-only · not configurable in this demo. Delays apply after each request or polling round completes.</p><dl data-testid="effective-polling"><dt>Telemetry</dt><dd>~5 s</dd><dt>Topology</dt><dd>~5 s · Overview and Network only</dd><dt>IP Pool</dt><dd>~5 s · while its panel is open</dd><dt>Recent Events</dt><dd>~5 s</dd><dt>Storage</dt><dd>~10 s</dd><dt>Health</dt><dd>~10 s</dd></dl><p>Subscribers and Devices: collection snapshots, refreshed on load, manual refresh or related operations. No continuous polling.</p><p>Event notifications: not implemented in this demo.</p></div>:<OperationalStatus page={page}/>}
   </section>;
 }
