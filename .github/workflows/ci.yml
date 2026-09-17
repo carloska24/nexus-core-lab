@@ -40,6 +40,11 @@ jobs:
       - name: Apply PostgreSQL migrations
         run: go run ./cmd/migrate -url "$TEST_DATABASE_URL" -up
 
+      - name: Check backend formatting
+        run: |
+          unformatted="$(find . -name '*.go' -not -path './.git/*' -print0 | xargs -0 gofmt -l)"
+          test -z "$unformatted"
+
       - name: Vet backend
         run: go vet ./...
 
@@ -63,6 +68,13 @@ jobs:
         working-directory: web/reference-version
         run: npm ci
 
+      - name: Test map presentation
+        working-directory: web/reference-version
+        run: npm run test:map
+
       - name: Build frontend
         working-directory: web/reference-version
         run: npm run build
+
+      - name: Build production container
+        run: docker build --tag nexus-core-lab:ci .

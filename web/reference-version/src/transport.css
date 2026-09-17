@@ -11,3 +11,9 @@
 .app .donut-list{width:180px}
 .app .donut-list p{font-size:10px;gap:6px}
 .app .donut-list p i{flex-shrink:0}
+.app main{position:relative}
+.service-notice{position:absolute;z-index:30;top:88px;right:18px;width:410px;display:flex;align-items:center;gap:14px;padding:13px 15px;border:1px solid #31536b;border-radius:8px;background:#0a1b2bf2;box-shadow:0 12px 40px #0009;color:#dceaff}
+.service-notice[data-state="error"],.service-notice[data-state="stale"]{border-color:#8a5849}
+.service-notice div{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}.service-notice strong{font-size:13px}.service-notice span,.service-notice small{font-size:11px;color:#9eb6ce}.service-notice button{flex:none;padding:8px 12px;border:1px solid #3678a9;border-radius:5px;background:#0e4167;color:#eaf5ff}
+.map-loading{height:100%;display:grid;place-items:center;background:radial-gradient(circle at center,#0d2232,#05111c);color:#9db8d2;font-size:14px}
+.configuration-grid{display:grid;grid-template-columns:minmax(0,650px) minmax(0,430px);gap:18px;align-items:start}.demo-reset-card{max-width:430px}.demo-reset-card button+button{margin-left:10px}.demo-reset-card .destructive{border-color:#9b534f;background:#572925}.demo-reset-card .cancel-reset{background:#14283a}

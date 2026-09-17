@@ -1,0 +1,16 @@
+.git
+.github
+.env
+.env.*
+**/node_modules
+**/dist
+**/.cache
+**/.vite
+**/*.log
+**/*.tmp
+**/*.tsbuildinfo
+web/reference-version/evidence
+web/reference-version/docs
+web/reference-version/*.md
+web/reference-version/tests/gate*.cjs
+web/src

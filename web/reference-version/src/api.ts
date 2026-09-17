@@ -20,6 +20,10 @@ export interface Telemetry {
   };
 }
 
+interface DemoResetResponse {
+  status: 'reset';
+}
+
 export class ApiError extends Error {
   constructor(message: string, public status?: number, public code?: string) {
     super(message);
@@ -43,6 +47,9 @@ function isTelemetry(value: unknown): value is Telemetry {
   return ['active_sessions', 'connected_devices', 'dropped_events_total'].every(key => count(value.metrics && (value.metrics as Record<string, unknown>)[key])) &&
     ['attach', 'cell_handover', 'detach', 'stale_disconnect'].every(key => count((value.events_total as Record<string, unknown>)[key]));
 }
+function isDemoReset(value: unknown): value is DemoResetResponse {
+  return object(value) && value.status === 'reset';
+}
 
 export async function read<T>(path: string, validate: (value: unknown) => value is T, signal?: AbortSignal, options: RequestInit = {}): Promise<T> {
   const response = await fetch(path, { ...options, signal, cache: 'no-store', headers: { Accept: 'application/json', ...options.headers } });
@@ -64,6 +71,9 @@ export async function getHealth(signal?: AbortSignal): Promise<Health> {
 }
 export function getTelemetry(signal?: AbortSignal): Promise<Telemetry> {
   return read('/telemetry', isTelemetry, signal);
+}
+export function resetPublicDemo(): Promise<DemoResetResponse> {
+  return read('/api/v1/demo/reset', isDemoReset, undefined, { method: 'POST' });
 }
 
 export function totalEvents(telemetry: Telemetry): number {

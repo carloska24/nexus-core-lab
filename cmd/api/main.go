@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync/atomic"
 	"syscall"
 	"time"
@@ -160,7 +161,7 @@ func main() {
 		}
 		log.Println("public_demo_mode=enabled storage_backend=memory")
 		registry := newPublicDemoRegistry(demoConfig)
-		runHTTPServer(publicDemoSafety(registry, demoConfig), registry.Shutdown)
+		runHTTPServer(publicDemoSafety(withFrontend(registry), demoConfig), registry.Shutdown)
 		return
 	}
 
@@ -243,7 +244,20 @@ func main() {
 	// Envolve o roteador com middleware de Request ID, log/slog e contagem de requisições
 	handler := httpserver.TelemetryMiddleware(&requestsCounter)(router)
 
-	runHTTPServer(handler, telemetryWorker.Shutdown)
+	runHTTPServer(withFrontend(handler), telemetryWorker.Shutdown)
+}
+
+func withFrontend(api http.Handler) http.Handler {
+	root := strings.TrimSpace(os.Getenv("NEXUS_WEB_DIR"))
+	if root == "" {
+		return api
+	}
+	frontend, err := httpserver.WithSPA(api, os.DirFS(root))
+	if err != nil {
+		log.Fatalf("fatal: frontend configuration failed: %v", err)
+	}
+	log.Printf("frontend=enabled root=%s", root)
+	return frontend
 }
 
 func runHTTPServer(handler http.Handler, shutdown func(context.Context) error) {

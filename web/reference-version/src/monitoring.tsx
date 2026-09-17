@@ -15,11 +15,12 @@ const Monitoring = createContext<{
   storage: ReadState<StorageSnapshot>;
   telemetry: ReadState<Telemetry>;
   observations: Observation[];
-}>({ health: initial, storage: initial, telemetry: initial, observations: [] });
+  retryHealth: () => void;
+}>({ health: initial, storage: initial, telemetry: initial, observations: [], retryHealth: () => {} });
 
 // One subscription per resource for the entire app, not one per card/route.
 // Schedule after completion so slow requests never overlap. All reads time out.
-export function usePolling<T>(read: (signal: AbortSignal) => Promise<T>, interval: number, onSuccess?: (data: T, gap: boolean) => void) {
+export function usePolling<T>(read: (signal: AbortSignal) => Promise<T>, interval: number, onSuccess?: (data: T, gap: boolean) => void, retryKey = 0) {
   const [state, setState] = useState<ReadState<T>>(initial);
   useEffect(() => {
     let disposed = false;
@@ -49,12 +50,13 @@ export function usePolling<T>(read: (signal: AbortSignal) => Promise<T>, interva
     };
     void poll();
     return () => { disposed = true; clearTimeout(timer); controller?.abort(); };
-  }, [read, interval, onSuccess]);
+  }, [read, interval, onSuccess, retryKey]);
   return state;
 }
 
 export function MonitoringProvider({ children }: { children: ReactNode }) {
   const [observations, setObservations] = useState<Observation[]>([]);
+  const [healthRetry, setHealthRetry] = useState(0);
   // Stable callback avoids resetting polling on every render.
   const [record] = useState(() => (data: Telemetry, gap: boolean) => {
     setObservations(previous => {
@@ -67,10 +69,10 @@ export function MonitoringProvider({ children }: { children: ReactNode }) {
       }].slice(-360);
     });
   });
-  const health = usePolling(getHealth, 10000);
+  const health = usePolling(getHealth, 10000, undefined, healthRetry);
   const storage = usePolling(getStorage, 10000);
   const telemetry = usePolling(getTelemetry, 5000, record);
-  return <Monitoring.Provider value={{ health, storage, telemetry, observations }}>{children}</Monitoring.Provider>;
+  return <Monitoring.Provider value={{ health, storage, telemetry, observations, retryHealth: () => setHealthRetry(value => value + 1) }}>{children}</Monitoring.Provider>;
 }
 
 export const useMonitoring = () => useContext(Monitoring);

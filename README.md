@@ -1,48 +1,50 @@
 # NEXUS Core Lab
 
-**Telecom Core Network Simulation Lab**
+**Interactive telecom core network simulation and operations lab**
 
-NEXUS Core Lab is an educational system for exploring telecom-oriented domain
-modeling through a modular Go application, an HTTP API, a concurrent simulator,
-PostgreSQL persistence, asynchronous telemetry, and an operational dashboard.
-It models useful lifecycle and concurrency problems without claiming to
-implement a commercial EPC or 5G Core.
+NEXUS Core Lab is a portfolio project for exploring telecom-oriented domain
+modeling through a modular Go backend, a React operations dashboard,
+PostgreSQL repositories, concurrent session handling, telemetry, and a real
+cartographic view of Campinas. It demonstrates engineering decisions and
+failure behavior; it does not claim to implement a commercial EPC or 5G Core.
 
-## Overview
+## Live Demo
 
-The project follows a subscriber and device from provisioning to network
-detachment. It is intended to make engineering decisions visible: explicit
-state transitions, module boundaries, persistence contracts, safe concurrency,
-migrations, observable events, and end-to-end HTTP behavior.
+**Live Demo URL will be added after deployment validation.**
 
-## Why this project exists
+The public build runs an isolated, memory-only workspace for each anonymous
+visitor. No account, personal information, or location permission is required.
 
-Telecom systems provide a concrete setting for practicing backend engineering.
-NEXUS uses that setting to demonstrate:
+## What is NEXUS Core Lab?
 
-- domain lifecycles and invariants;
-- a modular monolith with consumer-owned interfaces;
-- concurrent session handling and IP allocation;
-- interchangeable MEMORY and PostgreSQL repositories;
-- transactional, versioned database migrations;
-- bounded asynchronous telemetry;
-- an external simulator that only uses the public HTTP API;
-- a React dashboard that distinguishes live backend data from local sandbox UI.
+The system follows a simulated subscriber and device across a complete network
+session. It makes domain transitions, persistence boundaries, IP allocation,
+telemetry, and operational status visible through one interface.
+
+The official Hero Flow is:
+
+```text
+Provision → Activate → Register → Attach → Handover → Detach
+```
+
+Use **Subscribers** to provision and activate an identity, **Devices** to
+register an IMEI, and **Sessions** to attach, hand over, and detach. The
+Overview and Network pages update from the same API state.
 
 ## Architecture
 
-`cmd/api` is the composition root. It selects the persistence mode, wires the
+`cmd/api` is the composition root. It selects the storage mode, wires the
 domain services, starts telemetry, and exposes one HTTP server.
 
 ```mermaid
-flowchart TD
-    Dashboard[React dashboard] --> API[cmd/api<br/>HTTP composition root]
-    Simulator[cmd/simulator<br/>HTTP client] --> API
+flowchart LR
+    Browser[React dashboard] -->|same-origin HTTP| API[Go HTTP server]
+    Simulator[Concurrent CLI simulator] -->|HTTP| API
     API --> Domains[Subscriber / Device / Session]
-    Domains --> Network[Network and IP pool]
+    Domains --> Network[Cells and IP pool]
     Domains --> Telemetry[Bounded telemetry worker]
     Domains --> Repositories[Repository contracts]
-    Repositories --> Memory[In-memory repositories]
+    Repositories --> Memory[(MEMORY)]
     Repositories --> PostgreSQL[(PostgreSQL)]
 ```
 
@@ -50,38 +52,77 @@ See [Architecture](docs/ARCHITECTURE.md), [API reference](docs/API.md),
 [ADR-001](docs/adr/ADR-001-modular-monolith.md), and
 [ADR-002](docs/adr/ADR-002-radio-technology-as-semantic-metadata.md).
 
-## Hero Flow
+## Public Demo Architecture
 
-```text
-Provision Subscriber
-        ↓
-Activate
-        ↓
-Register Device
-        ↓
-Attach
-        ↓
-Handover
-        ↓
-Detach
+The production container compiles the canonical frontend and serves it from
+the Go process. API and SPA share one origin, so the public build needs no
+internal reverse proxy or Node.js runtime.
+
+```mermaid
+flowchart TD
+    Visitor[Anonymous visitor] -->|HTTPS| Host[Container host]
+    Host --> Go[Go HTTP server]
+    Go --> Static[React SPA and hashed assets]
+    Go --> Context[Visitor-isolated demo context]
+    Context --> Memory[(In-memory repositories)]
+    Static --> Maps[OpenFreeMap vector tiles]
 ```
 
-The flow can be performed through the operational Subscriber, Device, and
-Session pages or through `cmd/simulator`. The CLI simulator calls only the
-public HTTP API and can run multiple virtual devices concurrently.
+The demo cookie is an opaque random identifier. Each visitor receives separate
+repositories, telemetry, IP allocation, limits, and reset behavior. Contexts
+expire by idle and absolute TTL and disappear when the process restarts.
 
-The dashboard's **Simulator / Sandbox** is frontend-only. A browser does not
-execute `cmd/simulator` or shell commands.
+## Real vs Simulated
 
-## Technology stack
+| Real software behavior | Simulated lab data |
+|---|---|
+| Go HTTP API and domain validation | IMSI, MSISDN, and IMEI values |
+| Repository contracts and PostgreSQL adapters | Subscriber and Device identities |
+| Subscriber, Device, and Session lifecycles | Telecom cell and device coordinates |
+| Concurrency-safe IP allocation | LTE/5G infrastructure and coverage |
+| Telemetry and recent events | Movement and RF behavior |
+| Visitor isolation and reset | Radio access behavior |
+| MapLibre rendering and Campinas cartography | Illustrative antenna placement |
 
-- Go 1.27, `net/http`, `database/sql`;
-- PostgreSQL 16 with pgx and SQL migrations;
-- React 18, TypeScript 5, Vite 6, and Lucide icons;
-- Docker Compose for optional local PostgreSQL;
-- native Go tests, race detector, and focused browser verification scripts.
+## Campinas Map
 
-## Quick Start — MEMORY
+The Network view uses MapLibre GL JS with OpenFreeMap vector tiles. Campinas
+streets and place names are real cartography; telecom cells, connected-device
+positions, coverage, and paths are illustrative. The application does not
+request geolocation and does not contain real antenna coordinates. If the tile
+service is unavailable, a local dark fallback preserves the network topology.
+
+## Visitor Isolation and Demo Reset
+
+Public Demo Mode stores each visitor's state only in process memory. The
+**Configuration → Reset Demo** action clears only the current anonymous
+visitor's records. Other visitors are unaffected. A container restart clears
+all public demo contexts by design; the UI and documentation do not imply
+durable public persistence.
+
+## Security and Privacy
+
+Public Demo Mode includes:
+
+- an anonymous `HttpOnly`, `SameSite=Strict` cookie, marked `Secure` over HTTPS;
+- origin validation for state-changing requests;
+- request body, resource, context, and mutation-rate limits;
+- a restrictive Content Security Policy and blocked geolocation, camera, and
+  microphone permissions;
+- no permissive CORS policy, authentication secret, PII, or GPS collection;
+- visitor-local reset and bounded TTL cleanup.
+
+`PUBLIC_DEMO_MODE=true` is intentionally incompatible with `DATABASE_URL`.
+
+## Technology Stack
+
+- Go 1.27, `net/http`, `database/sql`, and pgx;
+- PostgreSQL 16 with versioned SQL migrations;
+- React 18, TypeScript 5, Vite 6, Lucide, MapLibre GL JS 6;
+- Docker multi-stage build with a non-root distroless runtime;
+- Go tests, race detector, Node tests, and browser verification.
+
+## Local Development
 
 Requirements: Go 1.27, Node.js 22, and npm 10.
 
@@ -92,62 +133,67 @@ npm ci
 npm run dev
 ```
 
-Open the URL printed by Vite. `npm run dev` builds and starts the Go API, waits
-for `/health`, and starts the dashboard. Without `DATABASE_URL`, data is kept in
-memory and is discarded when the process stops. Press `Ctrl+C` to stop both.
+Open the URL printed by Vite. The development script starts the Go API, waits
+for `/health`, and starts Vite with a same-path proxy. Without `DATABASE_URL`,
+the local API uses shared process memory. Press `Ctrl+C` to stop both services.
 
-## PostgreSQL mode
+To exercise visitor isolation locally, run the API with
+`PUBLIC_DEMO_MODE=true`; do not set `DATABASE_URL` in that terminal.
 
-Docker is required for this local option. From the repository root:
+## Docker
+
+Docker is the shortest production-like path and requires no host Go or Node.js:
+
+```sh
+docker build -t nexus-core-lab:local .
+docker run --rm -p 8080:8080 \
+  -e PUBLIC_DEMO_MODE=true \
+  nexus-core-lab:local
+```
+
+Open `http://localhost:8080`. The image defaults to `PORT=8080`,
+`PUBLIC_DEMO_MODE=true`, and `NEXUS_WEB_DIR=/app/web`. A platform may override
+`PORT`. Do not configure `DATABASE_URL` for a public demo deployment.
+
+The final image contains the statically linked application and compiled web
+assets only. Node.js, npm, the Go toolchain, source control metadata, local
+environment files, and host dependencies are not copied into the runtime.
+
+## PostgreSQL Local and Integration Mode
+
+From the repository root:
 
 ```sh
 cp .env.example .env
-# Replace change_me in .env with a local password.
+# Replace change_me with a local-only password.
 docker compose up -d postgres
-```
-
-Export a matching connection URL in the terminal that runs Go, apply the
-migrations, and start the dashboard:
-
-```sh
 export DATABASE_URL='postgres://nexus:change_me@localhost:5433/nexus_core_lab?sslmode=disable'
 go run ./cmd/migrate -up
 cd web/reference-version
 npm run dev
 ```
 
-PowerShell uses `$env:DATABASE_URL = '...'` instead of `export`. Replace the
-placeholder locally and never commit the resulting `.env` or connection URL.
-Detailed instructions are in
+PowerShell uses `$env:DATABASE_URL = '...'` instead of `export`. Never commit
+the resulting `.env` or connection URL. See
 [Local PostgreSQL setup](docs/engineering/LOCAL_POSTGRES_SETUP.md).
-
-## Dashboard
-
-The canonical frontend is [`web/reference-version`](web/reference-version/).
-It provides Overview, Subscribers, Devices, Sessions, Network, Events,
-Telemetry, storage diagnostics, Simulator/Sandbox, and Configuration views.
-The older mock-oriented files under `web/` are retained only as legacy source
-history and are not a runtime dependency of the canonical frontend.
-
-No promotional dashboard screenshot is currently versioned. The map asset is a
-local, attributed visual layer rather than an external map service.
 
 ## Simulator CLI
 
-With the API running on port 8080, open another terminal at the repository root:
+With the API running on port 8080:
 
 ```sh
 go run ./cmd/simulator -api http://localhost:8080 -devices 5
 ```
 
-`-devices` accepts 1–100 virtual devices. Each goroutine executes the complete
-Hero Flow and the final report includes server telemetry.
+The CLI calls only the public HTTP API and runs concurrent Hero Flows. The
+dashboard's **Simulator / Sandbox** page is intentionally frontend-only.
 
 ## Testing
 
-Backend validation from the repository root:
+Backend validation:
 
 ```sh
+gofmt -w .
 go vet ./...
 go build ./...
 go test -count=1 ./...
@@ -160,14 +206,24 @@ disposable database. Frontend validation:
 ```sh
 cd web/reference-version
 npm ci
+npm run test:map
 npm run build
 ```
 
-Historical browser scripts under `web/reference-version/tests` were used for
-engineering verification. They depend on an external browser runtime and are
-not part of the clean-clone Quick Start.
+Production image validation:
 
-## Project structure
+```sh
+docker build -t nexus-core-lab:local .
+```
+
+## Continuous Integration
+
+The GitHub Actions workflow checks Go formatting, vet, build, tests, the race
+detector, PostgreSQL-backed tests, clean frontend installation, map presentation
+tests, the Vite production build, and the Docker image build. It does not deploy
+or require cloud credentials.
+
+## Repository Structure
 
 ```text
 cmd/                    API, migration CLI, and concurrent simulator
@@ -175,33 +231,39 @@ internal/               domain modules and platform adapters
 migrations/             ordered PostgreSQL up/down migrations
 docs/                   architecture, API, ADRs, and engineering notes
 web/reference-version/  canonical operational dashboard
-web/src/                legacy mock-oriented frontend source
+web/src/                retained legacy mock-oriented frontend source
+Dockerfile              reproducible single-service production image
 ```
 
-## Architectural decisions
+## Engineering Decisions
 
-The project deliberately uses a modular monolith. MEMORY mode keeps the first
-run simple; PostgreSQL demonstrates durable repositories and migrations.
-`database/sql` with pgx keeps SQL and transaction behavior explicit. The
-telemetry worker is bounded so observability cannot apply unbounded backpressure
-to domain operations.
+- A modular monolith keeps domain boundaries visible without distributed-system
+  infrastructure that the lab does not need.
+- Consumer-owned interfaces prevent domain packages from leaking types across
+  module boundaries.
+- MEMORY mode supports a zero-setup demo; PostgreSQL demonstrates durable
+  repositories, migration validation, and startup state reconstruction.
+- Static frontend files remain on the final container filesystem. This keeps the
+  Go build independent from generated web output while preserving a single
+  runtime process and image.
+- The bounded telemetry worker avoids unbounded backpressure on domain writes.
 
-## Educational scope and limitations
+## Limitations
 
-- This is not an EPC, 5GC, radio network, or protocol implementation.
-- LTE/5G labels are semantic metadata; compatibility is not enforced.
-- Cells and the Campinas topology are an illustrative static catalog.
-- Recent events are bounded process memory, not durable audit history.
-- The IP pool is in memory and is reconstructed from connected PostgreSQL
-  sessions during startup.
-- Authentication, authorization, multi-user operation, and production deployment
-  are intentionally outside the current scope.
+- This is not an EPC, 5GC, radio network, or telecom protocol implementation.
+- LTE/5G labels are semantic metadata; RF compatibility is not enforced.
+- Public demo data is intentionally ephemeral and anonymous.
+- Recent events are bounded process memory rather than durable audit history.
+- The public build has no authentication or multi-tenant user accounts; its
+  isolation boundary is the anonymous demo cookie and resource limits.
+- OpenFreeMap availability affects live tiles; the local topology fallback
+  remains available.
 
-## AI-assisted engineering disclosure
+## AI-Assisted Engineering Disclosure
 
-This project was developed with AI-assisted engineering workflows. Architecture,
-scope, domain decisions, implementation acceptance, and testing were subject to
-explicit human review. See the
+This project was developed with AI-assisted engineering workflows.
+Architecture, scope, domain decisions, implementation acceptance, security
+boundaries, and testing were subject to explicit human review. See the
 [engineering guidelines](docs/engineering/AI_ENGINEERING_GUIDELINES.md).
 
 ## License

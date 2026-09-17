@@ -23,9 +23,16 @@ Errors use a stable envelope:
 | `GET` | `/api/v1/system/storage` | `MEMORY` or `POSTGRESQL` diagnostics; PostgreSQL availability uses the application's existing pool |
 | `GET` | `/api/v1/network/ip-pool` | CIDR, capacity, allocated, available, and utilization percentage |
 | `GET` | `/api/v1/events/recent` | Up to 100 events from the current process, newest consumed first |
+| `POST` | `/api/v1/demo/reset` | Public Demo Mode only: replace the requesting visitor's isolated context |
 
 `/health` is liveness only. Storage availability is intentionally reported by
 the separate storage endpoint. Recent events are not persisted.
+
+In Public Demo Mode, all operational routes except `/health` resolve an
+anonymous visitor context from an opaque cookie. Reset affects only that
+context. The endpoint returns `404` outside Public Demo Mode. State-changing
+requests are subject to origin validation, body limits, resource limits, and
+rate limits.
 
 ## Subscribers
 

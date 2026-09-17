@@ -1,0 +1,73 @@
+{
+  "origin": "http://127.0.0.1:18083",
+  "results": [
+    "Go serves SPA and immutable assets without masking API 404 responses",
+    "Health, anonymous HttpOnly visitor cookie and SameSite isolation are active",
+    "Hero Flow reaches the Campinas topology with authoritative Session, Cell and IP",
+    "Detach releases the IP and exposes the authoritative event",
+    "Two visitor contexts retain independent telecom records",
+    "Reset Demo clears only the requesting visitor and reloads a clean dashboard",
+    "Production container layout fits 1920x1080, 1440x900 and 1366x768",
+    "OpenFreeMap failure selects the local topology fallback",
+    "Zero uncaught JavaScript exceptions in the production-like flow"
+  ],
+  "errors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "hero": [
+    {
+      "action": "Provision + Activate",
+      "imsi": "724059682204937"
+    },
+    {
+      "action": "Register",
+      "imei": "860010682204937"
+    },
+    {
+      "action": "Attach",
+      "sessionID": "2471ffdc-a519-4c07-a180-384ef909b6e3",
+      "ip": "10.45.0.2",
+      "cell": "CELL-SP-001"
+    },
+    {
+      "action": "Handover",
+      "sessionID": "2471ffdc-a519-4c07-a180-384ef909b6e3",
+      "ip": "10.45.0.2",
+      "cell": "CELL-SP-002"
+    },
+    {
+      "action": "Detach",
+      "sessionID": "2471ffdc-a519-4c07-a180-384ef909b6e3",
+      "releasedIP": "10.45.0.2"
+    }
+  ],
+  "layouts": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "clientWidth": 1311,
+      "scrollWidth": 1311,
+      "clientHeight": 946,
+      "scrollHeight": 946
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "clientWidth": 1311,
+      "scrollWidth": 1311,
+      "clientHeight": 946,
+      "scrollHeight": 946
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "clientWidth": 1311,
+      "scrollWidth": 1311,
+      "clientHeight": 946,
+      "scrollHeight": 946
+    }
+  ]
+}

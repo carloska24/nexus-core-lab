@@ -1,10 +1,10 @@
 import {storageView} from './storage-api';
-import { useState, useEffect, createContext, useContext } from 'react';
+import { lazy, Suspense, useState, useEffect, createContext, useContext } from 'react';
 import { ReferenceIcon, SkylineArt } from './ReferenceArt';
 import './comparison.css';
 import './transport.css';
 import { MonitoringProvider, useMonitoring, readLabel, snapshotLabel } from './monitoring';
-import { totalEvents } from './api';
+import { ApiError, resetPublicDemo, totalEvents } from './api';
 import { ActivityChart, Donut, OperationalStatus } from './LivePanels';
 import { SubscribersProvider, useSubscribers } from './subscribers';
 import { SubscribersPage } from './SubscribersPage';
@@ -17,12 +17,13 @@ import { RecentEvents } from './RecentEvents';
 import { IPPoolCard } from './IPPoolCard';
 import { TopologyProvider } from './topology';
 import { ActiveSessionsPreview } from './LiveTopology';
-import { MapTopology } from './MapTopology';
 import {
   Activity, Antenna, ArrowRight, BarChart3, Check, CirclePlay, Clock3, Database,
   FileText, Gauge, Home, List, Network, RadioTower,
   Server, Settings, Smartphone, Users, Wifi, X
 } from 'lucide-react';
+
+const MapTopology = lazy(() => import('./MapTopology').then(module => ({ default: module.MapTopology })));
 
 const Navigation = createContext({page:'Overview',go:(_page:string)=>{}});
 const nav = [
@@ -73,6 +74,15 @@ function Topbar() {
   </header>;
 }
 
+function ServiceNotice() {
+  const {health,retryHealth}=useMonitoring();
+  if(health.status==='success')return null;
+  return <aside className="service-notice" data-state={health.status} role={health.status==='error'?'alert':'status'}>
+    <div><strong>{health.status==='loading'?'Connecting to the public demo…':'The public demo is temporarily unavailable.'}</strong><span>This public demo may take a few seconds to start after a period of inactivity.</span>{health.error&&<small>{health.error}</small>}</div>
+    {health.status!=='loading'&&<button type="button" onClick={retryHealth}>Try Again</button>}
+  </aside>;
+}
+
 function Kpis() {
   const {telemetry}=useMonitoring();
   const {collection}=useSubscribers();
@@ -93,14 +103,34 @@ function Topology() {
     <div className="panel-head"><div className="head-title"><span className="head-icon"><ReferenceIcon name="topology"/></span><div><h2>Network Topology</h2><p>Real Campinas map · simulated telecom positions · no GPS</p></div></div>
       <div className="map-legend"><span><i className="lte"/>LTE Cell</span><span><i className="g5"/>5G Cell</span><span><i className="dev"/>Connected Device</span></div>
     </div>
-    <MapTopology />
+    <Suspense fallback={<div className="map-loading" role="status">Loading the Campinas map…</div>}><MapTopology /></Suspense>
   </article>;
+}
+
+function DemoResetCard(){
+  const [armed,setArmed]=useState(false);
+  const [busy,setBusy]=useState(false);
+  const [message,setMessage]=useState('');
+  const [error,setError]=useState('');
+  const reset=async()=>{
+    if(!armed){setArmed(true);setMessage('Click again to confirm the reset for this visitor only.');return;}
+    setBusy(true);setError('');setMessage('Resetting your visitor demo…');
+    try{
+      await resetPublicDemo();
+      setMessage('Demo reset. Reloading the clean visitor workspace…');
+      window.setTimeout(()=>window.location.assign('/#overview'),350);
+    }catch(cause){
+      setBusy(false);setArmed(false);setMessage('');
+      setError(cause instanceof ApiError&&cause.status===404?'Reset Demo is available when PUBLIC_DEMO_MODE is enabled.':cause instanceof Error?cause.message:'Unable to reset the demo.');
+    }
+  };
+  return <div className="workspace-card demo-reset-card"><h2>Public demo controls</h2><p>Reset clears the simulated telecom records associated with this anonymous visitor. It does not affect other visitors.</p><button type="button" className={armed?'destructive':''} disabled={busy} onClick={()=>void reset()}>{busy?'Resetting…':armed?'Confirm Reset Demo':'Reset Demo'}</button>{armed&&!busy&&<button type="button" className="cancel-reset" onClick={()=>{setArmed(false);setMessage('')}}>Cancel</button>}{message&&<p role="status">{message}</p>}{error&&<p className="subscriber-error" role="alert">{error}</p>}</div>;
 }
 
 function Workspace({page}:{page:string}){
   const [simEvents,setSimEvents]=useState<string[]>([]);
   return <section className={`workspace${page==='Network'?' network-page':''}`}><header><div><small>NEXUS CORE LAB / {page.toUpperCase()}</small><h1>{page==='Simulator'?'Local Event Sandbox':page}</h1><p>{page==='Telemetry'?'Current API counters · browser observations · authoritative IP pool snapshot':['System','API Status','Database'].includes(page)?'HTTP liveness and storage diagnostics':page==='Network'?'Real session associations · configured cells':page==='Simulator'?'Frontend-only simulation':page==='Configuration'?'Effective settings · read-only':'Explore the telecom lab'}</p></div></header>
-    {page==='Network'?<div className="network-workspace"><Topology/></div>:page==='Telemetry'?<div className="telemetry-workspace"><ActivityChart/><Donut/><IPPoolCard/></div>:page==='Simulator'?<div className="workspace-card"><h2>Simulate locally</h2><p>These sandbox actions only change this page. They do not send backend requests or change Subscribers, Devices or Sessions.</p><p>For the real Hero Flow, use Subscribers → Devices → Sessions. The separate <code>cmd/simulator</code> CLI also runs the real flow over HTTP; this page does not start it.</p><div className="sim-actions">{['ATTACH','CELL_HANDOVER','DETACH'].map(t=><button key={t} onClick={()=>setSimEvents(prev=>[`${new Date().toLocaleTimeString()} · ${t} · UE-01 · ${t==='CELL_HANDOVER'?'SP-001 → SP-003':t==='ATTACH'?'Connected to SP-001':'Session terminated'}`,...prev])}>{t}</button>)}<button onClick={()=>setSimEvents([])}>Clear</button></div><ul aria-live="polite">{simEvents.map((e,i)=><li key={i}>{e}</li>)}</ul>{simEvents.length===0&&<p>No simulated events yet.</p>}</div>:page==='Configuration'?<div className="workspace-card config-form"><h2>Effective polling intervals</h2><p>Read-only · not configurable in this demo. Delays apply after each request or polling round completes.</p><dl data-testid="effective-polling"><dt>Telemetry</dt><dd>~5 s</dd><dt>Topology</dt><dd>~5 s · Overview and Network only</dd><dt>IP Pool</dt><dd>~5 s · while its panel is open</dd><dt>Recent Events</dt><dd>~5 s</dd><dt>Storage</dt><dd>~10 s</dd><dt>Health</dt><dd>~10 s</dd></dl><p>Subscribers and Devices: collection snapshots, refreshed on load, manual refresh or related operations. No continuous polling.</p><p>Event notifications: not implemented in this demo.</p></div>:<OperationalStatus page={page}/>}
+    {page==='Network'?<div className="network-workspace"><Topology/></div>:page==='Telemetry'?<div className="telemetry-workspace"><ActivityChart/><Donut/><IPPoolCard/></div>:page==='Simulator'?<div className="workspace-card"><h2>Simulate locally</h2><p>These sandbox actions only change this page. They do not send backend requests or change Subscribers, Devices or Sessions.</p><p>For the real Hero Flow, use Subscribers → Devices → Sessions. The separate <code>cmd/simulator</code> CLI also runs the real flow over HTTP; this page does not start it.</p><div className="sim-actions">{['ATTACH','CELL_HANDOVER','DETACH'].map(t=><button key={t} onClick={()=>setSimEvents(prev=>[`${new Date().toLocaleTimeString()} · ${t} · UE-01 · ${t==='CELL_HANDOVER'?'SP-001 → SP-003':t==='ATTACH'?'Connected to SP-001':'Session terminated'}`,...prev])}>{t}</button>)}<button onClick={()=>setSimEvents([])}>Clear</button></div><ul aria-live="polite">{simEvents.map((e,i)=><li key={i}>{e}</li>)}</ul>{simEvents.length===0&&<p>No simulated events yet.</p>}</div>:page==='Configuration'?<div className="configuration-grid"><div className="workspace-card config-form"><h2>Effective polling intervals</h2><p>Read-only · not configurable in this demo. Delays apply after each request or polling round completes.</p><dl data-testid="effective-polling"><dt>Telemetry</dt><dd>~5 s</dd><dt>Topology</dt><dd>~5 s · Overview and Network only</dd><dt>IP Pool</dt><dd>~5 s · while its panel is open</dd><dt>Recent Events</dt><dd>~5 s</dd><dt>Storage</dt><dd>~10 s</dd><dt>Health</dt><dd>~10 s</dd></dl><p>Subscribers and Devices: collection snapshots, refreshed on load, manual refresh or related operations. No continuous polling.</p><p>Event notifications: not implemented in this demo.</p></div><DemoResetCard/></div>:<OperationalStatus page={page}/>}
   </section>;
 }
 
@@ -111,6 +141,6 @@ export default function App(){
   const [scale,setScale]=useState(()=>Math.min(window.innerWidth/1536,window.innerHeight/1024,1));
   useEffect(()=>{const resize=()=>setScale(Math.min(window.innerWidth/1536,window.innerHeight/1024,1));const route=()=>setPage(readPage());window.addEventListener('resize',resize);window.addEventListener('hashchange',route);return()=>{window.removeEventListener('resize',resize);window.removeEventListener('hashchange',route)}},[]);
   const go=(next:string)=>{setPage(next);window.location.hash=next.toLowerCase().replace(/ /g,'-')};
-  return <MonitoringProvider><RecentEventsProvider><SubscribersProvider><DevicesProvider><TopologyProvider enabled={page==='Overview'||page==='Network'}><Navigation.Provider value={{page,go}}><div className="fit-shell" style={{width:1536*scale,height:1024*scale}}><div className="app" style={{transform:`scale(${scale})`,transformOrigin:'top left'}}><Sidebar/><main><Topbar/>{page==='Overview'?<div className="dashboard"><Kpis/><section className="center"><Topology/><div className="right-tables"><ActiveSessionsPreview/><RecentEvents/></div></section><section className="bottom"><ActivityChart/><Donut/><IPPoolCard/></section></div>:page==='Subscribers'?<SubscribersPage/>:page==='Devices'?<DevicesPage/>:page==='Sessions'?<SessionsPage/>:page==='Events'?<RecentEvents full/>:<Workspace key={page} page={page}/>}</main></div></div></Navigation.Provider></TopologyProvider></DevicesProvider></SubscribersProvider></RecentEventsProvider></MonitoringProvider>
+  return <MonitoringProvider><RecentEventsProvider><SubscribersProvider><DevicesProvider><TopologyProvider enabled={page==='Overview'||page==='Network'}><Navigation.Provider value={{page,go}}><div className="fit-shell" style={{width:1536*scale,height:1024*scale}}><div className="app" style={{transform:`scale(${scale})`,transformOrigin:'top left'}}><Sidebar/><main><Topbar/><ServiceNotice/>{page==='Overview'?<div className="dashboard"><Kpis/><section className="center"><Topology/><div className="right-tables"><ActiveSessionsPreview/><RecentEvents/></div></section><section className="bottom"><ActivityChart/><Donut/><IPPoolCard/></section></div>:page==='Subscribers'?<SubscribersPage/>:page==='Devices'?<DevicesPage/>:page==='Sessions'?<SessionsPage/>:page==='Events'?<RecentEvents full/>:<Workspace key={page} page={page}/>}</main></div></div></Navigation.Provider></TopologyProvider></DevicesProvider></SubscribersProvider></RecentEventsProvider></MonitoringProvider>
 }
 

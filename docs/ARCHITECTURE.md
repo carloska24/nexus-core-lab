@@ -19,6 +19,12 @@ not require.
 6. registers HTTP routes and request telemetry;
 7. coordinates graceful HTTP and telemetry shutdown.
 
+When `NEXUS_WEB_DIR` is configured, the same process also serves the compiled
+React application. `/api/*`, `/health`, and `/telemetry` always retain routing
+priority. Existing static files are served directly; an extensionless unknown
+frontend route receives `index.html`. API 404 responses and missing assets are
+never replaced by the SPA fallback.
+
 ```mermaid
 flowchart LR
     Dashboard[Dashboard] -->|HTTP| API[cmd/api]
@@ -102,6 +108,19 @@ Simulator/Sandbox page is local browser state and is labeled accordingly.
 `cmd/simulator` is a separate concurrent HTTP client. Each virtual device runs
 Provision → Activate → Register → Attach → Handover → Detach and then reports a
 telemetry snapshot. The browser does not execute the CLI.
+
+## Public Demo Mode
+
+`PUBLIC_DEMO_MODE=true` replaces the shared repository graph with a registry of
+anonymous visitor contexts. Each opaque cookie maps to independent in-memory
+repositories, telemetry, and IP allocation. Contexts have idle and absolute
+TTLs, global capacity limits, per-visitor resource limits, and mutation rate
+limits. Reset swaps only the requesting visitor's context.
+
+The public production image copies the Vite output to `/app/web` and sets
+`NEXUS_WEB_DIR=/app/web`. Go serves the SPA and API on one port. The runtime is
+a non-root distroless image and contains neither Node.js nor the Go toolchain.
+Public Demo Mode rejects startup if `DATABASE_URL` is also present.
 
 ## Intentional boundaries
 
