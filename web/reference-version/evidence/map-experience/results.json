@@ -1,0 +1,249 @@
+{
+  "origin": "http://127.0.0.1:18084",
+  "checks": [
+    "Empty topology is intentional and MapLibre worker plus real Campinas tiles load successfully",
+    "Attached state shows a deterministic device, serving Cell and logical link",
+    "Handover preserves Session and IP while visual association moves to CELL-SP-002",
+    "Detached state removes the dynamic device and logical link",
+    "Provider failure preserves the local, truthful topology fallback",
+    "Zero uncaught JavaScript exceptions; console output contains only expected active-session 404 responses"
+  ],
+  "transport": {
+    "workers": [
+      {
+        "url": "http://127.0.0.1:18084/assets/maplibre-gl-worker-BBYVuMpd.js",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:18084/assets/maplibre-gl-worker-BBYVuMpd.js",
+        "status": 200
+      }
+    ],
+    "tiles": [
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/756/1157.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/755/1157.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/756/1158.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/755/1158.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/757/1157.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/757/1158.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/fonts/Noto%20Sans%20Regular/0-255.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/756/1157.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/755/1157.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/756/1158.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/fonts/Noto%20Sans%20Regular/0-255.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/755/1158.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/757/1157.pbf",
+        "status": 200
+      },
+      {
+        "url": "https://tiles.openfreemap.org/planet/20260913_164504_pt/11/757/1158.pbf",
+        "status": 200
+      }
+    ],
+    "failures": []
+  },
+  "states": {
+    "empty": [
+      {
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      }
+    ],
+    "attached": [
+      {
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      }
+    ],
+    "handover": [
+      {
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      }
+    ],
+    "detached": [
+      {
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      }
+    ],
+    "fallback": [
+      {
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      },
+      {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "clientWidth": 1311,
+        "scrollWidth": 1311,
+        "clientHeight": 946,
+        "scrollHeight": 946
+      }
+    ]
+  },
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}

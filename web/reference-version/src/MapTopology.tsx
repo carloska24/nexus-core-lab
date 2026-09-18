@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import type { GeoJSONSource, Map as MapLibreMap, MapOptions } from 'maplibre-gl';
-import { MapPin, Minus, Plus, RotateCcw } from 'lucide-react';
+import { MapPin, Minus, Plus, RotateCcw, X } from 'lucide-react';
 import { TopologyOverlay, TopologyStatus } from './LiveTopology';
 import { MAP_PROVIDER } from './map-provider';
 import { buildMapPresentation, mapMode } from './map-presentation';
@@ -10,7 +11,30 @@ import { useTopology } from './topology';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './map-topology.css';
 
+maplibregl.setWorkerUrl(maplibreWorkerUrl);
+
 type StyleSpecification = Exclude<MapOptions['style'], string | null | undefined>;
+type MapEntityKind = 'cell' | 'device';
+type MapSelection = { kind: MapEntityKind; properties: Record<string, unknown> };
+type ObservedHandover = { alias: string; sessionId: string; fromCellId: string; toCellId: string };
+
+const observedAssociations = new Map<string, string>();
+const emptyLines = (): GeoJSON.FeatureCollection<GeoJSON.LineString> => ({ type: 'FeatureCollection', features: [] });
+
+function handoverCollection(handover?: ObservedHandover): GeoJSON.FeatureCollection<GeoJSON.LineString> {
+  if (!handover) return emptyLines();
+  const from = networkCells.find(cell => cell.id === handover.fromCellId);
+  const to = networkCells.find(cell => cell.id === handover.toCellId);
+  if (!from || !to) return emptyLines();
+  return {
+    type: 'FeatureCollection',
+    features: [{
+      type: 'Feature', id: handover.sessionId,
+      geometry: { type: 'LineString', coordinates: [[from.longitude, from.latitude], [to.longitude, to.latitude]] },
+      properties: { ...handover },
+    }],
+  };
+}
 
 const minorRoads = Array.from({ length: 20 }, (_, index) => ({
   d: index % 2 === 0 ? `M ${-80 + index * 53} 0 Q ${180 + index * 19} 210 ${60 + index * 42} 500` : `M 0 ${20 + index * 24} Q 400 ${100 + index * 11} 850 ${10 + index * 23}`,
@@ -101,7 +125,7 @@ function popupContent(properties: Record<string, unknown>, kind: 'cell' | 'devic
   const root = document.createElement('div');
   root.className = 'nexus-map-popup';
   const rows = kind === 'cell'
-    ? [['Cell', properties.id], ['Region', properties.region], ['Technology', properties.tech], ['State', properties.status], ['Coordinates', 'Illustrative · not infrastructure GPS']]
+    ? [['Cell', properties.id], ['Region', properties.region], ['Technology', properties.tech], ['State', properties.status], ['Active sessions', properties.sessionCount], ['Coordinates', 'Illustrative · not infrastructure GPS']]
     : [['Device', properties.alias], ['IMEI', properties.imei], ['Session', properties.sessionId], ['Virtual IP', properties.ipAddress], ['Cell', properties.cellId], ['Position', 'Deterministic presentation coordinate']];
   for (const [label, value] of rows) {
     const line = document.createElement('p');
@@ -113,44 +137,80 @@ function popupContent(properties: Record<string, unknown>, kind: 'cell' | 'devic
   return root;
 }
 
-function installNexusLayers(map: MapLibreMap, presentation: ReturnType<typeof buildMapPresentation>) {
+function installNexusLayers(
+  map: MapLibreMap,
+  presentation: ReturnType<typeof buildMapPresentation>,
+  handover: GeoJSON.FeatureCollection<GeoJSON.LineString>,
+  select: (selection: MapSelection) => void,
+) {
   map.addSource('nexus-cells', { type: 'geojson', data: presentation.cells });
   map.addSource('nexus-devices', { type: 'geojson', data: presentation.devices });
   map.addSource('nexus-links', { type: 'geojson', data: presentation.links });
+  map.addSource('nexus-handover', { type: 'geojson', data: handover });
+
   map.addLayer({ id: 'nexus-coverage', type: 'circle', source: 'nexus-cells', paint: {
-    'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 24, 13, 64, 16, 110],
-    'circle-color': ['match', ['get', 'tech'], 'LTE', '#369fff', '#b15bf5'],
-    'circle-opacity': .09, 'circle-stroke-width': 1, 'circle-stroke-opacity': .25,
-    'circle-stroke-color': ['match', ['get', 'tech'], 'LTE', '#369fff', '#b15bf5'],
+    'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 48, 13, 105, 16, 180],
+    'circle-color': ['match', ['get', 'tech'], 'LTE', '#329df4', '#b55bf5'],
+    'circle-opacity': ['match', ['get', 'activity'], 'ACTIVE', .11, .055],
+    'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 10, .8, 15, 1.5],
+    'circle-stroke-opacity': ['match', ['get', 'activity'], 'ACTIVE', .38, .2],
+    'circle-stroke-color': ['match', ['get', 'tech'], 'LTE', '#55b6ff', '#cf83ff'],
+  }});
+  map.addLayer({ id: 'nexus-link-underlay', type: 'line', source: 'nexus-links', paint: {
+    'line-color': ['match', ['get', 'state'], 'stale', '#91a5b3', '#2be698'],
+    'line-width': 7, 'line-opacity': .13, 'line-blur': 3,
   }});
   map.addLayer({ id: 'nexus-links', type: 'line', source: 'nexus-links', paint: {
-    'line-color': ['match', ['get', 'state'], 'stale', '#91a5b3', '#35dc8a'],
-    'line-width': 2.2, 'line-opacity': ['match', ['get', 'state'], 'stale', .5, .9], 'line-dasharray': [2, 2],
+    'line-color': ['match', ['get', 'state'], 'stale', '#91a5b3', '#4be5a0'],
+    'line-width': 2.2, 'line-opacity': ['match', ['get', 'state'], 'stale', .5, .94], 'line-dasharray': [2, 1.5],
+  }});
+  map.addLayer({ id: 'nexus-handover-glow', type: 'line', source: 'nexus-handover', paint: {
+    'line-color': '#ff8737', 'line-width': 9, 'line-opacity': .18, 'line-blur': 4,
+  }});
+  map.addLayer({ id: 'nexus-handover', type: 'line', source: 'nexus-handover', paint: {
+    'line-color': '#ff963f', 'line-width': 3, 'line-opacity': .95, 'line-dasharray': [3, 1.6],
+  }});
+  map.addLayer({ id: 'nexus-cell-halos', type: 'circle', source: 'nexus-cells', paint: {
+    'circle-radius': ['match', ['get', 'activity'], 'ACTIVE', 30, 26],
+    'circle-color': ['match', ['get', 'tech'], 'LTE', '#299dff', '#b44ff3'],
+    'circle-opacity': ['match', ['get', 'activity'], 'ACTIVE', .16, .08],
+    'circle-blur': .6,
   }});
   map.addLayer({ id: 'nexus-cell-rings', type: 'circle', source: 'nexus-cells', paint: {
-    'circle-radius': 19, 'circle-color': '#071522', 'circle-opacity': .88, 'circle-stroke-width': 3,
-    'circle-stroke-color': ['match', ['get', 'tech'], 'LTE', '#3ca7ff', '#bd62f6'],
+    'circle-radius': ['match', ['get', 'tech'], 'LTE', 20, 23],
+    'circle-color': '#06131f', 'circle-opacity': .94,
+    'circle-stroke-width': ['match', ['get', 'activity'], 'ACTIVE', 3.5, 2.5],
+    'circle-stroke-color': ['match', ['get', 'tech'], 'LTE', '#42aaff', '#c060f7'],
   }});
   map.addLayer({ id: 'nexus-cell-cores', type: 'circle', source: 'nexus-cells', paint: {
-    'circle-radius': 5, 'circle-color': ['match', ['get', 'tech'], 'LTE', '#3ca7ff', '#bd62f6'],
-    'circle-stroke-width': 2, 'circle-stroke-color': '#d9eeff',
+    'circle-radius': ['match', ['get', 'tech'], 'LTE', 8, 10],
+    'circle-color': '#071522', 'circle-stroke-width': 1.5,
+    'circle-stroke-color': ['match', ['get', 'tech'], 'LTE', '#9dd5ff', '#e0afff'],
   }});
+  map.addLayer({ id: 'nexus-cell-tech', type: 'symbol', source: 'nexus-cells', layout: {
+    'text-field': ['match', ['get', 'tech'], 'LTE', 'L', '5'], 'text-size': 11,
+    'text-font': ['Noto Sans Regular'], 'text-allow-overlap': true,
+  }, paint: { 'text-color': ['match', ['get', 'tech'], 'LTE', '#75c3ff', '#d48aff'], 'text-halo-color': '#06131f', 'text-halo-width': 1 }});
   map.addLayer({ id: 'nexus-cell-labels', type: 'symbol', source: 'nexus-cells', layout: {
-    'text-field': ['concat', ['get', 'id'], '\n', ['get', 'region'], ' · ', ['get', 'tech']], 'text-size': 12,
-    'text-font': ['Noto Sans Regular'],
-    'text-offset': ['match', ['get', 'id'], 'CELL-SP-003', ['literal', [2.1, 0]], ['literal', [0, 2.7]]],
+    'text-field': ['concat', ['get', 'id'], '\n', ['get', 'region'], ' · ', ['get', 'tech'], ' · ', ['to-string', ['get', 'sessionCount']], ' LINK'],
+    'text-size': 12, 'text-line-height': 1.25, 'text-font': ['Noto Sans Regular'],
+    'text-offset': ['match', ['get', 'id'], 'CELL-SP-003', ['literal', [2.35, 0]], ['literal', [0, 2.9]]],
     'text-anchor': ['match', ['get', 'id'], 'CELL-SP-003', 'left', 'top'], 'text-allow-overlap': true,
   }, paint: { 'text-color': '#eef7ff', 'text-halo-color': '#04101a', 'text-halo-width': 2 }});
+  map.addLayer({ id: 'nexus-device-halos', type: 'circle', source: 'nexus-devices', paint: {
+    'circle-radius': 15, 'circle-color': '#30e596', 'circle-opacity': .15, 'circle-blur': .55,
+  }});
   map.addLayer({ id: 'nexus-device-rings', type: 'circle', source: 'nexus-devices', paint: {
-    'circle-radius': 10, 'circle-color': '#38df8d', 'circle-opacity': .12, 'circle-stroke-width': 1,
-    'circle-stroke-color': '#74f1b0', 'circle-stroke-opacity': .55,
+    'circle-radius': 9, 'circle-color': '#081a20', 'circle-opacity': .96, 'circle-stroke-width': 2,
+    'circle-stroke-color': ['match', ['get', 'state'], 'stale', '#9eaab3', '#5bf0a9'],
   }});
   map.addLayer({ id: 'nexus-devices', type: 'circle', source: 'nexus-devices', paint: {
-    'circle-radius': 5.5, 'circle-color': ['match', ['get', 'state'], 'stale', '#94a4b0', '#3fe395'],
-    'circle-stroke-width': 2, 'circle-stroke-color': '#d9ffed',
+    'circle-radius': 3.8, 'circle-color': ['match', ['get', 'state'], 'stale', '#94a4b0', '#4ce69e'],
+    'circle-stroke-width': 1, 'circle-stroke-color': '#e2fff0',
   }});
   map.addLayer({ id: 'nexus-device-labels', type: 'symbol', source: 'nexus-devices', layout: {
-    'text-field': ['get', 'alias'], 'text-size': 11, 'text-font': ['Noto Sans Regular'], 'text-offset': [0, 1.25], 'text-anchor': 'top', 'text-allow-overlap': true,
+    'text-field': ['concat', ['get', 'alias'], ' · ', ['get', 'technology']], 'text-size': 11,
+    'text-font': ['Noto Sans Regular'], 'text-offset': [0, 1.45], 'text-anchor': 'top', 'text-allow-overlap': true,
   }, paint: { 'text-color': '#eafff5', 'text-halo-color': '#04101a', 'text-halo-width': 2 }});
 
   const interactive = ['nexus-devices', 'nexus-cell-rings'];
@@ -160,18 +220,29 @@ function installNexusLayers(map: MapLibreMap, presentation: ReturnType<typeof bu
   }
   map.on('click', 'nexus-devices', event => {
     const feature = event.features?.[0];
-    if (feature?.properties) new maplibregl.Popup({ closeButton: true, maxWidth: '330px' }).setLngLat(event.lngLat).setDOMContent(popupContent(feature.properties, 'device')).addTo(map);
+    if (feature?.properties) {
+      select({ kind: 'device', properties: feature.properties });
+      new maplibregl.Popup({ closeButton: true, maxWidth: '330px' }).setLngLat(event.lngLat).setDOMContent(popupContent(feature.properties, 'device')).addTo(map);
+    }
   });
   map.on('click', 'nexus-cell-rings', event => {
     const feature = event.features?.[0];
-    if (feature?.properties) new maplibregl.Popup({ closeButton: true, maxWidth: '330px' }).setLngLat(event.lngLat).setDOMContent(popupContent(feature.properties, 'cell')).addTo(map);
+    if (feature?.properties) {
+      select({ kind: 'cell', properties: feature.properties });
+      new maplibregl.Popup({ closeButton: true, maxWidth: '330px' }).setLngLat(event.lngLat).setDOMContent(popupContent(feature.properties, 'cell')).addTo(map);
+    }
   });
 }
 
-function updateSources(map: MapLibreMap, presentation: ReturnType<typeof buildMapPresentation>) {
+function updateSources(
+  map: MapLibreMap,
+  presentation: ReturnType<typeof buildMapPresentation>,
+  handover: GeoJSON.FeatureCollection<GeoJSON.LineString>,
+) {
   (map.getSource('nexus-cells') as GeoJSONSource | undefined)?.setData(presentation.cells);
   (map.getSource('nexus-devices') as GeoJSONSource | undefined)?.setData(presentation.devices);
   (map.getSource('nexus-links') as GeoJSONSource | undefined)?.setData(presentation.links);
+  (map.getSource('nexus-handover') as GeoJSONSource | undefined)?.setData(handover);
 }
 
 export function MapTopology() {
@@ -184,6 +255,32 @@ export function MapTopology() {
   const [attempt, setAttempt] = useState(0);
   const [mode, setMode] = useState<'loading' | 'ready' | 'fallback'>('loading');
   const [fallbackReason, setFallbackReason] = useState('Interactive map unavailable. Live NEXUS state remains visible on the local map.');
+  const [selected, setSelected] = useState<MapSelection>();
+  const [handover, setHandover] = useState<ObservedHandover>();
+  const handoverData = useMemo(() => handoverCollection(handover), [handover]);
+  const handoverRef = useRef(handoverData);
+  handoverRef.current = handoverData;
+
+  useEffect(() => {
+    let detected: ObservedHandover | undefined;
+    const current = new Map<string, string>();
+    for (const device of presentation.connected) {
+      const previousCellId = observedAssociations.get(device.sessionId);
+      current.set(device.sessionId, device.cellId);
+      if (previousCellId && previousCellId !== device.cellId) {
+        detected = { alias: device.alias, sessionId: device.sessionId, fromCellId: previousCellId, toCellId: device.cellId };
+      }
+    }
+    observedAssociations.clear();
+    current.forEach((cellId, sessionId) => observedAssociations.set(sessionId, cellId));
+    if (detected) setHandover(detected);
+  }, [presentation]);
+
+  useEffect(() => {
+    if (!handover) return;
+    const timer = window.setTimeout(() => setHandover(undefined), 8000);
+    return () => window.clearTimeout(timer);
+  }, [handover]);
 
   useEffect(() => {
     if (!container.current) return;
@@ -232,7 +329,7 @@ export function MapTopology() {
           if (disposed || installed) return;
           installed = true;
           darkenBaseStyle(createdMap);
-          installNexusLayers(createdMap, presentationRef.current);
+          installNexusLayers(createdMap, presentationRef.current, handoverRef.current, setSelected);
           setMode('ready');
         });
         createdMap.on('error', () => {
@@ -260,16 +357,30 @@ export function MapTopology() {
   }, [attempt]);
 
   useEffect(() => {
-    if (mode === 'ready' && mapRef.current) updateSources(mapRef.current, presentation);
-  }, [mode, presentation]);
+    if (mode === 'ready' && mapRef.current) updateSources(mapRef.current, presentation, handoverData);
+  }, [mode, presentation, handoverData]);
 
   const retry = () => { setMode('loading'); setAttempt(value => value + 1); };
+  const activeCells = presentation.cells.features.filter(feature => Number(feature.properties?.sessionCount ?? 0) > 0).length;
   return <div className="map-wrap map-experience" data-map-mode={mode}>
     {mode !== 'fallback' && <div ref={container} className="maplibre-canvas" data-testid="real-map" role="region" aria-label="Interactive map of real Campinas cartography with simulated telecom topology" />}
     {mode === 'fallback' && <StaticFallback reason={fallbackReason} retry={retry} />}
     {mode === 'loading' && <div className="map-loading" role="status">Loading real Campinas cartography…</div>}
-    <div className="map-truth" data-testid="map-truth">Simulated telecom topology over real Campinas cartography</div>
+    <div className="map-truth" data-testid="map-truth"><strong>REAL CARTOGRAPHY</strong><span>Simulated telecom topology over real Campinas cartography · illustrative coverage</span></div>
     <TopologyStatus />
+    <section className="map-ops-hud" data-testid="map-hud" aria-label="Network topology summary">
+      <header><span>NETWORK DIGITAL TWIN</span><b>{snapshot.status === 'success' ? 'OBSERVED' : snapshot.status.toUpperCase()}</b></header>
+      <div><p><strong>{networkCells.length}</strong><span>Configured cells</span></p><p><strong>{activeCells}</strong><span>Active cells</span></p><p><strong>{presentation.connected.length}</strong><span>Logical links</span></p></div>
+      <small>Positions and coverage are simulated</small>
+    </section>
+    {presentation.connected.length === 0 && snapshot.status === 'success' && <div className="map-empty" data-testid="map-empty"><b>TOPOLOGY READY</b><span>No connected sessions observed</span><small>Configured cells remain visible for operational context</small></div>}
+    {handover && <div className="handover-feedback" data-testid="handover-feedback" role="status"><b>HANDOVER OBSERVED</b><span>{handover.alias}</span><strong>{handover.fromCellId} <i>→</i> {handover.toCellId}</strong><small>Logical association changed · session and IP preserved</small></div>}
+    {selected && <aside className="map-inspector" data-testid="map-inspector" aria-label="Selected topology entity">
+      <header><span>{selected.kind === 'cell' ? 'CELL NODE' : 'CONNECTED DEVICE'}</span><button type="button" aria-label="Close map inspector" onClick={() => setSelected(undefined)}><X /></button></header>
+      <strong>{String(selected.properties.id ?? selected.properties.alias ?? 'Topology entity')}</strong>
+      {selected.kind === 'cell' ? <dl><dt>Region</dt><dd>{String(selected.properties.region ?? '—')}</dd><dt>Technology</dt><dd>{String(selected.properties.tech ?? '—')}</dd><dt>Operational state</dt><dd>{String(selected.properties.status ?? '—')}</dd><dt>Active sessions</dt><dd>{String(selected.properties.sessionCount ?? 0)}</dd></dl> : <dl><dt>IMEI</dt><dd>{String(selected.properties.imei ?? '—')}</dd><dt>Virtual IP</dt><dd>{String(selected.properties.ipAddress ?? '—')}</dd><dt>Serving cell</dt><dd>{String(selected.properties.cellId ?? '—')}</dd><dt>Technology</dt><dd>{String(selected.properties.technology ?? '—')}</dd><dt>Session</dt><dd>{String(selected.properties.sessionId ?? '—')}</dd></dl>}
+      <small>{selected.kind === 'cell' ? 'Configured cell · illustrative map anchor' : 'Real domain state · deterministic simulated position'}</small>
+    </aside>}
     <div className="sr-only" role="region" aria-live="polite" aria-label="Connected sessions on topology">
       <p>{presentation.connected.length} connected devices shown.</p>
       {presentation.connected.map(device => <p key={device.id} data-testid="map-device" data-device-id={device.id} data-session-id={device.sessionId} data-cell-id={device.cellId} data-ip={device.ipAddress}>{device.alias}: session {device.sessionId}, IP {device.ipAddress}, cell {device.cellId}, {device.state}.</p>)}

@@ -144,3 +144,5 @@ body #root .app{margin:0}
 .record-modal{width:520px;box-shadow:0 20px 100px #000}.record-modal>button{float:right}.mock-notice{color:#e5bb68!important}
 .app .map-attribution{position:absolute;bottom:3px;left:19px;font-size:9px;color:#8faac0;z-index:4;text-decoration:none}
 .app .location{bottom:20px}
+
+.app .map-legend i.lte,.app .map-legend i.g5{display:grid;place-items:center;border-radius:50%;background:#071522;font:700 7px 'JetBrains Mono',monospace}.app .map-legend i.lte{color:#55b6ff;border:1px solid #55b6ff}.app .map-legend i.g5{color:#cf83ff;border:1px solid #cf83ff}.app .map-legend i.dev{width:9px;height:9px;border:2px solid #b9ffdc;box-shadow:0 0 0 3px #35dc8a22}.app .map-legend i.handover{height:2px;border-radius:0}

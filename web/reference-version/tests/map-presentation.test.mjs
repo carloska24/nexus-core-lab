@@ -24,6 +24,10 @@ test('CONNECTED Session produces one inspectable Device and one Cell link', () =
   assert.equal(result.links.features.length, 1);
   assert.equal(result.connected[0].sessionId, session.id);
   assert.equal(result.connected[0].ipAddress, session.ip_address);
+  const servingCell = result.cells.features.find(feature => feature.properties.id === session.cell_id);
+  assert.equal(servingCell.properties.sessionCount, 1);
+  assert.equal(servingCell.properties.activity, 'ACTIVE');
+  assert.ok(result.cells.features.filter(feature => feature.properties.activity === 'IDLE').length === 2);
 });
 
 test('attach, handover and detach follow the authoritative Session snapshot', () => {
@@ -52,4 +56,11 @@ test('map implementation never requests browser geolocation', () => {
   const root = path.resolve(import.meta.dirname, '../src');
   const source = ['MapTopology.tsx', 'map-presentation.ts', 'map-provider.ts'].map(file => fs.readFileSync(path.join(root, file), 'utf8')).join('\n');
   assert.doesNotMatch(source, /navigator\s*\.\s*geolocation|GeolocateControl/);
+});
+
+
+test('production map uses Vite worker bundling and an explicit MapLibre worker URL', () => {
+  const source = fs.readFileSync(path.resolve(import.meta.dirname, '../src/MapTopology.tsx'), 'utf8');
+  assert.match(source, /maplibre-gl-worker\.mjs\?worker&url/);
+  assert.match(source, /maplibregl\.setWorkerUrl\(maplibreWorkerUrl\)/);
 });

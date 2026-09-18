@@ -12,7 +12,8 @@
     "dev:frontend": "vite",
     "build": "tsc && vite build",
     "test:map": "node --test tests/map-presentation.test.mjs",
-    "test:browser:gate13c": "node tests/gate13c.cjs"
+    "test:browser:gate13c": "node tests/gate13c.cjs",
+    "test:browser:map": "node tests/map-experience.cjs"
   },
   "dependencies": {
     "lucide-react": "^0.475.0",

@@ -37,7 +37,7 @@ export function presentationCoordinate(key: string, cellId: string): Coordinate 
   if (!cell) throw new Error(`Unknown configured cell: ${cellId}`);
   const hash = stableHash(key);
   const angle = (hash % 360) * Math.PI / 180;
-  const radius = 0.0032 + ((hash >>> 9) % 1000) / 1000 * 0.0026;
+  const radius = 0.008 + ((hash >>> 9) % 1000) / 1000 * 0.004;
   const longitudeScale = Math.max(0.4, Math.cos(cell.latitude * Math.PI / 180));
   return [
     Number((cell.longitude + Math.cos(angle) * radius / longitudeScale).toFixed(6)),
@@ -67,14 +67,21 @@ export function buildMapPresentation(entries: TopologyEntry[]): MapPresentation 
       } satisfies PresentationDevice;
     });
 
+  const sessionCounts = new Map(networkCells.map(cell => [cell.id, connected.filter(device => device.cellId === cell.id).length]));
   const cells: GeoJSON.FeatureCollection<GeoJSON.Point> = {
     type: 'FeatureCollection',
-    features: networkCells.map(cell => ({
-      type: 'Feature',
-      id: cell.id,
-      geometry: { type: 'Point', coordinates: [cell.longitude, cell.latitude] },
-      properties: { id: cell.id, name: cell.name, region: cell.region, tech: cell.tech, status: 'CONFIGURED' },
-    })),
+    features: networkCells.map(cell => {
+      const sessionCount = sessionCounts.get(cell.id) ?? 0;
+      return {
+        type: 'Feature',
+        id: cell.id,
+        geometry: { type: 'Point', coordinates: [cell.longitude, cell.latitude] },
+        properties: {
+          id: cell.id, name: cell.name, region: cell.region, tech: cell.tech,
+          status: 'CONFIGURED', sessionCount, activity: sessionCount > 0 ? 'ACTIVE' : 'IDLE',
+        },
+      };
+    }),
   };
   const devices: GeoJSON.FeatureCollection<GeoJSON.Point> = {
     type: 'FeatureCollection',

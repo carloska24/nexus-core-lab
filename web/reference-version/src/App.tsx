@@ -101,7 +101,7 @@ function Kpis() {
 function Topology() {
   return <article className="panel topology-panel">
     <div className="panel-head"><div className="head-title"><span className="head-icon"><ReferenceIcon name="topology"/></span><div><h2>Network Topology</h2><p>Real Campinas map · simulated telecom positions · no GPS</p></div></div>
-      <div className="map-legend"><span><i className="lte"/>LTE Cell</span><span><i className="g5"/>5G Cell</span><span><i className="dev"/>Connected Device</span></div>
+      <div className="map-legend"><span><i className="lte">L</i>LTE Cell</span><span><i className="g5">5</i>5G Cell</span><span><i className="dev"/>Connected Device</span><span><i className="handover"/>Handover</span></div>
     </div>
     <Suspense fallback={<div className="map-loading" role="status">Loading the Campinas map…</div>}><MapTopology /></Suspense>
   </article>;
